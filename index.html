@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>دليل العروض الذكي | VIP</title>
+    <title>دليلك | Daleelak</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
         
@@ -32,6 +32,9 @@
         .header-title h1 { font-size: 22px; font-weight: 900; color: #fff; letter-spacing: 1px; }
         .header-title p { font-size: 13px; color: #D4AF37; font-weight: bold; margin-top: 2px; }
         .spacer { width: 28px; } 
+
+        /* تصميم جملة الترحيب الجديدة */
+        .welcome-box { text-align: center; padding: 12px; font-weight: 900; color: #0f2027; background: linear-gradient(90deg, #D4AF37, #F3E5AB); margin: 15px 15px 0 15px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 1px solid #c5a017; font-size: 16px; }
 
         /* شريط الفئة الثابت */
         .sticky-cat { position: fixed; top: 80px; left: 0; right: 0; max-width: 460px; margin: 0 auto; background: linear-gradient(90deg, #D4AF37, #F3E5AB); color: #111; padding: 12px 25px; font-weight: 900; font-size: 15px; z-index: 1000; display: none; align-items: center; justify-content: space-between; box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4); border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; border: 1px solid #c5a017; transition: 0.3s; }
@@ -99,7 +102,7 @@
         <div class="header">
             <div class="menu-icon" onclick="toggleMenu()">☰</div>
             <div class="header-title" id="admin-trigger">
-                <h1>دليل مدينتي الذكي</h1>
+                <h1>دليلك | Daleelak</h1>
                 <p>دليلك لأفضل العروض</p>
             </div>
             <div class="spacer"></div>
@@ -123,6 +126,8 @@
             <a class="admin-btn" style="background: #D4AF37; color: #000;" href="https://docs.google.com/spreadsheets/d/1TA9f759D07O_z3VnIh8krMD0iKpFkwGQCF08_IymtIa08W2XGuhDpjhtgb1Zao-5YKGJ-mHsb3qt70/edit" target="_blank">فتح الشيت لإضافة العروض ↗</a>
             <button class="admin-btn" style="background: #333;" onclick="document.getElementById('admin-dashboard').style.display='none'">إغلاق اللوحة</button>
         </div>
+
+        <div class="welcome-box">✨ كل اللي محتاجه هتلاقيه عندنا! ✨</div>
 
         <div class="categories-wrapper">
             <div class="categories" id="main-categories"></div>
