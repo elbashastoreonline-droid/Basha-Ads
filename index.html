@@ -3,44 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>دليل مدينتي الذكي</title>
+    <title>دليلك | Daleelak</title>
     <style>
-        body { font-family: sans-serif; background: #f4f4f4; padding: 20px; display: flex; justify-content: center; }
-        #app-container { width: 100%; max-width: 480px; background: white; min-height: 100vh; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        @media (min-width: 768px) { #app-container { max-width: 800px; } }
-        .ad-card { padding: 15px; margin-bottom: 15px; border-radius: 15px; border-right: 5px solid #ccc; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .VIP { border-right-color: #ffd700; background: #fffdf0; }
-        .ad-title { font-weight: bold; font-size: 1.2em; margin-bottom: 5px; }
-        .ad-desc { color: #555; margin-bottom: 10px; }
-        .btn-whatsapp { display: block; background: #25d366; color: white; text-align: center; padding: 10px; border-radius: 10px; text-decoration: none; font-weight: bold; }
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; }
+        
+        body { background-color: #2c3e50; display: flex; justify-content: center; }
+
+        #app-container {
+            width: 100%;
+            max-width: 480px;
+            background-color: #f4f7f6;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 40px rgba(0,0,0,0.5);
+            padding-bottom: 85px;
+            padding-top: 100px;
+            overflow-x: hidden;
+        }
+        
+        /* الهيدر */
+        .header { position: fixed; top: 0; left: 0; right: 0; max-width: 480px; margin: 0 auto; width: 100%; background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); color: white; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.2); border-bottom-left-radius: 25px; border-bottom-right-radius: 25px; z-index: 1001; }
+        .menu-icon { font-size: 28px; cursor: pointer; color: #D4AF37; }
+        .header-title { text-align: center; flex-grow: 1; cursor: pointer; } 
+        .header-title h1 { font-size: 20px; font-weight: 900; color: #fff; }
+        .header-title p { font-size: 11px; color: #D4AF37; font-weight: bold; }
+        .spacer { width: 28px; } 
+
+        /* جملة الترحيب */
+        .welcome-msg { text-align: center; padding: 10px; font-weight: 700; color: #0f2027; background: #fff; margin: 0 15px 15px 15px; border-radius: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border: 1px solid #ddd; }
+
+        /* الأقسام والإعلانات */
+        .sticky-cat { position: fixed; top: 80px; left: 0; right: 0; max-width: 460px; margin: 0 auto; background: linear-gradient(90deg, #D4AF37, #F3E5AB); color: #111; padding: 10px 20px; font-weight: 900; z-index: 1000; display: none; align-items: center; justify-content: space-between; box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4); border-radius: 20px; }
+        .close-cat { background: rgba(0,0,0,0.1); width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        
+        .categories-wrapper { padding: 10px 15px; overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
+        .cat-btn { background: white; border: 1.5px solid #e0e0e0; padding: 8px 16px; border-radius: 20px; color: #555; font-weight: bold; cursor: pointer; margin-left: 8px; transition: 0.3s; }
+        .cat-btn.active { background: #0f2027; color: #D4AF37; }
+
+        .vip-card { min-width: 85%; margin-right: 15px; background: #fff; border-radius: 20px; border: 2px solid #D4AF37; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .vip-card img { width: 100%; height: 150px; object-fit: cover; }
+        .vip-info { padding: 15px; text-align: center; }
+        .vip-wa-btn { background: #25D366; color: white; display: block; padding: 10px; border-radius: 10px; text-decoration: none; font-weight: bold; margin-top: 10px; }
+
+        .ad-card { background: #fff; border-radius: 15px; display: flex; margin: 15px; padding: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .ad-card img { width: 100px; height: 100px; object-fit: cover; border-radius: 10px; }
+        .ad-details { padding-right: 10px; flex-grow: 1; }
+        .normal-wa-btn { background: #f0f0f0; color: #128C7E; padding: 8px; border-radius: 8px; text-decoration: none; font-size: 12px; display: block; margin-top: 5px; text-align: center; border: 1px solid #ccc; }
+
+        .floating-btn { position: fixed; bottom: 20px; left: 0; right: 0; max-width: 250px; margin: 0 auto; background: #e74c3c; color: white; padding: 12px; border-radius: 30px; font-weight: 900; text-align: center; text-decoration: none; z-index: 1000; }
+        #admin-dashboard { display: none; background: #fff; padding: 15px; margin: 15px; border-radius: 10px; border: 1px solid #ccc; }
     </style>
 </head>
 <body>
+
     <div id="app-container">
-        <h2 style="text-align: center;">🔥 أحدث الإعلانات</h2>
-        <div id="ads-container">جاري تحميل الإعلانات...</div>
+        <div class="header">
+            <div class="menu-icon" onclick="toggleMenu()">☰</div>
+            <div class="header-title" id="admin-trigger">
+                <h1>دليلك | Daleelak</h1>
+                <p>دليلك لأفضل العروض</p>
+            </div>
+            <div class="spacer"></div>
+        </div>
+
+        <!-- جملة الترحيب -->
+        <div class="welcome-msg">كل اللي محتاجه هتلاقيه عندنا! ✨</div>
+
+        <div class="sticky-cat" id="sticky-cat">
+            <span id="sticky-cat-name"></span>
+            <div class="close-cat" onclick="resetCategory()">✖</div>
+        </div>
+
+        <div id="admin-dashboard">
+            <a href="https://docs.google.com/spreadsheets/d/1TA9f759D07O_z3VnIh8krMD0iKpFkwGQCF08_IymtIa08W2XGuhDpjhtgb1Zao-5YKGJ-mHsb3qt70/edit" target="_blank" style="display:block; padding:10px; background:#D4AF37; color:#000; text-align:center; border-radius:5px; text-decoration:none;">فتح الشيت للإدارة ↗</a>
+        </div>
+
+        <div class="categories-wrapper">
+            <div class="categories" id="main-categories"></div>
+        </div>
+
+        <div id="vip-container" style="display:flex; overflow-x:auto; padding-bottom:15px;"></div>
+
+        <div class="ad-list">
+            <h3 id="ads-section-title" style="margin: 15px;">🔥 أحدث الإعلانات</h3>
+            <div id="ads-container"></div>
+        </div>
+
+        <a class="floating-btn" href="https://wa.me/201288023436">+ أضف إعلانك معنا</a>
     </div>
 
     <script>
-        // هذا الرابط يربط الشيت بالموقع
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxYAm4El3tSVrCFH4rFxGf0ddPxclyccrMOx9-uPPnHmYBjN6DrO3KPZibJKZYK7o7i/exec";
+        const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTA9f759D07O_z3VnIh8krMD0iKpFkwGQCF08_IymtIa08W2XGuhDpjhtgb1Zao-5YKGJ-mHsb3qt70/pub?gid=1257423716&single=true&output=csv';
+        let globalAdsData = []; 
 
-        fetch(SCRIPT_URL)
-        .then(response => response.json())
-        .then(data => {
-            const container = document.getElementById('ads-container');
-            container.innerHTML = '';
-            data.forEach(ad => {
-                const card = document.createElement('div');
-                card.className = `ad-card ${ad.type === 'VIP' ? 'VIP' : ''}`;
-                card.innerHTML = `
-                    <div class="ad-title">${ad.name} ${ad.type === 'VIP' ? '⭐' : ''}</div>
-                    <div class="ad-desc">${ad.desc}</div>
-                    <a href="https://wa.me/${ad.phone}" class="btn-whatsapp">مراسلة واتساب</a>
+        async function fetchAds() {
+            const response = await fetch(csvUrl);
+            const rawText = await response.text();
+            const lines = rawText.split('\n');
+            globalAdsData = [];
+            for (let i = 1; i < lines.length; i++) {
+                const cols = lines[i].split(',');
+                if(cols.length > 2) {
+                    globalAdsData.push({
+                        title: cols[1], desc: cols[2], category: cols[3] || 'أخرى',
+                        img: cols[4] || '', whatsapp: cols[5] || '201288023436',
+                        type: (cols[6]||'').toLowerCase().trim(), status: (cols[7]||'').trim()
+                    });
+                }
+            }
+            renderAds('الكل');
+        }
+
+        function renderAds(cat) {
+            const vip = document.getElementById('vip-container');
+            const normal = document.getElementById('ads-container');
+            vip.innerHTML = ''; normal.innerHTML = '';
+
+            globalAdsData.forEach(ad => {
+                if(ad.status !== 'شغال') return;
+                if(cat !== 'الكل' && !ad.category.includes(cat)) return;
+
+                const html = `
+                    <div class="${ad.type === 'vip' ? 'vip-card' : 'ad-card'}">
+                        ${ad.type === 'vip' ? `<img src="${ad.img || 'https://via.placeholder.com/150'}">` : `<img src="${ad.img || 'https://via.placeholder.com/150'}">`}
+                        <div class="${ad.type === 'vip' ? 'vip-info' : 'ad-details'}">
+                            <h3>${ad.title}</h3>
+                            <p>${ad.desc}</p>
+                            <a href="https://wa.me/${ad.whatsapp.replace(/\D/g,'')}" class="${ad.type === 'vip' ? 'vip-wa-btn' : 'normal-wa-btn'}">مراسلة واتساب</a>
+                        </div>
+                    </div>
                 `;
-                container.appendChild(card);
+                ad.type === 'vip' ? vip.innerHTML += html : normal.innerHTML += html;
             });
+        }
+
+        document.getElementById('admin-trigger').addEventListener('click', () => {
+            if(prompt("كلمة المرور:") === "1234") document.getElementById('admin-dashboard').style.display='block';
         });
+
+        fetchAds();
     </script>
 </body>
 </html>
