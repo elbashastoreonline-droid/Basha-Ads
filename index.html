@@ -144,7 +144,7 @@
             <div id="ads-container"></div>
         </div>
 
-        <a class="floating-btn" href="https://wa.me/201288023436?text=أهلاً%20جيم%20باشا%20أريد%20إضافة%20إعلان%20جديد%20في%20الدليل" target="_blank">+ أضف إعلانك معنا</a>
+        <a class="floating-btn" href="https://wa.me/201288023436?text=السلام%20عليكم%20كنت%20عايز%20اضيف%20اعلان%20في%20موقع%20دليلك%20ايه%20هي%20الاسعار%20المتاحه%20للعادي%20وال%20VIP" target="_blank">+ أضف إعلانك معنا</a>
 
     </div>
 
@@ -248,9 +248,13 @@
                 }
 
                 const displayImg = ad.img ? ad.img : 'https://i.ibb.co/pjxDzJxM/file-00000000335471f48a03a0acb621d53c.png';
-                const cleanPhone = ad.whatsapp.replace(/[^0-9]/g, '');
-                const waUrl = `https://wa.me/${cleanPhone}`;
-
+                let cleanPhone = ad.whatsapp.replace(/[^0-9]/g, '');
+// الكود ده بيشوف لو الرقم بيبدأ بـ 01 هنضيفله 2 عشان يبقى بكود مصر 20 ويشتغل مع الواتساب
+if (cleanPhone.startsWith('01') && cleanPhone.length === 11) {
+    cleanPhone = '2' + cleanPhone;
+}
+const waUrl = `https://wa.me/${cleanPhone}`;
+                
                 if (ad.type === 'vip') {
                     vipAdsCount++;
                     vipContainer.innerHTML += `
