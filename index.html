@@ -262,8 +262,11 @@
                 }
 
                 document.getElementById('loading-msg').style.display = 'none';
-                renderCategorizedAds('الكل');
 
+                // كود الترتيب العشوائي للإعلانات مع كل تحديث للصفحة
+                globalAdsData.sort(() => Math.random() - 0.5);
+
+                renderCategorizedAds('الكل');
             } catch (error) {
                 document.getElementById('loading-msg').innerText = '⚠️ حدث خطأ في الاتصال بقاعدة البيانات.';
             }
