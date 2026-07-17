@@ -73,6 +73,13 @@
         
         .vip-scroll { display: flex; overflow-x: auto; gap: 20px; padding-bottom: 15px; padding-top: 5px; scrollbar-width: none; scroll-snap-type: x mandatory; }
         .vip-scroll::-webkit-scrollbar { display: none; }
+        /* إظهار شريط تمرير لإعلانات VIP على الكمبيوتر */
+        @media (min-width: 768px) {
+            .vip-scroll { scrollbar-width: thin; scrollbar-color: #D4AF37 transparent; }
+            .vip-scroll::-webkit-scrollbar { display: block; height: 6px; margin-top: 10px; }
+            .vip-scroll::-webkit-scrollbar-thumb { background: #D4AF37; border-radius: 10px; }
+            .vip-scroll::-webkit-scrollbar-track { background: transparent; }
+        }
         
         .vip-card { min-width: 90%; scroll-snap-align: center; background: linear-gradient(180deg, #ffffff 0%, #fffbf0 100%); border-radius: 20px; border: 2px solid #D4AF37; overflow: hidden; box-shadow: 0 8px 25px rgba(212, 175, 55, 0.25); flex-shrink: 0; position: relative; transform: scale(1); transition: 0.3s; }
         .vip-badge { position: absolute; top: 15px; right: 15px; background: linear-gradient(135deg, #FFDF00, #D4AF37); color: #000; padding: 6px 15px; border-radius: 25px; font-weight: 900; font-size: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 10; border: 1px solid #fff; }
@@ -136,6 +143,10 @@
         </div>
 
         <div class="welcome-box">✨ كل اللي محتاجه هتلاقيه عندنا! ✨</div>
+        <!-- شريط البحث -->
+        <div style="padding: 15px 15px 0 15px; max-width: 1200px; margin: 0 auto;">
+            <input type="text" id="search-box" onkeyup="liveSearch()" placeholder="🔍 ابحث عن مطعم، خدمة، عرض..." style="width: 100%; padding: 12px 15px; border-radius: 25px; border: 2px solid #D4AF37; outline: none; font-size: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); text-align: right; color: #333; font-weight: bold;">
+        </div>
 
         <div class="categories-wrapper">
             <div class="categories" id="main-categories"></div>
@@ -359,6 +370,23 @@ const waUrl = `https://wa.me/${cleanPhone}`;
         }
 
         function resetCategory() { selectCategory('الكل'); }
+        // دالة البحث المباشر
+        function liveSearch() {
+            let input = document.getElementById('search-box').value.toLowerCase();
+            let allAds = document.querySelectorAll('.ad-card, .vip-card');
+            
+            allAds.forEach(card => {
+                let title = card.querySelector('h3').innerText.toLowerCase();
+                let desc = card.querySelector('p') ? card.querySelector('p').innerText.toLowerCase() : '';
+                
+                // لو الكلمة موجودة في العنوان أو الوصف هيعرض الإعلان، لو لأ هيخفيه
+                if (title.includes(input) || desc.includes(input)) {
+                    card.style.display = ''; 
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
 
         let headerClicks = 0;
         document.getElementById('admin-trigger').addEventListener('click', () => {
