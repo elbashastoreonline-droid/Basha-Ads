@@ -197,6 +197,15 @@
         border-bottom: 1px solid #eaeaea;
     }
 }
+        /* تأثير الظهور الناعم للإعلانات */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.ad-card, .vip-card {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+        
 </style>
     <script>
         const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTA9f759D07O_z3VnIh8krMD0iKpFkwGQCF08_IymtIa08W2XGuhDpjhtgb1Zao-5YKGJ-mHsb3qt70/pub?gid=1257423716&single=true&output=csv';
