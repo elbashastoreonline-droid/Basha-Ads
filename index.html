@@ -155,7 +155,37 @@
         <a class="floating-btn" href="https://wa.me/201288023436?text=السلام%20عليكم%20كنت%20عايز%20اضيف%20اعلان%20في%20موقع%20دليلك%20ايه%20هي%20الاسعار%20المتاحه%20للعادي%20وال%20VIP" target="_blank">+ أضف إعلانك معنا</a>
 
     </div>
-
+<style>
+/* تحويل التصميم لشاشة كاملة واحترافية على الأجهزة الكبيرة */
+@media (min-width: 768px) {
+    #app-container {
+        max-width: 1200px; 
+        background-color: #f4f7f6;
+    }
+    .header {
+        max-width: 1200px;
+    }
+    .sticky-cat {
+        max-width: 1160px;
+    }
+    /* جعل الإعلانات تظهر بجانب بعضها في الشاشات الكبيرة */
+    #ads-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 20px;
+    }
+    /* تظبيط شكل كارت الإعلان على الكمبيوتر */
+    .ad-card {
+        flex-direction: column; 
+    }
+    .ad-card img {
+        width: 100%;
+        height: 180px;
+        border-left: none;
+        border-bottom: 1px solid #eaeaea;
+    }
+}
+</style>
     <script>
         const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTA9f759D07O_z3VnIh8krMD0iKpFkwGQCF08_IymtIa08W2XGuhDpjhtgb1Zao-5YKGJ-mHsb3qt70/pub?gid=1257423716&single=true&output=csv';
         let globalAdsData = []; 
