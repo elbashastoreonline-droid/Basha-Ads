@@ -188,7 +188,19 @@
 
         <div class="ad-list">
             <h3 id="ads-section-title" style="margin-top: 10px; margin-bottom: 5px; color: #111; font-size: 18px; font-weight: 900;">🔥 أحدث الإعلانات</h3>
-            <div id="loading-msg" class="status-msg">⏳ جاري تحديث العروض...</div>
+                <!-- شاشة التحميل الاحترافية -->
+    <div id="loading-msg" style="text-align: center; padding: 40px 20px;">
+        <style>
+            @keyframes pulse-logo {
+                0% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); }
+                70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(212, 175, 55, 0); }
+                100% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+            }
+        </style>
+        <img src="https://i.ibb.co/M5StFDSQ/file-00000000335471f48a03a0acb621d53c.png" alt="دليلك - جاري التحميل" style="width: 85px; height: 85px; border-radius: 50%; border: 2px solid #D4AF37; animation: pulse-logo 1.5s infinite; margin-bottom: 15px; background-color: #fff; padding: 2px;">
+        <h3 style="color: #0f2027; font-size: 16px; font-weight: bold;">جاري تحميل الإعلانات...</h3>
+    </div>
+
             <div id="ads-container"></div>
         </div>
 
