@@ -297,6 +297,18 @@
             fields.push(field.trim());
             return fields;
         }
+                // دالة المشاركة الاحترافية
+        function shareAd(title) {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'دليلك | Daleelak',
+                    text: 'شوف العرض ده على دليلك: ' + title,
+                    url: window.location.href
+                }).catch(console.error);
+            } else {
+                alert('عفواً، جهازك لا يدعم هذه الميزة.');
+            }
+        }
 
         async function fetchAdsFromGoogleSheet() {
             createCategoryLayouts();
@@ -367,7 +379,11 @@ const waUrl = `https://wa.me/${cleanPhone}`;
                             <div class="vip-info">
                                 <h3>${ad.title}</h3>
                                 <p>${ad.desc}</p>
-                                <a href="${waUrl}" target="_blank" class="vip-wa-btn">تواصل عبر الواتساب</a>
+                                    <div style="display: flex; gap: 10px;">
+        <a href="${waUrl}" target="_blank" class="vip-wa-btn" style="flex-grow: 1; margin: 0;">💬 تواصل عبر الواتساب</a>
+        <button onclick="shareAd('${ad.title}')" style="background: #fff; border: 2px solid #D4AF37; color: #0f2027; padding: 0 15px; border-radius: 12px; font-size: 18px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">🔗</button>
+    </div>
+
                             </div>
                         </div>
                     `;
@@ -381,7 +397,11 @@ const waUrl = `https://wa.me/${cleanPhone}`;
                                     <h3>${ad.title}</h3>
                                     <p>${ad.desc}</p>
                                 </div>
-                                <a href="${waUrl}" target="_blank" class="normal-wa-btn">مراسلة واتساب</a>
+                                    <div style="display: flex; gap: 8px; margin-top: 10px;">
+        <a href="${waUrl}" target="_blank" class="normal-wa-btn" style="flex-grow: 1; margin-top: 0;">💬 تواصل عبر الواتساب</a>
+        <button onclick="shareAd('${ad.title}')" style="background: #f9f9f9; border: 1px solid #ccc; color: #555; padding: 0 12px; border-radius: 8px; font-size: 16px; cursor: pointer;">🔗</button>
+    </div>
+
                             </div>
                         </div>
                     `;
