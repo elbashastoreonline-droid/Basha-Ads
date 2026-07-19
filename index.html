@@ -44,10 +44,10 @@
         .spacer { width: 28px; } 
 /* شريط الأخبار المتحرك */
         .news-ticker-wrapper { margin: 15px 15px 0 15px; background: #0f2027; border: 1px solid #D4AF37; border-radius: 10px; overflow: hidden; display: flex; align-items: center; padding: 8px 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .news-ticker-text { white-space: nowrap; color: #D4AF37; font-weight: bold; font-size: 14px; display: inline-block; animation: scroll-ticker 25s linear infinite; }
+        .news-ticker-text { white-space: nowrap; color: #D4AF37; font-weight: bold; font-size: 14px; display: inline-block; width: max-content; animation: scroll-ticker 20s linear infinite; padding-right: 100%; }
         @keyframes scroll-ticker {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100vw); }
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-100%, 0, 0); }
         }
         body.dark-mode .news-ticker-wrapper { background: #1a1a1a; border-color: #555; }
         /* تصميم جملة الترحيب الجديدة */
@@ -354,7 +354,7 @@
             fields.push(field.trim());
             return fields;
         }
-                // دالة المشاركة الاحترافية
+               // دالة المشاركة الاحترافية (مع دعم متصفحات السوشيال ميديا)
         function shareAd(title) {
             if (navigator.share) {
                 navigator.share({
@@ -363,14 +363,23 @@
                     url: window.location.href
                 }).catch(console.error);
             } else {
-                alert('عفواً، جهازك لا يدعم هذه الميزة.');
+                // لو المتصفح داخل تطبيق زي الماسنجر وقافل الميزة، ننسخ الرابط فوراً
+                const tempInput = document.createElement("input");
+                tempInput.value = window.location.href;
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                document.execCommand("copy");
+                document.body.removeChild(tempInput);
+                alert('تم نسخ رابط الموقع بنجاح! تقدر تبعته لأصحابك دلوقتي.');
             }
         }
 
         async function fetchAdsFromGoogleSheet() {
             createCategoryLayouts();
             try {
-                const response = await fetch(csvUrl);
+                // إضافة كاسر الكاش بالوقت الحالي لإلغاء أي تعليق أو تأخير
+                const cacheBuster = `&t=${new Date().getTime()}`;
+                const response = await fetch(csvUrl + cacheBuster);
                 const rawText = await response.text();
                 const lines = rawText.split('\n');
                 globalAdsData = [];
