@@ -122,6 +122,24 @@
         .admin-btn { width: 100%; padding: 12px; border: none; border-radius: 8px; margin-bottom: 10px; font-weight: bold; cursor: pointer; color: white; display: block; text-align: center; text-decoration: none; font-size: 15px; }
         
         .status-msg { text-align: center; padding: 30px 20px; color: #888; font-size: 15px; font-weight: bold; }
+        /* 🌙 أكواد الوضع الليلي */
+        body.dark-mode { background-color: #121212; }
+        body.dark-mode #app-container { background-color: #1a1a1a; box-shadow: 0 0 40px rgba(255,255,255,0.05); }
+        body.dark-mode .ad-card { background: #242424; border-color: #333; }
+        body.dark-mode .ad-details h3, body.dark-mode .vip-info h3, body.dark-mode #ads-section-title { color: #f4f7f6 !important; }
+        body.dark-mode .ad-details p, body.dark-mode .vip-info p { color: #bbb; }
+        body.dark-mode .vip-card { background: linear-gradient(180deg, #242424 0%, #1a1a1a 100%); border-color: #555; }
+        body.dark-mode .welcome-box { background: linear-gradient(90deg, #333, #222); color: #D4AF37; border-color: #555; }
+        body.dark-mode .sidebar { background: #1a1a1a; }
+        body.dark-mode .sidebar h3 { color: #D4AF37; border-bottom-color: #555; }
+        body.dark-mode .sidebar .cat-btn-side { background: #242424; color: #ddd; border-color: #444; }
+        body.dark-mode .sidebar .cat-btn-side.active { background: #D4AF37; color: #0f2027; }
+        body.dark-mode .cat-btn { background: #242424; color: #ddd; border-color: #444; }
+        body.dark-mode .cat-btn.active { background: linear-gradient(135deg, #0f2027, #203a43); color: #D4AF37; border-color: #D4AF37; }
+        body.dark-mode #loading-msg h3 { color: #f4f7f6 !important; }
+        body.dark-mode .status-msg { color: #aaa; }
+        body.dark-mode .normal-wa-btn { background: #333; color: #25D366; border-color: #25D366; }
+        body.dark-mode button[onclick^="shareAd"] { background: #333 !important; color: #ddd !important; border-color: #555 !important; }
     </style>
 </head>
 <body>
@@ -134,7 +152,8 @@
                 <h1>دليلك | Daleelak</h1>
                 <p>دليلك لأفضل العروض</p>
             </div>
-            <div class="spacer"></div>
+            <!-- زرار الوضع الليلي -->
+            <div id="dark-toggle-icon" onclick="toggleDarkMode()" style="font-size: 24px; cursor: pointer; width: 28px; text-align: left; transition: 0.3s;">🌙</div>
         </div>
 
         <div class="sticky-cat" id="sticky-cat">
@@ -272,7 +291,16 @@
             '🏢 العقارات', '🎓 التعليم', '💼 الخدمات', '⚽ الرياضة والترفيه', '🎉 المناسبات', 
             '✈️ السفر والسياحة', '🐾 الحيوانات الأليفة', '💳 الخدمات المالية', '🚚 الشحن والتوصيل', '📌 أخرى'
         ];
-
+// دالة الوضع الليلي
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            let toggleIcon = document.getElementById('dark-toggle-icon');
+            if (document.body.classList.contains('dark-mode')) {
+                toggleIcon.innerText = '☀️';
+            } else {
+                toggleIcon.innerText = '🌙';
+            }
+        }
         function toggleMenu() {
             document.getElementById('sidebar').classList.toggle('active');
             document.getElementById('overlay').classList.toggle('active');
