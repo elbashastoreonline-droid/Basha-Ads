@@ -45,9 +45,9 @@
 /* شريط الأخبار المتحرك */
         .news-ticker-wrapper { margin: 15px 15px 0 15px; background: #0f2027; border: 1px solid #D4AF37; border-radius: 10px; overflow: hidden; padding: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); white-space: nowrap; display: block; position: relative; }
         .news-ticker-text { display: inline-block; color: #D4AF37; font-weight: bold; font-size: 15px; animation: scroll-ticker 20s linear infinite; }
-        @keyframes scroll-ticker {
-            0% { transform: translateX(100vw); }
-            100% { transform: translateX(-100%); }
+       @keyframes scroll-ticker {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100vw); }
         }
         body.dark-mode .news-ticker-wrapper { background: #1a1a1a; border-color: #555; }
         body.dark-mode .news-ticker-wrapper { background: #1a1a1a; border-color: #555; }
