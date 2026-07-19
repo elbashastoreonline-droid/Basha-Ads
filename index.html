@@ -42,7 +42,14 @@
         .header-title h1 { font-size: 22px; font-weight: 900; color: #fff; letter-spacing: 1px; }
         .header-title p { font-size: 13px; color: #D4AF37; font-weight: bold; margin-top: 2px; }
         .spacer { width: 28px; } 
-
+/* شريط الأخبار المتحرك */
+        .news-ticker-wrapper { margin: 15px 15px 0 15px; background: #0f2027; border: 1px solid #D4AF37; border-radius: 10px; overflow: hidden; display: flex; align-items: center; padding: 8px 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .news-ticker-text { white-space: nowrap; color: #D4AF37; font-weight: bold; font-size: 14px; display: inline-block; animation: scroll-ticker 25s linear infinite; }
+        @keyframes scroll-ticker {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100vw); }
+        }
+        body.dark-mode .news-ticker-wrapper { background: #1a1a1a; border-color: #555; }
         /* تصميم جملة الترحيب الجديدة */
         .welcome-box { text-align: center; padding: 12px; font-weight: 900; color: #0f2027; background: linear-gradient(90deg, #D4AF37, #F3E5AB); margin: 15px 15px 0 15px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 1px solid #c5a017; font-size: 16px; }
 
@@ -176,6 +183,14 @@
         </div>
 
         <div class="welcome-box">✨ كل اللي محتاجه هتلاقيه عندنا! ✨</div>
+        <!-- شريط الأخبار المتحرك -->
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <div class="news-ticker-wrapper">
+                <div class="news-ticker-text">
+                    📢 عروض اليوم: خصم خاص على إعلانات الـ VIP لفترة محدودة... | 🚀 أسرع شحن لألعاب ببجي وفري فاير مع الراعي الرسمي GAME BASHA... | 💎 تصفح أحدث العروض والخصومات في دليلك...
+                </div>
+            </div>
+        </div>
         <!-- شريط البحث -->
         <div style="padding: 15px 15px 0 15px; max-width: 1200px; margin: 0 auto;">
             <input type="text" id="search-box" onkeyup="liveSearch()" placeholder="🔍 ابحث عن مطعم، خدمة، عرض..." style="width: 100%; padding: 12px 15px; border-radius: 25px; border: 2px solid #D4AF37; outline: none; font-size: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); text-align: right; color: #333; font-weight: bold;">
