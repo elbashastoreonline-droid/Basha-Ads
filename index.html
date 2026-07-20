@@ -104,7 +104,22 @@
         .vip-card img { width: 100%; height: 180px; object-fit: cover; border-bottom: 3px solid #D4AF37; }
         .vip-info { padding: 20px 15px; text-align: center; }
         .vip-info h3 { color: #0f2027; font-size: 20px; font-weight: 900; margin-bottom: 8px; }
-        .vip-info p { font-size: 14px; color: #555; margin-bottom: 15px; line-height: 1.5; font-weight: bold; word-wrap: break-word; white-space: pre-wrap; overflow: hidden; }
+        .vip-info p { 
+            font-size: 14px; 
+            color: #555; 
+            margin-bottom: 15px; 
+            line-height: 1.5; 
+            font-weight: bold; 
+            word-break: break-word; 
+            overflow-wrap: break-word; 
+            white-space: normal; 
+            max-width: 100%; 
+            display: -webkit-box;
+            -webkit-line-clamp: 3; /* بيخلي الوصف اخره 3 سطور لو طويل عشان الكارت يفضل شيك */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
         .vip-wa-btn { background: linear-gradient(90deg, #25D366, #128C7E); color: white; border: none; padding: 12px; border-radius: 12px; font-weight: bold; font-size: 16px; width: 100%; display: block; text-decoration: none; box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4); }
 
         /* 📦 تصميم الإعلانات العادية الهادية 📦 */
