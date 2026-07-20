@@ -461,12 +461,11 @@
                 if (cleanPhone.startsWith('01') && cleanPhone.length === 11) { cleanPhone = '2' + cleanPhone; }
                 const waUrl = cleanPhone ? `https://wa.me/${cleanPhone}` : '';
 
-                // تجهيز رقم الاتصال (لو موجود)
+                                // تجهيز رقم الاتصال (لو موجود)
                 let cleanCall = ad.callPhone ? ad.callPhone.replace(/[^0-9]/g, '') : '';
 
-const waUrl = `https://wa.me/${cleanPhone}`;
-                
-                                if (ad.type === 'vip') {
+                if (ad.type === 'vip') {
+
                     vipAdsCount++;
                     
                     // بناء زراير الـ VIP بذكاء (الزرار اللي ملوش داتا في الشيت مش هيظهر أصلاً)
