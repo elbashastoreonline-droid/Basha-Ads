@@ -320,7 +320,7 @@
 }
         
 </style>
-        <script>
+            <script>
         const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTA9f759D07O_z3VnIh8krMD0iKpFkwGQCF08_IymtIa08W2XGuhDpjhtgb1Zao-5YKGJ-mHsb3qt70/pub?gid=1257423716&single=true&output=csv';
         let globalAdsData = []; 
 
@@ -369,19 +369,53 @@
             });
         }
 
-        function parseCSVLine(text) {
-            let fields = []; let field = ''; let inQuotes = false;
-            for (let i = 0; i < text.length; i++) {
-                let char = text[i];
-                if (char === '"') { inQuotes = !inQuotes; }
-                else if (char === ',' && !inQuotes) { fields.push(field.trim()); field = ''; }
-                else { field += char; }
+        // 🌟 الدالة الجديدة لقراءة البيانات باحترافية (بتحل مشكلة السطور المقطوعة)
+        function parseCSV(rawText) {
+            let rows = [];
+            let fields = [];
+            let field = '';
+            let inQuotes = false;
+            for (let i = 0; i < rawText.length; i++) {
+                let char = rawText[i];
+                let nextChar = rawText[i + 1];
+
+                if (char === '"') {
+                    if (inQuotes && nextChar === '"') {
+                        field += '"';
+                        i++; 
+                    } else {
+                        inQuotes = !inQuotes;
+                    }
+                } else if (char === ',' && !inQuotes) {
+                    fields.push(field);
+                    field = '';
+                } else if (char === '\n' && !inQuotes) {
+                    fields.push(field);
+                    rows.push(fields);
+                    fields = [];
+                    field = '';
+                } else if (char === '\r' && !inQuotes) {
+                    // نتجاهل الـ return character
+                } else {
+                    field += char;
+                }
             }
-            fields.push(field.trim());
-            return fields;
+            if (fields.length > 0 || field !== '') {
+                fields.push(field);
+                rows.push(fields);
+            }
+            return rows;
         }
 
-        // دالة المشاركة الاحترافية
+        // 🌟 دالة تحويل الأرقام العربية (٠١٢) إلى إنجليزية (012)
+        function convertArabicToEnglishNumbers(str) {
+            if (!str) return '';
+            const arabicNumbers = /[\u0660-\u0669]/g;
+            return str.replace(arabicNumbers, function(c) {
+                return c.charCodeAt(0) - 0x0660;
+            });
+        }
+
         function shareAd(title) {
             if (navigator.share) {
                 navigator.share({
@@ -406,32 +440,33 @@
                 const cacheBuster = `&t=${new Date().getTime()}`;
                 const response = await fetch(csvUrl + cacheBuster);
                 const rawText = await response.text();
-                const lines = rawText.split('\n');
+                
+                // استخدام الدالة الجديدة بدل split اللي كانت بتبوظ الكلام
+                const rows = parseCSV(rawText);
                 globalAdsData = [];
 
-                for (let i = 1; i < lines.length; i++) {
-                    if (!lines[i].trim()) continue;
-                    const columns = parseCSVLine(lines[i]);
+                for (let i = 1; i < rows.length; i++) {
+                    const columns = rows[i];
                     if (!columns[1] || columns[1].trim() === "") continue; 
 
                     globalAdsData.push({
-                        title: columns[1],
-                        desc: columns[2] || '',
-                        category: columns[3] || '📌 أخرى',
-                        img: columns[4] || '',
-                        whatsapp: columns[5] || '', 
+                        title: columns[1].trim(),
+                        desc: columns[2] ? columns[2].trim() : '',
+                        category: columns[3] ? columns[3].trim() : '📌 أخرى',
+                        img: columns[4] ? columns[4].trim() : '',
+                        whatsapp: columns[5] ? columns[5].trim() : '', 
                         type: columns[6] ? columns[6].trim().toLowerCase() : 'normal',
                         status: columns[7] ? columns[7].trim() : 'شغال',
                         location: columns[12] ? columns[12].trim() : '', 
                         callPhone: columns[13] ? columns[13].trim() : ''
                     });
-                } // تم إضافة قوس الإغلاق المفقود للـ for هنا بنجاح
+                }
 
                 document.getElementById('loading-msg').style.display = 'none';
                 globalAdsData.sort(() => Math.random() - 0.5);
                 renderCategorizedAds('الكل');
             } catch (error) {
-                document.getElementById('loading-msg').innerText = '⚠️ حدث خطأ في الاتصال بقاعدة البيانات.';
+                document.getElementById('loading-msg').innerHTML = '<h3 style="color: #e74c3c;">⚠️ حدث خطأ في الاتصال بقاعدة البيانات.</h3>';
             }
         }
 
@@ -454,11 +489,15 @@
 
                 const displayImg = ad.img ? ad.img : 'https://i.ibb.co/pjxDzJxM/file-00000000335471f48a03a0acb621d53c.png';
                 
-                let cleanPhone = ad.whatsapp ? ad.whatsapp.replace(/[^0-9]/g, '') : '';
+                // 🌟 معالجة رقم الواتساب بالدالة الجديدة
+                let waStr = convertArabicToEnglishNumbers(ad.whatsapp);
+                let cleanPhone = waStr.replace(/[^0-9]/g, '');
                 if (cleanPhone.startsWith('01') && cleanPhone.length === 11) { cleanPhone = '2' + cleanPhone; }
                 const waUrl = cleanPhone ? `https://wa.me/${cleanPhone}` : '';
 
-                let cleanCall = ad.callPhone ? ad.callPhone.replace(/[^0-9]/g, '') : '';
+                // 🌟 معالجة رقم الاتصال بالدالة الجديدة
+                let callStr = convertArabicToEnglishNumbers(ad.callPhone);
+                let cleanCall = callStr.replace(/[^0-9]/g, '');
 
                 if (ad.type === 'vip') {
                     vipAdsCount++;
@@ -482,7 +521,7 @@
                             </div>
                         </div>
                     `;
-                } else { // تم تصحيح الربط هنا بين الـ if والـ else بنجاح
+                } else {
                     normalAdsCount++;
                     
                     let normalButtons = '';
@@ -575,7 +614,9 @@
         });
 
         fetchAdsFromGoogleSheet();
-                </script>
+                        </script>
+    
+        
     
     
 </body>
