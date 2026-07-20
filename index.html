@@ -99,10 +99,43 @@
             .vip-scroll::-webkit-scrollbar-track { background: transparent; }
         }
         
-        .vip-card { min-width: 90%; scroll-snap-align: center; background: linear-gradient(180deg, #ffffff 0%, #fffbf0 100%); border-radius: 20px; border: 2px solid #D4AF37; overflow: hidden; box-shadow: 0 8px 25px rgba(212, 175, 55, 0.25); flex-shrink: 0; position: relative; transform: scale(1); transition: 0.3s; }
+        .vip-card {
+    width: 90%;
+    min-width: 90%;
+    max-width: 90%;
+    scroll-snap-align: center;
+    background: linear-gradient(180deg, #ffffff 0%, #fffbf0 100%);
+    border-radius: 20px;
+    border: 2px solid #D4AF37;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.25);
+    flex-shrink: 0;
+    position: relative;
+    transform: scale(1);
+    transition: 0.3s;
+        }
         .vip-badge { position: absolute; top: 15px; right: 15px; background: linear-gradient(135deg, #FFDF00, #D4AF37); color: #000; padding: 6px 15px; border-radius: 25px; font-weight: 900; font-size: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 10; border: 1px solid #fff; }
         .vip-card img { width: 100%; height: 180px; object-fit: cover; border-bottom: 3px solid #D4AF37; }
-        .vip-info { padding: 20px 15px; text-align: center; }
+        .vip-info p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 15px;
+    line-height: 1.5;
+    font-weight: bold;
+
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+        }
         .vip-info h3 { color: #0f2027; font-size: 20px; font-weight: 900; margin-bottom: 8px; }
         ..vip-info p {
     font-size: 14px;
