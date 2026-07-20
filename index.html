@@ -104,16 +104,16 @@
         .vip-card img { width: 100%; height: 180px; object-fit: cover; border-bottom: 3px solid #D4AF37; }
         .vip-info { padding: 20px 15px; text-align: center; }
         .vip-info h3 { color: #0f2027; font-size: 20px; font-weight: 900; margin-bottom: 8px; }
-        .vip-info p { font-size: 14px; color: #555; margin-bottom: 15px; line-height: 1.5; font-weight: bold; }
+        .vip-info p { font-size: 14px; color: #555; margin-bottom: 15px; line-height: 1.5; font-weight: bold; word-wrap: break-word; white-space: pre-wrap; overflow: hidden; }
         .vip-wa-btn { background: linear-gradient(90deg, #25D366, #128C7E); color: white; border: none; padding: 12px; border-radius: 12px; font-weight: bold; font-size: 16px; width: 100%; display: block; text-decoration: none; box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4); }
 
         /* 📦 تصميم الإعلانات العادية الهادية 📦 */
         .ad-list { padding: 0 15px 20px 15px; display: flex; flex-direction: column; gap: 15px; }
         .ad-card { background: #fff; border-radius: 16px; display: flex; overflow: hidden; box-shadow: 0 3px 10px rgba(0,0,0,0.06); border: 1px solid #eaeaea; transition: 0.3s; }
         .ad-card img { width: 110px; height: 120px; object-fit: cover; border-left: 1px solid #eaeaea; }
-        .ad-details { padding: 12px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .ad-details { padding: 12px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; min-width: 0; }
         .ad-details h3 { font-size: 16px; color: #222; font-weight: 900; }
-        .ad-details p { font-size: 12px; color: #777; margin-top: 5px; line-height: 1.4; }
+        .ad-details p { font-size: 12px; color: #777; margin-top: 5px; line-height: 1.4; word-wrap: break-word; white-space: pre-wrap; overflow: hidden; }
         .normal-wa-btn { background: #f0f0f0; color: #128C7E; border: 1px solid #25D366; padding: 8px; border-radius: 8px; font-weight: bold; text-align: center; text-decoration: none; font-size: 13px; margin-top: 10px; display: block; transition: 0.3s; }
         .normal-wa-btn:hover { background: #25D366; color: #fff; }
         
@@ -413,16 +413,18 @@
                     const columns = parseCSVLine(lines[i]);
                     if (!columns[1] || columns[1].trim() === "") continue; 
 
-                    globalAdsData.push({
+                                        globalAdsData.push({
                         title: columns[1],
                         desc: columns[2] || '',
                         category: columns[3] || '📌 أخرى',
                         img: columns[4] || '',
-                        whatsapp: columns[5] || '201288023436',
+                        whatsapp: columns[5] || '', 
                         type: columns[6] ? columns[6].trim().toLowerCase() : 'normal',
-                        status: columns[7] ? columns[7].trim() : 'شغال'
+                        status: columns[7] ? columns[7].trim() : 'شغال',
+                        location: columns[12] ? columns[12].trim() : '', 
+                        callPhone: columns[13] ? columns[13].trim() : ''
                     });
-                }
+
 
                 document.getElementById('loading-msg').style.display = 'none';
 
@@ -452,16 +454,27 @@
                     if (!ad.category.includes(cleanSearch)) return;
                 }
 
-                const displayImg = ad.img ? ad.img : 'https://i.ibb.co/pjxDzJxM/file-00000000335471f48a03a0acb621d53c.png';
-                let cleanPhone = ad.whatsapp.replace(/[^0-9]/g, '');
-// الكود ده بيشوف لو الرقم بيبدأ بـ 01 هنضيفله 2 عشان يبقى بكود مصر 20 ويشتغل مع الواتساب
-if (cleanPhone.startsWith('01') && cleanPhone.length === 11) {
-    cleanPhone = '2' + cleanPhone;
+                                const displayImg = ad.img ? ad.img : 'https://i.ibb.co/pjxDzJxM/file-00000000335471f48a03a0acb621d53c.png';
+                
+                // تجهيز رقم الواتساب (لو موجود)
+                let cleanPhone = ad.whatsapp ? ad.whatsapp.replace(/[^0-9]/g, '') : '';
+                if (cleanPhone.startsWith('01') && cleanPhone.length === 11) { cleanPhone = '2' + cleanPhone; }
+                const waUrl = cleanPhone ? `https://wa.me/${cleanPhone}` : '';
+
+                // تجهيز رقم الاتصال (لو موجود)
+                let cleanCall = ad.callPhone ? ad.callPhone.replace(/[^0-9]/g, '') : '';
 }
 const waUrl = `https://wa.me/${cleanPhone}`;
                 
-                if (ad.type === 'vip') {
+                                if (ad.type === 'vip') {
                     vipAdsCount++;
+                    
+                    // بناء زراير الـ VIP بذكاء (الزرار اللي ملوش داتا في الشيت مش هيظهر أصلاً)
+                    let vipButtons = '';
+                    if (cleanPhone) vipButtons += `<a href="${waUrl}" target="_blank" class="vip-wa-btn" style="flex-grow: 1; margin: 0; padding: 10px; font-size: 14px;">💬 واتساب</a>`;
+                    if (cleanCall) vipButtons += `<a href="tel:${cleanCall}" class="vip-wa-btn" style="background: #3498db; flex-grow: 1; margin: 0; padding: 10px; font-size: 14px; box-shadow: none;">📞 اتصال</a>`;
+                    if (ad.location) vipButtons += `<a href="${ad.location}" target="_blank" class="vip-wa-btn" style="background: #e74c3c; flex-grow: 1; margin: 0; padding: 10px; font-size: 14px; box-shadow: none;">📍 لوكيشن</a>`;
+
                     vipContainer.innerHTML += `
                         <div class="vip-card shimmer-effect">
                             <div class="vip-badge">👑 VIP</div>
@@ -469,16 +482,25 @@ const waUrl = `https://wa.me/${cleanPhone}`;
                             <div class="vip-info">
                                 <h3>${ad.title}</h3>
                                 <p>${ad.desc}</p>
-                                    <div style="display: flex; gap: 10px;">
-        <a href="${waUrl}" target="_blank" class="vip-wa-btn" style="flex-grow: 1; margin: 0;">💬 تواصل عبر الواتساب</a>
-        <button onclick="shareAd('${ad.title}')" style="background: #fff; border: 2px solid #D4AF37; color: #0f2027; padding: 0 15px; border-radius: 12px; font-size: 18px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">🔗</button>
-    </div>
-
+                                <div style="display: flex; gap: 8px;">
+                                    ${vipButtons}
+                                    <button onclick="shareAd('${ad.title}')" style="background: #fff; border: 2px solid #D4AF37; color: #0f2027; padding: 0 15px; border-radius: 12px; font-size: 18px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">🔗</button>
+                                </div>
                             </div>
                         </div>
                     `;
-                } else {
+                }
+
+                    `;
+                                } else {
                     normalAdsCount++;
+                    
+                    // بناء زراير الإعلان العادي بذكاء
+                    let normalButtons = '';
+                    if (cleanPhone) normalButtons += `<a href="${waUrl}" target="_blank" class="normal-wa-btn" style="flex-grow: 1; margin-top: 0;">💬 واتساب</a>`;
+                    if (cleanCall) normalButtons += `<a href="tel:${cleanCall}" class="normal-wa-btn" style="background: #f4f7f6; color: #3498db; border: 1px solid #3498db; flex-grow: 1; margin-top: 0;">📞 اتصال</a>`;
+                    if (ad.location) normalButtons += `<a href="${ad.location}" target="_blank" class="normal-wa-btn" style="background: #f4f7f6; color: #e74c3c; border: 1px solid #e74c3c; flex-grow: 1; margin-top: 0;">📍 لوكيشن</a>`;
+
                     adsContainer.innerHTML += `
                         <div class="ad-card">
                             <img src="${displayImg}" alt="Ad Image">
@@ -487,11 +509,10 @@ const waUrl = `https://wa.me/${cleanPhone}`;
                                     <h3>${ad.title}</h3>
                                     <p>${ad.desc}</p>
                                 </div>
-                                    <div style="display: flex; gap: 8px; margin-top: 10px;">
-        <a href="${waUrl}" target="_blank" class="normal-wa-btn" style="flex-grow: 1; margin-top: 0;">💬 تواصل عبر الواتساب</a>
-        <button onclick="shareAd('${ad.title}')" style="background: #f9f9f9; border: 1px solid #ccc; color: #555; padding: 0 12px; border-radius: 8px; font-size: 16px; cursor: pointer;">🔗</button>
-    </div>
-
+                                <div style="display: flex; gap: 8px; margin-top: 10px;">
+                                    ${normalButtons}
+                                    <button onclick="shareAd('${ad.title}')" style="background: #f9f9f9; border: 1px solid #ccc; color: #555; padding: 0 12px; border-radius: 8px; font-size: 16px; cursor: pointer;">🔗</button>
+                                </div>
                             </div>
                         </div>
                     `;
