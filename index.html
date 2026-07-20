@@ -588,12 +588,10 @@
                                     <button onclick="shareAd('${ad.title}')" class="icon-btn btn-share" title="مشاركة">🔗</button>
                                 </div>
                             </div>
-                                                </div>
-                    `;
+                       </div>
+              `;
                 } else {
                     normalAdsCount++;
-
-                    
                     let normalButtons = '';
                     if (cleanPhone) normalButtons += `<a href="${waUrl}" target="_blank" class="normal-wa-btn" style="flex-grow: 1; margin-top: 0;">💬 واتساب</a>`;
                     if (cleanCall) normalButtons += `<a href="tel:${cleanCall}" class="normal-wa-btn" style="background: #f4f7f6; color: #3498db; border: 1px solid #3498db; flex-grow: 1; margin-top: 0;">📞 اتصال</a>`;
