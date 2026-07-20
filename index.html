@@ -320,7 +320,7 @@
 }
         
 </style>
-    <script>
+        <script>
         const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTA9f759D07O_z3VnIh8krMD0iKpFkwGQCF08_IymtIa08W2XGuhDpjhtgb1Zao-5YKGJ-mHsb3qt70/pub?gid=1257423716&single=true&output=csv';
         let globalAdsData = []; 
 
@@ -330,7 +330,8 @@
             '🏢 العقارات', '🎓 التعليم', '💼 الخدمات', '⚽ الرياضة والترفيه', '🎉 المناسبات', 
             '✈️ السفر والسياحة', '🐾 الحيوانات الأليفة', '💳 الخدمات المالية', '🚚 الشحن والتوصيل', '📌 أخرى'
         ];
-// دالة الوضع الليلي
+
+        // دالة الوضع الليلي
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
             let toggleIcon = document.getElementById('dark-toggle-icon');
@@ -340,6 +341,7 @@
                 toggleIcon.innerText = '🌙';
             }
         }
+
         function toggleMenu() {
             document.getElementById('sidebar').classList.toggle('active');
             document.getElementById('overlay').classList.toggle('active');
@@ -378,7 +380,8 @@
             fields.push(field.trim());
             return fields;
         }
-               // دالة المشاركة الاحترافية (مع دعم متصفحات السوشيال ميديا)
+
+        // دالة المشاركة الاحترافية
         function shareAd(title) {
             if (navigator.share) {
                 navigator.share({
@@ -387,7 +390,6 @@
                     url: window.location.href
                 }).catch(console.error);
             } else {
-                // لو المتصفح داخل تطبيق زي الماسنجر وقافل الميزة، ننسخ الرابط فوراً
                 const tempInput = document.createElement("input");
                 tempInput.value = window.location.href;
                 document.body.appendChild(tempInput);
@@ -401,7 +403,6 @@
         async function fetchAdsFromGoogleSheet() {
             createCategoryLayouts();
             try {
-                // إضافة كاسر الكاش بالوقت الحالي لإلغاء أي تعليق أو تأخير
                 const cacheBuster = `&t=${new Date().getTime()}`;
                 const response = await fetch(csvUrl + cacheBuster);
                 const rawText = await response.text();
@@ -413,7 +414,7 @@
                     const columns = parseCSVLine(lines[i]);
                     if (!columns[1] || columns[1].trim() === "") continue; 
 
-                                        globalAdsData.push({
+                    globalAdsData.push({
                         title: columns[1],
                         desc: columns[2] || '',
                         category: columns[3] || '📌 أخرى',
@@ -424,13 +425,10 @@
                         location: columns[12] ? columns[12].trim() : '', 
                         callPhone: columns[13] ? columns[13].trim() : ''
                     });
-
+                } // تم إضافة قوس الإغلاق المفقود للـ for هنا بنجاح
 
                 document.getElementById('loading-msg').style.display = 'none';
-
-                // كود الترتيب العشوائي للإعلانات مع كل تحديث للصفحة
                 globalAdsData.sort(() => Math.random() - 0.5);
-
                 renderCategorizedAds('الكل');
             } catch (error) {
                 document.getElementById('loading-msg').innerText = '⚠️ حدث خطأ في الاتصال بقاعدة البيانات.';
@@ -454,21 +452,17 @@
                     if (!ad.category.includes(cleanSearch)) return;
                 }
 
-                                const displayImg = ad.img ? ad.img : 'https://i.ibb.co/pjxDzJxM/file-00000000335471f48a03a0acb621d53c.png';
+                const displayImg = ad.img ? ad.img : 'https://i.ibb.co/pjxDzJxM/file-00000000335471f48a03a0acb621d53c.png';
                 
-                // تجهيز رقم الواتساب (لو موجود)
                 let cleanPhone = ad.whatsapp ? ad.whatsapp.replace(/[^0-9]/g, '') : '';
                 if (cleanPhone.startsWith('01') && cleanPhone.length === 11) { cleanPhone = '2' + cleanPhone; }
                 const waUrl = cleanPhone ? `https://wa.me/${cleanPhone}` : '';
 
-                                // تجهيز رقم الاتصال (لو موجود)
                 let cleanCall = ad.callPhone ? ad.callPhone.replace(/[^0-9]/g, '') : '';
 
                 if (ad.type === 'vip') {
-
                     vipAdsCount++;
                     
-                    // بناء زراير الـ VIP بذكاء (الزرار اللي ملوش داتا في الشيت مش هيظهر أصلاً)
                     let vipButtons = '';
                     if (cleanPhone) vipButtons += `<a href="${waUrl}" target="_blank" class="vip-wa-btn" style="flex-grow: 1; margin: 0; padding: 10px; font-size: 14px;">💬 واتساب</a>`;
                     if (cleanCall) vipButtons += `<a href="tel:${cleanCall}" class="vip-wa-btn" style="background: #3498db; flex-grow: 1; margin: 0; padding: 10px; font-size: 14px; box-shadow: none;">📞 اتصال</a>`;
@@ -488,13 +482,9 @@
                             </div>
                         </div>
                     `;
-                }
-
-                    `;
-                                } else {
+                } else { // تم تصحيح الربط هنا بين الـ if والـ else بنجاح
                     normalAdsCount++;
                     
-                    // بناء زراير الإعلان العادي بذكاء
                     let normalButtons = '';
                     if (cleanPhone) normalButtons += `<a href="${waUrl}" target="_blank" class="normal-wa-btn" style="flex-grow: 1; margin-top: 0;">💬 واتساب</a>`;
                     if (cleanCall) normalButtons += `<a href="tel:${cleanCall}" class="normal-wa-btn" style="background: #f4f7f6; color: #3498db; border: 1px solid #3498db; flex-grow: 1; margin-top: 0;">📞 اتصال</a>`;
@@ -550,13 +540,13 @@
         }
 
         function resetCategory() { selectCategory('الكل'); }
-        // إظهار وإخفاء زرار الطلوع لفوق
+
         window.addEventListener('scroll', () => {
             let btn = document.getElementById('back-to-top');
             if (window.scrollY > 300) { btn.style.display = 'flex'; } 
             else { btn.style.display = 'none'; }
         });
-        // دالة البحث المباشر
+
         function liveSearch() {
             let input = document.getElementById('search-box').value.toLowerCase();
             let allAds = document.querySelectorAll('.ad-card, .vip-card');
@@ -565,7 +555,6 @@
                 let title = card.querySelector('h3').innerText.toLowerCase();
                 let desc = card.querySelector('p') ? card.querySelector('p').innerText.toLowerCase() : '';
                 
-                // لو الكلمة موجودة في العنوان أو الوصف هيعرض الإعلان، لو لأ هيخفيه
                 if (title.includes(input) || desc.includes(input)) {
                     card.style.display = ''; 
                 } else {
@@ -586,6 +575,8 @@
         });
 
         fetchAdsFromGoogleSheet();
-    </script>
+                </script>
+    
+    
 </body>
 </html>
