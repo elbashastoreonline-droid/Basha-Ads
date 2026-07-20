@@ -566,30 +566,52 @@
                 let callStr = convertArabicToEnglishNumbers(ad.callPhone);
                 let cleanCall = callStr.replace(/[^0-9]/g, '');
 
-                                                if (ad.type === 'vip') {
+                                                                if (ad.type === 'vip') {
                     vipAdsCount++;
                     
-                    // زراير أيقونات دائرية بدون كلام
+                    // بناء زراير الأيقونات الدائرية باستخدام اللوجوهات الحقيقية
                     let vipButtons = '';
-                    if (cleanPhone) vipButtons += `<a href="${waUrl}" target="_blank" class="icon-btn btn-wa" title="واتساب">💬</a>`;
-                    if (cleanCall) vipButtons += `<a href="tel:${cleanCall}" class="icon-btn btn-call" title="اتصال">📞</a>`;
-                    if (ad.location) vipButtons += `<a href="${ad.location}" target="_blank" class="icon-btn btn-loc" title="الموقع الجغرافي">📍</a>`;
+                    
+                    // زرار الواتساب (لوجو حقيقي)
+                    if (cleanPhone) {
+                        vipButtons += `
+                            <a href="${waUrl}" target="_blank" class="icon-btn btn-wa" title="واتساب" style="background: transparent; box-shadow: none;">
+                                <img src="1000031449.png" alt="WhatsApp" style="width: 45px; height: 45px; object-fit: contain; border: none; border-radius: 0;">
+                            </a>`;
+                    }
+                    
+                    // زرار الاتصال (لوجو حقيقي)
+                    if (cleanCall) {
+                        vipButtons += `
+                            <a href="tel:${cleanCall}" class="icon-btn btn-call" title="اتصال" style="background: transparent; box-shadow: none;">
+                                <img src="1000031452.png" alt="Call" style="width: 45px; height: 45px; object-fit: contain; border: none; border-radius: 0;">
+                            </a>`;
+                    }
+                    
+                    // زرار اللوكيشن (لوجو حقيقي)
+                    if (ad.location) {
+                        vipButtons += `
+                            <a href="${ad.location}" target="_blank" class="icon-btn btn-loc" title="الموقع الجغرافي" style="background: transparent; box-shadow: none;">
+                                <img src="1000031450.png" alt="Location" style="width: 45px; height: 45px; object-fit: contain; border: none; border-radius: 0;">
+                            </a>`;
+                    }
 
                     vipContainer.innerHTML += `
                         <div class="vip-card shimmer-effect">
                             <div class="vip-badge">👑 VIP</div>
-                            <img src="${displayImg}" alt="VIP Ad">
+                            <img src="${displayImg}" alt="VIP Ad" style="width: 100%; height: 180px; object-fit: cover; border-bottom: 3px solid #D4AF37;">
                             <div class="vip-info">
                                 <h3>${ad.title}</h3>
                                 <p>${ad.desc}</p>
                                 <!-- حاوية الزراير في المنتصف -->
                                 <div class="action-buttons-container">
                                     ${vipButtons}
-                                    <button onclick="shareAd('${ad.title}')" class="icon-btn btn-share" title="مشاركة">🔗</button>
+                                    <button onclick="shareAd('${ad.title}')" class="icon-btn btn-share" title="مشاركة" style="width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px;">🔗</button>
                                 </div>
                             </div>
-                       </div>
-              `;
+                        </div>
+                    `;
+
                 } else {
                     normalAdsCount++;
                     let normalButtons = '';
