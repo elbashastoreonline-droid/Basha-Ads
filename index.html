@@ -398,7 +398,7 @@
 }
         
     </style>
-              <script>
+        <script>
         const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTA9f759D07O_z3VnIh8krMD0iKpFkwGQCF08_IymtIa08W2XGuhDpjhtgb1Zao-5YKGJ-mHsb3qt70/pub?gid=1257423716&single=true&output=csv';
         let globalAdsData = []; 
 
@@ -477,8 +477,8 @@
                         whatsapp: columns[5] ? columns[5].trim() : '', 
                         type: columns[6] ? columns[6].trim().toLowerCase() : 'normal',
                         status: columns[7] ? columns[7].trim() : 'شغال',
-                        city: columns[8] ? columns[8].trim() : 'غير محدد',     // العمود I
-                        region: columns[9] ? columns[9].trim() : 'غير محدد',   // العمود J
+                        city: columns[8] ? columns[8].trim() : 'غير محدد',     
+                        region: columns[9] ? columns[9].trim() : 'غير محدد',   
                         location: columns[12] ? columns[12].trim() : '', 
                         callPhone: columns[13] ? columns[13].trim() : ''
                     });
@@ -488,32 +488,28 @@
                 globalAdsData.sort(() => Math.random() - 0.5);
                 
                 buildFilterDropdowns();
-                applyFilters(); // عرض الإعلانات بعد تجهيز الفلاتر
+                applyFilters(); 
             } catch (error) {
                 document.getElementById('loading-msg').innerHTML = '<h3 style="color: #e74c3c;">⚠️ حدث خطأ في الاتصال بقاعدة البيانات.</h3>';
             }
         }
 
-        // 🌟 بناء قوائم الفلاتر الذكية بناءً على الداتا الموجودة
         function buildFilterDropdowns() {
             const catSelect = document.getElementById('filter-category');
             const citySelect = document.getElementById('filter-city');
 
-            // تعبئة الأقسام
             appCategories.forEach(cat => {
                 catSelect.innerHTML += `<option value="${cat}">${cat}</option>`;
             });
 
-            // استخراج المدن الموجودة فعلياً بدون تكرار
-            const uniqueCities = [...new Set(globalAdsData.map(ad => ad.city))].filter(c => c && c !== 'غير محدد');
+            const uniqueCities = [...new Set(globalAdsData.map(ad => ad.city))].filter(c => c && c !== 'غير محدد' && c !== '-');
             uniqueCities.forEach(city => {
                 citySelect.innerHTML += `<option value="${city}">${city}</option>`;
             });
             
-            updateRegionDropdown(); // تظبيط منطقة أول مدينة
+            updateRegionDropdown(); 
         }
 
-        // 🌟 تحديث المناطق لما العميل يغير المدينة
         function updateRegionDropdown() {
             const selectedCity = document.getElementById('filter-city').value;
             const regionSelect = document.getElementById('filter-region');
@@ -522,16 +518,14 @@
 
             if (selectedCity === 'الكل') return;
 
-            // جلب المناطق الخاصة بهذه المدينة فقط
             const cityAds = globalAdsData.filter(ad => ad.city === selectedCity);
-            const uniqueRegions = [...new Set(cityAds.map(ad => ad.region))].filter(r => r && r !== 'غير محدد');
+            const uniqueRegions = [...new Set(cityAds.map(ad => ad.region))].filter(r => r && r !== 'غير محدد' && r !== '-');
 
             uniqueRegions.forEach(region => {
                 regionSelect.innerHTML += `<option value="${region}">${region}</option>`;
             });
         }
 
-        // 🌟 تطبيق الفلاتر وعرض الكروت المتطابقة
         function applyFilters() {
             const selectedCat = document.getElementById('filter-category').value;
             const selectedCity = document.getElementById('filter-city').value;
@@ -551,7 +545,6 @@
             renderAds(filteredAds);
         }
 
-        // 🌟 رسم الكروت على الشاشة بناءً على الداتا المفلترة
         function renderAds(adsArray) {
             const vipContainer = document.getElementById('vip-container');
             const adsContainer = document.getElementById('ads-container');
@@ -565,21 +558,24 @@
 
                 const displayImg = ad.img ? ad.img : 'https://i.ibb.co/pjxDzJxM/file-00000000335471f48a03a0acb621d53c.png';
                 
-                let waStr = convertArabicToEnglishNumbers(ad.whatsapp);
+                // تنظيف صارم للأرقام والروابط عشان اللوجوهات متظهرش عالفاضي
+                let waStr = convertArabicToEnglishNumbers(ad.whatsapp).trim();
                 let cleanPhone = waStr.replace(/[^0-9]/g, '');
                 if (cleanPhone.startsWith('01') && cleanPhone.length === 11) { cleanPhone = '2' + cleanPhone; }
                 const waUrl = cleanPhone ? `https://wa.me/${cleanPhone}` : '';
 
-                let callStr = convertArabicToEnglishNumbers(ad.callPhone);
+                let callStr = convertArabicToEnglishNumbers(ad.callPhone).trim();
                 let cleanCall = callStr.replace(/[^0-9]/g, '');
+                
+                let hasLocation = ad.location && ad.location.trim() !== '-' && ad.location.trim().length > 5;
 
                 if (ad.type === 'vip') {
                     vipAdsCount++;
-                    
                     let vipButtons = '';
+                    
                     if (cleanPhone) vipButtons += `<a href="${waUrl}" target="_blank" class="icon-btn btn-wa" title="واتساب" style="background: transparent; box-shadow: none;"><img src="1000031449.png" alt="WhatsApp" style="width: 45px; height: 45px; object-fit: contain; border: none; border-radius: 0;"></a>`;
                     if (cleanCall) vipButtons += `<a href="tel:${cleanCall}" class="icon-btn btn-call" title="اتصال" style="background: transparent; box-shadow: none;"><img src="1000031452.png" alt="Call" style="width: 45px; height: 45px; object-fit: contain; border: none; border-radius: 0;"></a>`;
-                    if (ad.location) vipButtons += `<a href="${ad.location}" target="_blank" class="icon-btn btn-loc" title="الموقع الجغرافي" style="background: transparent; box-shadow: none;"><img src="1000031450.png" alt="Location" style="width: 45px; height: 45px; object-fit: contain; border: none; border-radius: 0;"></a>`;
+                    if (hasLocation) vipButtons += `<a href="${ad.location}" target="_blank" class="icon-btn btn-loc" title="الموقع الجغرافي" style="background: transparent; box-shadow: none;"><img src="1000031450.png" alt="Location" style="width: 45px; height: 45px; object-fit: contain; border: none; border-radius: 0;"></a>`;
 
                     vipContainer.innerHTML += `
                         <div class="vip-card shimmer-effect">
@@ -588,7 +584,7 @@
                             <div class="vip-info">
                                 <h3>${ad.title}</h3>
                                 <p>${ad.desc}</p>
-                                <div class="action-buttons-container">
+                                <div class="action-buttons-container" style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
                                     ${vipButtons}
                                     <button onclick="shareAd('${ad.title}')" class="icon-btn btn-share" title="مشاركة" style="width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px;">🔗</button>
                                 </div>
@@ -598,9 +594,11 @@
                 } else {
                     normalAdsCount++;
                     let normalButtons = '';
-                    if (cleanPhone) normalButtons += `<a href="${waUrl}" target="_blank" class="normal-wa-btn" style="flex-grow: 1; margin-top: 0;">💬 واتساب</a>`;
-                    if (cleanCall) normalButtons += `<a href="tel:${cleanCall}" class="normal-wa-btn" style="background: #f4f7f6; color: #3498db; border: 1px solid #3498db; flex-grow: 1; margin-top: 0;">📞 اتصال</a>`;
-                    if (ad.location) normalButtons += `<a href="${ad.location}" target="_blank" class="normal-wa-btn" style="background: #f4f7f6; color: #e74c3c; border: 1px solid #e74c3c; flex-grow: 1; margin-top: 0;">📍 لوكيشن</a>`;
+                    
+                    // استخدام نفس لوجوهات الـ VIP للإعلان العادي
+                    if (cleanPhone) normalButtons += `<a href="${waUrl}" target="_blank" class="icon-btn" title="واتساب" style="background: transparent; box-shadow: none; width: 35px; height: 35px; padding: 0;"><img src="1000031449.png" alt="WhatsApp" style="width: 100%; height: 100%; object-fit: contain;"></a>`;
+                    if (cleanCall) normalButtons += `<a href="tel:${cleanCall}" class="icon-btn" title="اتصال" style="background: transparent; box-shadow: none; width: 35px; height: 35px; padding: 0;"><img src="1000031452.png" alt="Call" style="width: 100%; height: 100%; object-fit: contain;"></a>`;
+                    if (hasLocation) normalButtons += `<a href="${ad.location}" target="_blank" class="icon-btn" title="الموقع الجغرافي" style="background: transparent; box-shadow: none; width: 35px; height: 35px; padding: 0;"><img src="1000031450.png" alt="Location" style="width: 100%; height: 100%; object-fit: contain;"></a>`;
 
                     adsContainer.innerHTML += `
                         <div class="ad-card">
@@ -610,9 +608,10 @@
                                     <h3>${ad.title}</h3>
                                     <p>${ad.desc}</p>
                                 </div>
-                                <div style="display: flex; gap: 8px; margin-top: 10px;">
+                                <!-- flex-wrap بتعالج اختفاء زرار المشاركة لو الشاشة ضيقة -->
+                                <div style="display: flex; gap: 12px; margin-top: 10px; align-items: center; flex-wrap: wrap;">
                                     ${normalButtons}
-                                    <button onclick="shareAd('${ad.title}')" style="background: #f9f9f9; border: 1px solid #ccc; color: #555; padding: 0 12px; border-radius: 8px; font-size: 16px; cursor: pointer;">🔗</button>
+                                    <button onclick="shareAd('${ad.title}')" class="icon-btn" title="مشاركة" style="width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; background: #f9f9f9; border: 1px solid #ccc; color: #555; padding: 0;">🔗</button>
                                 </div>
                             </div>
                         </div>
@@ -621,7 +620,9 @@
             });
 
             vipSectionBlock.style.display = vipAdsCount > 0 ? 'block' : 'none';
-            if (normalAdsCount === 0 && vipAdsCount === 0) { adsContainer.innerHTML = `<div class="status-msg">📭 لا توجد عروض مطابقة لبحثك.</div>`; }
+            if (normalAdsCount === 0 && vipAdsCount === 0) {
+                adsContainer.innerHTML = `<div class="status-msg">📭 لا توجد عروض مطابقة لبحثك.</div>`;
+            }
         }
 
         window.addEventListener('scroll', () => {
@@ -651,6 +652,7 @@
 
         fetchAdsFromGoogleSheet();
     </script>
+
 
         
     
