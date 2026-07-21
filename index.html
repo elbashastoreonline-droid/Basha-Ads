@@ -301,8 +301,19 @@
         </div>
     </div>
 </div>
-        <div class="categories-wrapper">
-            <div class="categories" id="main-categories"></div>
+                <!-- شريط الفلاتر المنسدلة الاحترافي -->
+        <div style="padding: 15px; max-width: 1200px; margin: 0 auto; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
+            <select id="filter-category" onchange="applyFilters()" style="flex: 1; min-width: 140px; padding: 10px 12px; border-radius: 12px; border: 2px solid #D4AF37; font-weight: bold; background: #fff; font-size: 14px; outline: none; color: #0f2027; cursor: pointer;">
+                <option value="الكل">كل الأقسام 🔻</option>
+            </select>
+
+            <select id="filter-city" onchange="updateRegionDropdown(); applyFilters();" style="flex: 1; min-width: 110px; padding: 10px 12px; border-radius: 12px; border: 2px solid #D4AF37; font-weight: bold; background: #fff; font-size: 14px; outline: none; color: #0f2027; cursor: pointer;">
+                <option value="الكل">كل المدن 🔻</option>
+            </select>
+
+            <select id="filter-region" onchange="applyFilters()" style="flex: 1; min-width: 110px; padding: 10px 12px; border-radius: 12px; border: 2px solid #D4AF37; font-weight: bold; background: #fff; font-size: 14px; outline: none; color: #0f2027; cursor: pointer;">
+                <option value="الكل">كل المناطق 🔻</option>
+            </select>
         </div>
 
         <div class="vip-section" id="vip-section-block">
