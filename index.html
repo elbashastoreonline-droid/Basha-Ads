@@ -397,27 +397,22 @@
     animation: fadeIn 0.5s ease-out forwards;
 }
         
-</style>
-            <script>
+    </style>
+              <script>
         const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTA9f759D07O_z3VnIh8krMD0iKpFkwGQCF08_IymtIa08W2XGuhDpjhtgb1Zao-5YKGJ-mHsb3qt70/pub?gid=1257423716&single=true&output=csv';
         let globalAdsData = []; 
 
         const appCategories = [
-            'الكل', '🏥 الرعاية الصحية', '🍽️ المطاعم والمقاهي', '🛍️ التسوق', '👕 الأزياء والموضة', 
+            '🏥 الرعاية الصحية', '🍽️ المطاعم والمقاهي', '🛍️ التسوق', '👕 الأزياء والموضة', 
             '💄 الجمال والعناية', '📱 التقنية والإلكترونيات', '🚗 السيارات', '🏠 المنزل والصيانة', 
             '🏢 العقارات', '🎓 التعليم', '💼 الخدمات', '⚽ الرياضة والترفيه', '🎉 المناسبات', 
             '✈️ السفر والسياحة', '🐾 الحيوانات الأليفة', '💳 الخدمات المالية', '🚚 الشحن والتوصيل', '📌 أخرى'
         ];
 
-        // دالة الوضع الليلي
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
             let toggleIcon = document.getElementById('dark-toggle-icon');
-            if (document.body.classList.contains('dark-mode')) {
-                toggleIcon.innerText = '☀️';
-            } else {
-                toggleIcon.innerText = '🌙';
-            }
+            toggleIcon.innerText = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
         }
 
         function toggleMenu() {
@@ -425,101 +420,48 @@
             document.getElementById('overlay').classList.toggle('active');
         }
 
-        function createCategoryLayouts() {
-            const mainCatContainer = document.getElementById('main-categories');
-            const sideCatContainer = document.getElementById('sidebar-categories-box');
-            
-            mainCatContainer.innerHTML = '';
-            sideCatContainer.innerHTML = '';
-
-            appCategories.forEach(cat => {
-                const mainBtn = document.createElement('button');
-                mainBtn.className = `cat-btn ${cat === 'الكل' ? 'active' : ''}`;
-                mainBtn.innerText = cat;
-                mainBtn.onclick = () => selectCategory(cat);
-                mainCatContainer.appendChild(mainBtn);
-
-                const sideBtn = document.createElement('button');
-                sideBtn.className = `cat-btn-side ${cat === 'الكل' ? 'active' : ''}`;
-                sideBtn.innerText = cat;
-                sideBtn.onclick = () => selectCategory(cat);
-                sideCatContainer.appendChild(sideBtn);
-            });
-        }
-
-        // 🌟 الدالة الجديدة لقراءة البيانات باحترافية (بتحل مشكلة السطور المقطوعة)
         function parseCSV(rawText) {
-            let rows = [];
-            let fields = [];
-            let field = '';
-            let inQuotes = false;
+            let rows = []; let fields = []; let field = ''; let inQuotes = false;
             for (let i = 0; i < rawText.length; i++) {
-                let char = rawText[i];
-                let nextChar = rawText[i + 1];
-
+                let char = rawText[i]; let nextChar = rawText[i + 1];
                 if (char === '"') {
-                    if (inQuotes && nextChar === '"') {
-                        field += '"';
-                        i++; 
-                    } else {
-                        inQuotes = !inQuotes;
-                    }
+                    if (inQuotes && nextChar === '"') { field += '"'; i++; } 
+                    else { inQuotes = !inQuotes; }
                 } else if (char === ',' && !inQuotes) {
-                    fields.push(field);
-                    field = '';
+                    fields.push(field); field = '';
                 } else if (char === '\n' && !inQuotes) {
-                    fields.push(field);
-                    rows.push(fields);
-                    fields = [];
-                    field = '';
+                    fields.push(field); rows.push(fields); fields = []; field = '';
                 } else if (char === '\r' && !inQuotes) {
-                    // نتجاهل الـ return character
-                } else {
-                    field += char;
-                }
+                } else { field += char; }
             }
-            if (fields.length > 0 || field !== '') {
-                fields.push(field);
-                rows.push(fields);
-            }
+            if (fields.length > 0 || field !== '') { fields.push(field); rows.push(fields); }
             return rows;
         }
 
-        // 🌟 دالة تحويل الأرقام العربية (٠١٢) إلى إنجليزية (012)
         function convertArabicToEnglishNumbers(str) {
             if (!str) return '';
-            const arabicNumbers = /[\u0660-\u0669]/g;
-            return str.replace(arabicNumbers, function(c) {
+            return str.replace(/[\u0660-\u0669]/g, function(c) {
                 return c.charCodeAt(0) - 0x0660;
             });
         }
 
         function shareAd(title) {
             if (navigator.share) {
-                navigator.share({
-                    title: 'دليلك | Daleelak',
-                    text: 'شوف العرض ده على دليلك: ' + title,
-                    url: window.location.href
-                }).catch(console.error);
+                navigator.share({ title: 'دليلك | Daleelak', text: 'شوف العرض ده على دليلك: ' + title, url: window.location.href }).catch(console.error);
             } else {
                 const tempInput = document.createElement("input");
                 tempInput.value = window.location.href;
                 document.body.appendChild(tempInput);
-                tempInput.select();
-                document.execCommand("copy");
-                document.body.removeChild(tempInput);
-                alert('تم نسخ رابط الموقع بنجاح! تقدر تبعته لأصحابك دلوقتي.');
+                tempInput.select(); document.execCommand("copy"); document.body.removeChild(tempInput);
+                alert('تم نسخ رابط الموقع بنجاح!');
             }
         }
 
         async function fetchAdsFromGoogleSheet() {
-            createCategoryLayouts();
             try {
                 const cacheBuster = `&t=${new Date().getTime()}`;
                 const response = await fetch(csvUrl + cacheBuster);
                 const rawText = await response.text();
-                
-                // استخدام الدالة الجديدة بدل split اللي كانت بتبوظ الكلام
                 const rows = parseCSV(rawText);
                 globalAdsData = [];
 
@@ -535,6 +477,8 @@
                         whatsapp: columns[5] ? columns[5].trim() : '', 
                         type: columns[6] ? columns[6].trim().toLowerCase() : 'normal',
                         status: columns[7] ? columns[7].trim() : 'شغال',
+                        city: columns[8] ? columns[8].trim() : 'غير محدد',     // العمود I
+                        region: columns[9] ? columns[9].trim() : 'غير محدد',   // العمود J
                         location: columns[12] ? columns[12].trim() : '', 
                         callPhone: columns[13] ? columns[13].trim() : ''
                     });
@@ -542,70 +486,100 @@
 
                 document.getElementById('loading-msg').style.display = 'none';
                 globalAdsData.sort(() => Math.random() - 0.5);
-                renderCategorizedAds('الكل');
+                
+                buildFilterDropdowns();
+                applyFilters(); // عرض الإعلانات بعد تجهيز الفلاتر
             } catch (error) {
                 document.getElementById('loading-msg').innerHTML = '<h3 style="color: #e74c3c;">⚠️ حدث خطأ في الاتصال بقاعدة البيانات.</h3>';
             }
         }
 
-        function renderCategorizedAds(catName) {
+        // 🌟 بناء قوائم الفلاتر الذكية بناءً على الداتا الموجودة
+        function buildFilterDropdowns() {
+            const catSelect = document.getElementById('filter-category');
+            const citySelect = document.getElementById('filter-city');
+
+            // تعبئة الأقسام
+            appCategories.forEach(cat => {
+                catSelect.innerHTML += `<option value="${cat}">${cat}</option>`;
+            });
+
+            // استخراج المدن الموجودة فعلياً بدون تكرار
+            const uniqueCities = [...new Set(globalAdsData.map(ad => ad.city))].filter(c => c && c !== 'غير محدد');
+            uniqueCities.forEach(city => {
+                citySelect.innerHTML += `<option value="${city}">${city}</option>`;
+            });
+            
+            updateRegionDropdown(); // تظبيط منطقة أول مدينة
+        }
+
+        // 🌟 تحديث المناطق لما العميل يغير المدينة
+        function updateRegionDropdown() {
+            const selectedCity = document.getElementById('filter-city').value;
+            const regionSelect = document.getElementById('filter-region');
+            
+            regionSelect.innerHTML = '<option value="الكل">كل المناطق 🔻</option>';
+
+            if (selectedCity === 'الكل') return;
+
+            // جلب المناطق الخاصة بهذه المدينة فقط
+            const cityAds = globalAdsData.filter(ad => ad.city === selectedCity);
+            const uniqueRegions = [...new Set(cityAds.map(ad => ad.region))].filter(r => r && r !== 'غير محدد');
+
+            uniqueRegions.forEach(region => {
+                regionSelect.innerHTML += `<option value="${region}">${region}</option>`;
+            });
+        }
+
+        // 🌟 تطبيق الفلاتر وعرض الكروت المتطابقة
+        function applyFilters() {
+            const selectedCat = document.getElementById('filter-category').value;
+            const selectedCity = document.getElementById('filter-city').value;
+            const selectedRegion = document.getElementById('filter-region').value;
+
+            const filteredAds = globalAdsData.filter(ad => {
+                let cleanAdCat = ad.category.replace(/[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF]/g, "").trim();
+                let cleanSelectedCat = selectedCat.replace(/[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF]/g, "").trim();
+                
+                const matchCat = (selectedCat === 'الكل') || cleanAdCat.includes(cleanSelectedCat);
+                const matchCity = (selectedCity === 'الكل') || (ad.city === selectedCity);
+                const matchRegion = (selectedRegion === 'الكل') || (ad.region === selectedRegion);
+
+                return matchCat && matchCity && matchRegion;
+            });
+
+            renderAds(filteredAds);
+        }
+
+        // 🌟 رسم الكروت على الشاشة بناءً على الداتا المفلترة
+        function renderAds(adsArray) {
             const vipContainer = document.getElementById('vip-container');
             const adsContainer = document.getElementById('ads-container');
             const vipSectionBlock = document.getElementById('vip-section-block');
 
-            vipContainer.innerHTML = '';
-            adsContainer.innerHTML = '';
+            vipContainer.innerHTML = ''; adsContainer.innerHTML = '';
             let normalAdsCount = 0, vipAdsCount = 0;
 
-            globalAdsData.forEach(ad => {
+            adsArray.forEach(ad => {
                 if (ad.status === 'موقوف') return; 
-
-                if (catName !== 'الكل') {
-                    let cleanSearch = catName.replace(/[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF]/g, "").trim();
-                    if (!ad.category.includes(cleanSearch)) return;
-                }
 
                 const displayImg = ad.img ? ad.img : 'https://i.ibb.co/pjxDzJxM/file-00000000335471f48a03a0acb621d53c.png';
                 
-                // 🌟 معالجة رقم الواتساب بالدالة الجديدة
                 let waStr = convertArabicToEnglishNumbers(ad.whatsapp);
                 let cleanPhone = waStr.replace(/[^0-9]/g, '');
                 if (cleanPhone.startsWith('01') && cleanPhone.length === 11) { cleanPhone = '2' + cleanPhone; }
                 const waUrl = cleanPhone ? `https://wa.me/${cleanPhone}` : '';
 
-                // 🌟 معالجة رقم الاتصال بالدالة الجديدة
                 let callStr = convertArabicToEnglishNumbers(ad.callPhone);
                 let cleanCall = callStr.replace(/[^0-9]/g, '');
 
-                                                                if (ad.type === 'vip') {
+                if (ad.type === 'vip') {
                     vipAdsCount++;
                     
-                    // بناء زراير الأيقونات الدائرية باستخدام اللوجوهات الحقيقية
                     let vipButtons = '';
-                    
-                    // زرار الواتساب (لوجو حقيقي)
-                    if (cleanPhone) {
-                        vipButtons += `
-                            <a href="${waUrl}" target="_blank" class="icon-btn btn-wa" title="واتساب" style="background: transparent; box-shadow: none;">
-                                <img src="1000031449.png" alt="WhatsApp" style="width: 45px; height: 45px; object-fit: contain; border: none; border-radius: 0;">
-                            </a>`;
-                    }
-                    
-                    // زرار الاتصال (لوجو حقيقي)
-                    if (cleanCall) {
-                        vipButtons += `
-                            <a href="tel:${cleanCall}" class="icon-btn btn-call" title="اتصال" style="background: transparent; box-shadow: none;">
-                                <img src="1000031452.png" alt="Call" style="width: 45px; height: 45px; object-fit: contain; border: none; border-radius: 0;">
-                            </a>`;
-                    }
-                    
-                    // زرار اللوكيشن (لوجو حقيقي)
-                    if (ad.location) {
-                        vipButtons += `
-                            <a href="${ad.location}" target="_blank" class="icon-btn btn-loc" title="الموقع الجغرافي" style="background: transparent; box-shadow: none;">
-                                <img src="1000031450.png" alt="Location" style="width: 45px; height: 45px; object-fit: contain; border: none; border-radius: 0;">
-                            </a>`;
-                    }
+                    if (cleanPhone) vipButtons += `<a href="${waUrl}" target="_blank" class="icon-btn btn-wa" title="واتساب" style="background: transparent; box-shadow: none;"><img src="1000031449.png" alt="WhatsApp" style="width: 45px; height: 45px; object-fit: contain; border: none; border-radius: 0;"></a>`;
+                    if (cleanCall) vipButtons += `<a href="tel:${cleanCall}" class="icon-btn btn-call" title="اتصال" style="background: transparent; box-shadow: none;"><img src="1000031452.png" alt="Call" style="width: 45px; height: 45px; object-fit: contain; border: none; border-radius: 0;"></a>`;
+                    if (ad.location) vipButtons += `<a href="${ad.location}" target="_blank" class="icon-btn btn-loc" title="الموقع الجغرافي" style="background: transparent; box-shadow: none;"><img src="1000031450.png" alt="Location" style="width: 45px; height: 45px; object-fit: contain; border: none; border-radius: 0;"></a>`;
 
                     vipContainer.innerHTML += `
                         <div class="vip-card shimmer-effect">
@@ -614,7 +588,6 @@
                             <div class="vip-info">
                                 <h3>${ad.title}</h3>
                                 <p>${ad.desc}</p>
-                                <!-- حاوية الزراير في المنتصف -->
                                 <div class="action-buttons-container">
                                     ${vipButtons}
                                     <button onclick="shareAd('${ad.title}')" class="icon-btn btn-share" title="مشاركة" style="width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px;">🔗</button>
@@ -622,7 +595,6 @@
                             </div>
                         </div>
                     `;
-
                 } else {
                     normalAdsCount++;
                     let normalButtons = '';
@@ -649,57 +621,20 @@
             });
 
             vipSectionBlock.style.display = vipAdsCount > 0 ? 'block' : 'none';
-            if (normalAdsCount === 0 && vipAdsCount === 0) {
-                adsContainer.innerHTML = `<div class="status-msg">📭 لا توجد عروض في هذا القسم حالياً.</div>`;
-            }
+            if (normalAdsCount === 0 && vipAdsCount === 0) { adsContainer.innerHTML = `<div class="status-msg">📭 لا توجد عروض مطابقة لبحثك.</div>`; }
         }
-
-        function selectCategory(catName) {
-            document.getElementById('sidebar').classList.remove('active');
-            document.getElementById('overlay').classList.remove('active');
-
-            let stickyBar = document.getElementById('sticky-cat');
-            let stickyName = document.getElementById('sticky-cat-name');
-            let adsTitle = document.getElementById('ads-section-title');
-
-            document.querySelectorAll('.cat-btn, .cat-btn-side').forEach(btn => {
-                if (btn.innerText.trim() === catName.trim()) { btn.classList.add('active'); } 
-                else { btn.classList.remove('active'); }
-            });
-
-            if (catName === 'الكل') {
-                stickyBar.style.display = 'none';
-                adsTitle.innerText = "🔥 أحدث الإعلانات";
-            } else {
-                stickyBar.style.display = 'flex';
-                stickyName.innerText = catName;
-                adsTitle.innerText = `عروض قسم ${catName}`;
-            }
-
-            renderCategorizedAds(catName);
-        }
-
-        function resetCategory() { selectCategory('الكل'); }
 
         window.addEventListener('scroll', () => {
             let btn = document.getElementById('back-to-top');
-            if (window.scrollY > 300) { btn.style.display = 'flex'; } 
-            else { btn.style.display = 'none'; }
+            btn.style.display = window.scrollY > 300 ? 'flex' : 'none';
         });
 
         function liveSearch() {
             let input = document.getElementById('search-box').value.toLowerCase();
-            let allAds = document.querySelectorAll('.ad-card, .vip-card');
-            
-            allAds.forEach(card => {
+            document.querySelectorAll('.ad-card, .vip-card').forEach(card => {
                 let title = card.querySelector('h3').innerText.toLowerCase();
                 let desc = card.querySelector('p') ? card.querySelector('p').innerText.toLowerCase() : '';
-                
-                if (title.includes(input) || desc.includes(input)) {
-                    card.style.display = ''; 
-                } else {
-                    card.style.display = 'none';
-                }
+                card.style.display = (title.includes(input) || desc.includes(input)) ? '' : 'none';
             });
         }
 
@@ -715,7 +650,9 @@
         });
 
         fetchAdsFromGoogleSheet();
-                        </script>
+    </script>
+
+        
     
         
     
