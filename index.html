@@ -469,8 +469,8 @@
                     const columns = rows[i];
                     if (!columns[1] || columns[1].trim() === "") continue; 
 
-                    globalAdsData.push({
-                        title: columns[1].trim(),
+                                        globalAdsData.push({
+                        title: columns[1] ? columns[1].trim() : '',
                         desc: columns[2] ? columns[2].trim() : '',
                         category: columns[3] ? columns[3].trim() : '📌 أخرى',
                         img: columns[4] ? columns[4].trim() : '',
@@ -479,8 +479,8 @@
                         status: columns[7] ? columns[7].trim() : 'شغال',
                         city: columns[8] ? columns[8].trim() : 'غير محدد',     
                         region: columns[9] ? columns[9].trim() : 'غير محدد',   
-                        location: columns[12] ? columns[12].trim() : '', 
-                        callPhone: columns[13] ? columns[13].trim() : ''
+                        location: columns[14] ? columns[14].trim() : '', 
+                        callPhone: columns[15] ? columns[15].trim() : ''
                     });
                 }
 
@@ -558,16 +558,18 @@
 
                 const displayImg = ad.img ? ad.img : 'https://i.ibb.co/pjxDzJxM/file-00000000335471f48a03a0acb621d53c.png';
                 
-                // تنظيف صارم للأرقام والروابط عشان اللوجوهات متظهرش عالفاضي
+                                // فحص دقيق لمنع ظهور الأيقونات لو الخلية فاضية أو فيها بيانات غلط
                 let waStr = convertArabicToEnglishNumbers(ad.whatsapp).trim();
                 let cleanPhone = waStr.replace(/[^0-9]/g, '');
                 if (cleanPhone.startsWith('01') && cleanPhone.length === 11) { cleanPhone = '2' + cleanPhone; }
+                if (cleanPhone.length < 8) { cleanPhone = ''; } // تصفير لو الرقم مش حقيقي
                 const waUrl = cleanPhone ? `https://wa.me/${cleanPhone}` : '';
 
                 let callStr = convertArabicToEnglishNumbers(ad.callPhone).trim();
                 let cleanCall = callStr.replace(/[^0-9]/g, '');
+                if (cleanCall.length < 8) { cleanCall = ''; } // تصفير لو الرقم مش حقيقي
                 
-                let hasLocation = ad.location && ad.location.trim() !== '-' && ad.location.trim().length > 5;
+                let hasLocation = ad.location && ad.location.trim() !== '' && ad.location.trim() !== '-' && ad.location.trim().length > 5;
 
                 if (ad.type === 'vip') {
                     vipAdsCount++;
