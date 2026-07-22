@@ -4,36 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>دليلك | Daleelak</title>
-    <!-- أكواد شياكة اللينك للمشاركة على الواتساب والسوشيال ميديا -->
     <meta property="og:title" content="دليلك | Daleelak - لأفضل العروض">
     <meta property="og:description" content="اكتشف أفضل المطاعم، العروض، والخدمات في مكان واحد. دليلك الشامل لكل اللي محتاجه!">
     <meta property="og:image" itemprop="image" content="https://i.ibb.co/M5StFDSQ/file-00000000335471f48a03a0acb621d53c.png">
     <meta property="og:image:type" content="image/png">
     <meta property="og:image:width" content="300">
     <meta property="og:image:height" content="300">
-    <meta property="og:url" content="https://elbashastoreonline-droid.github.io/Basha-Ads/">
     <meta property="og:type" content="website">
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
-        
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; }
-        
-        /* خلفية الشاشة للكمبيوتر */
         body { background-color: #2c3e50; display: flex; justify-content: center; }
 
-        /* حاوية التطبيق الرئيسية */
-        #app-container {
-            width: 100%;
-            max-width: 480px;
-            background-color: #f4f7f6;
-            min-height: 100vh;
-            position: relative;
-            box-shadow: 0 0 40px rgba(0,0,0,0.5);
-            padding-bottom: 85px;
-            padding-top: 85px;
-            overflow-x: hidden;
-        }
+        /* حاوية التطبيق */
+        #app-container { width: 100%; max-width: 480px; background-color: #f4f7f6; min-height: 100vh; position: relative; box-shadow: 0 0 40px rgba(0,0,0,0.5); padding-bottom: 85px; padding-top: 85px; overflow-x: hidden; }
         
         /* الهيدر */
         .header { position: fixed; top: 0; left: 0; right: 0; max-width: 480px; margin: 0 auto; width: 100%; background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); color: white; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.2); border-bottom-left-radius: 25px; border-bottom-right-radius: 25px; z-index: 1001; }
@@ -42,25 +27,30 @@
         .header-title h1 { font-size: 22px; font-weight: 900; color: #fff; letter-spacing: 1px; }
         .header-title p { font-size: 13px; color: #D4AF37; font-weight: bold; margin-top: 2px; }
         
-        /* شريط الأخبار المتحرك */
+        /* شريط الأخبار والترحيب */
+        .welcome-box { text-align: center; padding: 12px; font-weight: 900; color: #0f2027; background: linear-gradient(90deg, #D4AF37, #F3E5AB); margin: 15px 15px 0 15px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 1px solid #c5a017; font-size: 16px; }
         .news-ticker-wrapper { margin: 15px 15px 0 15px; background: #0f2027; border: 1px solid #D4AF37; border-radius: 10px; overflow: hidden; padding: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); white-space: nowrap; display: block; position: relative; }
         .news-ticker-text { display: inline-block; color: #D4AF37; font-weight: bold; font-size: 15px; animation: scroll-ticker 20s linear infinite; }
         @keyframes scroll-ticker { 0% { transform: translateX(-100%); } 100% { transform: translateX(100vw); } }
         
-        /* الترحيب والشريط الثابت */
-        .welcome-box { text-align: center; padding: 12px; font-weight: 900; color: #0f2027; background: linear-gradient(90deg, #D4AF37, #F3E5AB); margin: 15px 15px 0 15px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 1px solid #c5a017; font-size: 16px; }
-        .sticky-cat { position: fixed; top: 80px; left: 0; right: 0; max-width: 460px; margin: 0 auto; background: linear-gradient(90deg, #D4AF37, #F3E5AB); color: #111; padding: 12px 25px; font-weight: 900; font-size: 15px; z-index: 1000; display: none; align-items: center; justify-content: space-between; box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4); border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; border: 1px solid #c5a017; transition: 0.3s; }
+        /* شريط الفلتر الثابت */
+        .sticky-cat { position: fixed; top: 80px; left: 0; right: 0; max-width: 460px; margin: 0 auto; background: linear-gradient(90deg, #D4AF37, #F3E5AB); color: #111; padding: 12px 25px; font-weight: 900; font-size: 14px; z-index: 1000; display: none; align-items: center; justify-content: space-between; box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4); border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; border: 1px solid #c5a017; transition: 0.3s; }
         .close-cat { background: rgba(0,0,0,0.1); color: #000; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; cursor: pointer; }
 
-        /* القائمة الجانبية */
+        /* القائمة الجانبية (لوحة التحكم) */
         .sidebar { position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background: #fff; z-index: 2000; transition: 0.4s ease; box-shadow: -5px 0 25px rgba(0,0,0,0.3); padding: 25px; overflow-y: auto; border-top-left-radius: 20px; border-bottom-left-radius: 20px; }
         .sidebar.active { right: 0; }
         .close-btn { font-size: 35px; cursor: pointer; color: #e74c3c; float: left; margin-top: -15px; }
-        .sidebar h3 { margin-bottom: 25px; color: #0f2027; border-bottom: 3px solid #D4AF37; padding-bottom: 10px; clear: both; font-weight: 900; }
-        .sidebar .cat-btn-side { display: block; width: 100%; text-align: right; background: #f9f9f9; border: 1px solid #eee; padding: 15px; border-radius: 12px; margin-bottom: 12px; color: #333; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 15px; }
-        .sidebar .cat-btn-side.active { background: #0f2027; color: #D4AF37; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .sidebar h3 { margin-bottom: 20px; color: #0f2027; border-bottom: 3px solid #D4AF37; padding-bottom: 10px; clear: both; font-weight: 900; }
+        .sidebar .cat-btn-side { display: block; width: 100%; text-align: right; background: #f9f9f9; border: 1px solid #eee; padding: 12px 15px; border-radius: 12px; margin-bottom: 10px; color: #333; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 15px; }
+        .sidebar .cat-btn-side:hover, .sidebar .cat-btn-side.active { background: #0f2027; color: #D4AF37; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(3px); z-index: 1500; display: none; }
         .overlay.active { display: block; }
+
+        /* زر الفلترة الرئيسي (منتجات / أماكن) */
+        .main-toggle-container { display: flex; max-width: 1200px; margin: 15px auto 0; padding: 0 15px; gap: 10px; }
+        .main-btn { flex: 1; padding: 12px; border-radius: 12px; font-weight: 900; cursor: pointer; text-align: center; background: #fff; border: 2px solid #D4AF37; color: #0f2027; transition: 0.3s; font-size: 14px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .main-btn.active { background: linear-gradient(135deg, #0f2027, #2c5364); color: #D4AF37; border-color: #0f2027; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.2); }
 
         /* VIP */
         .vip-section { padding: 10px 15px 20px 15px; display: none; }
@@ -97,6 +87,20 @@
         .ad-details h3 { font-size: 16px; color: #222; font-weight: 900; }
         .ad-details p { font-size: 12px; color: #777; margin-top: 5px; line-height: 1.4; word-wrap: break-word; white-space: pre-wrap; overflow: hidden; }
 
+        /* شارات المنتجات والخصومات */
+        .discount-badge { position: absolute; top: 10px; left: 10px; background: #e74c3c; color: white; padding: 5px 10px; border-radius: 8px; font-weight: bold; font-size: 12px; z-index: 10; border: 1px solid #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .price-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 10px 0; }
+        .price-container .old-price-card { text-decoration: line-through; color: #999; font-size: 14px; }
+        .price-container .new-price-card { color: #27ae60; font-size: 18px; font-weight: 900; }
+        .delivery-badge { display: inline-block; background: #f39c12; color: #fff; padding: 4px 10px; border-radius: 5px; font-size: 11px; font-weight: bold; margin-bottom: 5px; }
+
+        /* شاشة المنتج المنفرد (Popup) */
+        .single-ad-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 4000; display: none; align-items: center; justify-content: center; }
+        .single-ad-modal { background: #fff; width: 95%; max-width: 450px; border-radius: 20px; overflow: hidden; position: relative; box-shadow: 0 15px 40px rgba(0,0,0,0.5); border: 2px solid #D4AF37; animation: fadeIn 0.4s ease-out; }
+        .single-ad-close { position: absolute; top: 10px; right: 15px; font-size: 30px; color: #fff; background: rgba(0,0,0,0.5); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; font-weight: bold; }
+        .single-ad-img { width: 100%; height: 250px; object-fit: cover; }
+        .single-ad-content { padding: 20px; text-align: center; }
+        
         /* تأثير اللمعة */
         .shimmer-effect { position: relative; overflow: hidden; }
         .shimmer-effect::after { content: ""; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); animation: shimmer 3s infinite; }
@@ -104,7 +108,7 @@
 
         /* الأزرار العائمة */
         #back-to-top { position: fixed; bottom: 85px; right: 20px; background: #D4AF37; color: #0f2027; width: 45px; height: 45px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); cursor: pointer; z-index: 1000; border: 2px solid #fff; transition: 0.3s; }
-        .floating-btn { position: fixed; bottom: 25px; left: 0; right: 0; max-width: 250px; margin: 0 auto; background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 14px 20px; border-radius: 30px; font-size: 16px; font-weight: 900; box-shadow: 0 8px 20px rgba(231, 76, 60, 0.4); border: 2px solid #fff; cursor: pointer; z-index: 1000; text-align: center; transition: 0.3s; }
+        .floating-btn { position: fixed; bottom: 25px; left: 0; right: 0; max-width: 250px; margin: 0 auto; background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 14px 20px; border-radius: 30px; font-size: 16px; font-weight: 900; box-shadow: 0 8px 20px rgba(231, 76, 60, 0.4); border: 2px solid #fff; cursor: pointer; z-index: 1000; text-align: center; transition: 0.3s; border: none; }
 
         /* لوحة التحكم والرسائل */
         #admin-dashboard { display: none; background: #fff; border: 2px solid #0f2027; padding: 20px; margin: 15px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
@@ -117,13 +121,16 @@
         body.dark-mode .ad-card { background: #242424; border-color: #333; }
         body.dark-mode .ad-details h3, body.dark-mode .vip-info h3, body.dark-mode #ads-section-title { color: #f4f7f6 !important; }
         body.dark-mode .ad-details p, body.dark-mode .vip-info p { color: #bbb; }
-        body.dark-mode .vip-card { background: linear-gradient(180deg, #242424 0%, #1a1a1a 100%); border-color: #555; }
+        body.dark-mode .vip-card, body.dark-mode .single-ad-modal { background: linear-gradient(180deg, #242424 0%, #1a1a1a 100%); border-color: #555; color: #fff; }
+        body.dark-mode .single-ad-modal h3 { color: #fff; }
         body.dark-mode .welcome-box { background: linear-gradient(90deg, #333, #222); color: #D4AF37; border-color: #555; }
         body.dark-mode .sidebar { background: #1a1a1a; }
         body.dark-mode .sidebar h3 { color: #D4AF37; border-bottom-color: #555; }
         body.dark-mode .sidebar .cat-btn-side { background: #242424; color: #ddd; border-color: #444; }
-        body.dark-mode .sidebar .cat-btn-side.active { background: #D4AF37; color: #0f2027; }
+        body.dark-mode .sidebar .cat-btn-side:hover { background: #D4AF37; color: #0f2027; }
         body.dark-mode .news-ticker-wrapper { background: #1a1a1a; border-color: #555; }
+        body.dark-mode .main-btn { background: #242424; color: #aaa; border-color: #444; }
+        body.dark-mode .main-btn.active { background: linear-gradient(135deg, #0f2027, #2c5364); color: #D4AF37; border-color: #D4AF37; }
 
         /* 📝 نافذة الفورمة (Modal) */
         .ad-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 3000; display: none; align-items: center; justify-content: center; }
@@ -134,37 +141,25 @@
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; font-weight: bold; font-size: 14px; color: #111; margin-bottom: 6px; }
         .form-group input, .form-group select { width: 100%; padding: 12px; border-radius: 12px; border: 2px solid #ddd; font-weight: bold; font-size: 14px; outline: none; }
-        
         .offers-container { display: flex; gap: 8px; margin-bottom: 10px; }
         .offer-btn { flex: 1; padding: 10px 5px; background: #fff; border: 2px solid #ddd; border-radius: 10px; cursor: pointer; font-weight: 900; font-size: 13px; color: #555; text-align: center; }
-        .offer-btn.active { background: linear-gradient(135deg, #0f2027, #2c5364); color: #D4AF37; border-color: #0f2027; transform: translateY(-2px); }
+        .offer-btn.active { background: linear-gradient(135deg, #0f2027, #2c5364); color: #D4AF37; border-color: #0f2027; }
         .price-calculator { background: linear-gradient(135deg, #0f2027, #2c5364); color: white; padding: 20px; border-radius: 15px; text-align: center; margin-top: 20px; border: 2px solid #D4AF37; }
         .price-calculator h3 { color: #D4AF37; margin-bottom: 5px; font-size: 24px; font-weight: 900; }
         .price-calculator .old-price { font-size: 16px; color: #aaa; text-decoration: line-through; }
         .copy-number { display: inline-block; background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 8px; border: 1px solid #D4AF37; cursor: pointer; color: #D4AF37; font-weight: bold; margin: 3px 0; }
         .submit-ad-btn { width: 100%; background: linear-gradient(90deg, #25D366, #128C7E); color: white; padding: 14px; border: none; border-radius: 12px; font-size: 18px; font-weight: 900; cursor: pointer; margin-top: 20px; }
         
-        body.dark-mode .ad-modal { background: #1a1a1a; }
-        body.dark-mode .ad-modal h2, body.dark-mode .form-group label { color: #f4f7f6; }
-        body.dark-mode .form-group input, body.dark-mode .form-group select { background: #242424; color: #fff; border-color: #444; }
-        body.dark-mode .offer-btn { background: #242424; color: #aaa; border-color: #444; }
-        body.dark-mode .offer-btn.active { border-color: #D4AF37; }
-
-        /* 🛍️ إضافات المنتجات والفورمة الذكية */
         .type-toggle { display: flex; gap: 10px; margin-bottom: 15px; }
         .type-btn { flex: 1; padding: 12px; border-radius: 12px; border: 2px solid #ddd; background: #fff; font-weight: bold; cursor: pointer; text-align: center; color: #555; }
         .type-btn.active { border-color: #D4AF37; background: #0f2027; color: #D4AF37; }
-        
-        .discount-badge { position: absolute; top: 10px; left: 10px; background: #e74c3c; color: white; padding: 5px 10px; border-radius: 8px; font-weight: bold; font-size: 13px; z-index: 10; border: 1px solid #fff; }
-        .price-container { display: flex; align-items: center; gap: 10px; margin: 10px 0; justify-content: center; }
-        .price-container .old-price-card { text-decoration: line-through; color: #999; font-size: 14px; }
-        .price-container .new-price-card { color: #27ae60; font-size: 20px; font-weight: 900; }
-        .delivery-badge { display: inline-block; background: #f39c12; color: #fff; padding: 4px 10px; border-radius: 5px; font-size: 12px; font-weight: bold; margin-bottom: 10px; }
-        
         .image-instruction { background: rgba(212, 175, 55, 0.1); border-right: 4px solid #D4AF37; padding: 12px; border-radius: 5px; font-size: 13px; font-weight: bold; color: #333; margin-top: 15px; line-height: 1.6; }
-        body.dark-mode .image-instruction { color: #ddd; background: rgba(212, 175, 55, 0.05); }
-        body.dark-mode .type-btn { background: #242424; color: #aaa; border-color: #444; }
-        body.dark-mode .type-btn.active { background: #0f2027; color: #D4AF37; border-color: #D4AF37; }
+        
+        body.dark-mode .ad-modal { background: #1a1a1a; }
+        body.dark-mode .ad-modal h2, body.dark-mode .form-group label, body.dark-mode .image-instruction { color: #f4f7f6; }
+        body.dark-mode .form-group input, body.dark-mode .form-group select { background: #242424; color: #fff; border-color: #444; }
+        body.dark-mode .offer-btn, body.dark-mode .type-btn { background: #242424; color: #aaa; border-color: #444; }
+        body.dark-mode .offer-btn.active, body.dark-mode .type-btn.active { border-color: #D4AF37; background: #0f2027; color: #D4AF37; }
 
         @media (min-width: 768px) {
             #app-container { max-width: 1200px; }
@@ -187,7 +182,8 @@
                 <h1>دليلك | Daleelak</h1>
                 <p>دليلك لأفضل العروض</p>
             </div>
-            <div id="dark-toggle-icon" onclick="toggleDarkMode()" style="font-size: 24px; cursor: pointer; width: 28px; text-align: left;">🌙</div>
+            <!-- تم نقل زرار الوضع الليلي للقائمة الجانبية -->
+            <div style="width: 28px;"></div>
         </div>
 
         <div class="sticky-cat" id="sticky-cat">
@@ -197,14 +193,22 @@
 
         <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 
-        <!-- القائمة الجانبية -->
+        <!-- القائمة الجانبية (لوحة التحكم الشاملة) -->
         <div class="sidebar" id="sidebar">
             <span class="close-btn" onclick="toggleMenu()">×</span>
+            <h3 style="margin-top: 10px;">⚙️ لوحة التحكم</h3>
+            
+            <button class="cat-btn-side" style="background: linear-gradient(135deg, #0f2027, #2c5364); color: #D4AF37; border: none; text-align: center;" onclick="setMainFilter('products'); toggleMenu();">🛍️ عرض المنتجات فقط</button>
+            <button class="cat-btn-side" style="background: #f4f7f6; color: #0f2027; border: 2px solid #D4AF37; text-align: center; margin-bottom: 20px;" onclick="setMainFilter('places'); toggleMenu();">🏢 عرض الأماكن فقط</button>
+            
+            <button class="cat-btn-side" style="text-align: center;" onclick="toggleDarkMode()">☀️ / 🌙 تبديل الوضع الليلي</button>
+            <button class="cat-btn-side" style="background: linear-gradient(90deg, #25D366, #128C7E); color: white; border: none; text-align: center; margin-bottom: 20px;" onclick="openAdModal(); toggleMenu();">🚀 أضف إعلانك معنا</button>
+            
             <h3>أقسام الدليل</h3>
             <div id="sidebar-categories-box"></div>
         </div>
 
-        <!-- لوحة التحكم -->
+        <!-- لوحة تحكم الإدارة المخفية -->
         <div id="admin-dashboard">
             <h3 style="color: #0f2027; text-align: center; margin-bottom: 15px;">⚙️ لوحة تحكم الإدارة</h3>
             <a class="admin-btn" style="background: #D4AF37; color: #000;" href="https://docs.google.com/spreadsheets/d/1TA9f759D07O_z3VnIh8krMD0iKpFkwGQCF08_IymtIa08W2XGuhDpjhtgb1Zao-5YKGJ-mHsb3qt70/edit" target="_blank">فتح الشيت لإضافة العروض ↗</a>
@@ -213,7 +217,6 @@
 
         <div class="welcome-box">✨ كل اللي محتاجه هتلاقيه عندنا! ✨</div>
         
-        <!-- شريط الأخبار -->
         <div style="max-width: 1200px; margin: 0 auto;">
             <div class="news-ticker-wrapper">
                 <div class="news-ticker-text">
@@ -224,7 +227,14 @@
 
         <!-- شريط البحث -->
         <div style="padding: 15px 15px 0 15px; max-width: 1200px; margin: 0 auto;">
-            <input type="text" id="search-box" onkeyup="liveSearch()" placeholder="🔍 ابحث عن مطعم، خدمة، عرض..." style="width: 100%; padding: 12px 15px; border-radius: 25px; border: 2px solid #D4AF37; outline: none; font-size: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); text-align: right; color: #333; font-weight: bold;">
+            <input type="text" id="search-box" onkeyup="applyFilters()" placeholder="🔍 ابحث عن مطعم، خدمة، منتج..." style="width: 100%; padding: 12px 15px; border-radius: 25px; border: 2px solid #D4AF37; outline: none; font-size: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); text-align: right; color: #333; font-weight: bold;">
+        </div>
+
+        <!-- أزرار الفلترة الذكية (منتجات / أماكن) -->
+        <div class="main-toggle-container">
+            <div class="main-btn active" id="filter-btn-all" onclick="setMainFilter('all')">🌍 الكل</div>
+            <div class="main-btn" id="filter-btn-places" onclick="setMainFilter('places')">🏢 الأماكن</div>
+            <div class="main-btn" id="filter-btn-products" onclick="setMainFilter('products')">🛍️ المنتجات</div>
         </div>
 
         <!-- بنر باشا الشحن -->
@@ -263,26 +273,37 @@
         <div class="ad-list">
             <h3 id="ads-section-title" style="margin-top: 10px; margin-bottom: 5px; color: #111; font-size: 18px; font-weight: 900;">🔥 أحدث الإعلانات</h3>
             <div id="loading-msg" style="text-align: center; padding: 40px 20px;">
-                <img src="https://i.ibb.co/M5StFDSQ/file-00000000335471f48a03a0acb621d53c.png" alt="دليلك - جاري التحميل" style="width: 85px; height: 85px; border-radius: 50%; border: 2px solid #D4AF37; margin-bottom: 15px; background-color: #fff; padding: 2px;">
+                <img src="https://i.ibb.co/M5StFDSQ/file-00000000335471f48a03a0acb621d53c.png" alt="دليلك - جاري التحميل" style="width: 85px; height: 85px; border-radius: 50%; border: 2px solid #D4AF37; margin-bottom: 15px; background-color: #fff; padding: 2px; animation: pulse-logo 1.5s infinite;">
                 <h3 style="color: #0f2027; font-size: 16px; font-weight: bold;">جاري تحميل الإعلانات...</h3>
+                <style>@keyframes pulse-logo { 0% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); } 70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(212, 175, 55, 0); } 100% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); } }</style>
             </div>
             <div id="ads-container"></div>
         </div>
 
-        <!-- تذييل الموقع -->
+        <!-- تذييل الموقع وإخلاء المسؤولية -->
         <div style="background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); color: white; text-align: center; padding: 30px 20px 90px 20px; border-top-left-radius: 30px; border-top-right-radius: 30px; margin-top: 40px;">
             <h3 style="color: #D4AF37; margin-bottom: 8px; font-weight: 900; font-size: 22px;">دليلك | Daleelak</h3>
             <p style="font-size: 13px; color: #ddd; margin-bottom: 20px; font-weight: bold;">دليلك الشامل لاكتشاف أفضل العروض، المطاعم، والخدمات في مكان واحد.</p>
             <div style="border-top: 1px solid rgba(212, 175, 55, 0.3); padding-top: 15px; font-size: 12px; color: #aaa; font-weight: bold;">
                 © 2026 جميع الحقوق محفوظة لدليلك.<br>
                 برعاية <span style="color: #D4AF37; font-weight: 900;">GAME BASHA</span>
-                <p style="font-size: 11px; color: #888; margin-top: 15px;">إخلاء مسؤولية: "دليلك" منصة إرشادية لعرض الخدمات.</p>
+                <p style="font-size: 11px; color: #888; margin-top: 15px; line-height: 1.6;">إخلاء مسؤولية: "دليلك" هو منصة إرشادية لعرض الخدمات العامة. البيانات المجانية المعروضة لا تعني وجود شراكة رسمية، ويحق لأي جهة طلب تعديل أو إزالة بياناتها بالتواصل مع الإدارة.</p>
             </div>
         </div>
 
         <!-- الأزرار العائمة -->
         <div id="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">⬆️</div>
         <button class="floating-btn" onclick="openAdModal()">+ أضف إعلانك معنا</button>
+
+        <!-- نافذة عرض الإعلان المنفرد (Popup المشاركة) -->
+        <div class="single-ad-overlay" id="single-ad-overlay">
+            <div class="single-ad-modal">
+                <div class="single-ad-close" onclick="closeSingleAd()">×</div>
+                <div id="single-ad-content-box">
+                    <!-- سيتم ملء البيانات هنا برمجياً -->
+                </div>
+            </div>
+        </div>
 
         <!-- 📝 نافذة الفورمة الذكية (أماكن + منتجات) -->
         <div class="ad-modal-overlay" id="ad-modal-overlay">
@@ -291,8 +312,8 @@
                 <h2>🚀 أضف إعلانك في دليلك</h2>
                 
                 <div class="type-toggle">
-                    <div class="type-btn active" id="btn-type-place" onclick="toggleAdType('مكان')">🏢 مكان / خدمة</div>
-                    <div class="type-btn" id="btn-type-product" onclick="toggleAdType('منتج')">🛍️ منتج / عرض</div>
+                    <div class="type-btn active" id="btn-type-place" onclick="toggleFormType('مكان')">🏢 مكان / خدمة</div>
+                    <div class="type-btn" id="btn-type-product" onclick="toggleFormType('منتج')">🛍️ منتج / عرض</div>
                 </div>
                 <input type="hidden" id="form-ad-type-hidden" value="مكان">
                 
@@ -420,6 +441,7 @@
     <script>
         const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTA9f759D07O_z3VnIh8krMD0iKpFkwGQCF08_IymtIa08W2XGuhDpjhtgb1Zao-5YKGJ-mHsb3qt70/pub?gid=1257423716&single=true&output=csv';
         let globalAdsData = []; 
+        let currentMainFilter = 'all'; // all, places, products
 
         const appCategories = [
             '🏥 الرعاية الصحية', '🍽️ المطاعم والمقاهي', '🛍️ التسوق', '👕 الأزياء والموضة', 
@@ -430,13 +452,19 @@
 
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
-            let toggleIcon = document.getElementById('dark-toggle-icon');
-            toggleIcon.innerText = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
         }
 
         function toggleMenu() {
             document.getElementById('sidebar').classList.toggle('active');
             document.getElementById('overlay').classList.toggle('active');
+        }
+
+        function buildSidebarCategories() {
+            const box = document.getElementById('sidebar-categories-box');
+            box.innerHTML = '';
+            appCategories.forEach(cat => {
+                box.innerHTML += `<button class="cat-btn-side" onclick="document.getElementById('filter-category').value='${cat}'; applyFilters(); toggleMenu();">${cat}</button>`;
+            });
         }
 
         function parseCSV(rawText) {
@@ -450,8 +478,8 @@
                     fields.push(field); field = '';
                 } else if (char === '\n' && !inQuotes) {
                     fields.push(field); rows.push(fields); fields = []; field = '';
-                } else if (char === '\r' && !inQuotes) {
-                } else { field += char; }
+                } else if (char === '\r' && !inQuotes) {} 
+                else { field += char; }
             }
             if (fields.length > 0 || field !== '') { fields.push(field); rows.push(fields); }
             return rows;
@@ -459,20 +487,15 @@
 
         function convertArabicToEnglishNumbers(str) {
             if (!str) return '';
-            return str.replace(/[\u0660-\u0669]/g, function(c) {
-                return c.charCodeAt(0) - 0x0660;
-            });
+            return str.replace(/[\u0660-\u0669]/g, c => c.charCodeAt(0) - 0x0660);
         }
 
         function shareAd(title) {
+            let shareUrl = window.location.origin + window.location.pathname + '?ad=' + encodeURIComponent(title);
             if (navigator.share) {
-                navigator.share({ title: 'دليلك | Daleelak', text: 'شوف العرض ده على دليلك: ' + title, url: window.location.href }).catch(console.error);
+                navigator.share({ title: 'دليلك | Daleelak', text: 'شوف العرض ده على دليلك: ' + title, url: shareUrl }).catch(console.error);
             } else {
-                const tempInput = document.createElement("input");
-                tempInput.value = window.location.href;
-                document.body.appendChild(tempInput);
-                tempInput.select(); document.execCommand("copy"); document.body.removeChild(tempInput);
-                alert('تم نسخ رابط الموقع بنجاح!');
+                navigator.clipboard.writeText(shareUrl).then(() => alert('✅ تم نسخ رابط المنتج بنجاح!'));
             }
         }
 
@@ -510,7 +533,9 @@
                 globalAdsData.sort(() => Math.random() - 0.5);
                 
                 buildFilterDropdowns();
+                buildSidebarCategories();
                 applyFilters(); 
+                checkDeepLink(); 
             } catch (error) {
                 document.getElementById('loading-msg').innerHTML = '<h3 style="color: #e74c3c;">⚠️ حدث خطأ في الاتصال بقاعدة البيانات.</h3>';
             }
@@ -520,14 +545,9 @@
             const catSelect = document.getElementById('filter-category');
             const citySelect = document.getElementById('filter-city');
 
-            appCategories.forEach(cat => {
-                catSelect.innerHTML += `<option value="${cat}">${cat}</option>`;
-            });
-
+            appCategories.forEach(cat => { catSelect.innerHTML += `<option value="${cat}">${cat}</option>`; });
             const uniqueCities = [...new Set(globalAdsData.map(ad => ad.city))].filter(c => c && c !== 'غير محدد' && c !== '-');
-            uniqueCities.forEach(city => {
-                citySelect.innerHTML += `<option value="${city}">${city}</option>`;
-            });
+            uniqueCities.forEach(city => { citySelect.innerHTML += `<option value="${city}">${city}</option>`; });
             
             updateRegionDropdown(); 
         }
@@ -535,33 +555,68 @@
         function updateRegionDropdown() {
             const selectedCity = document.getElementById('filter-city').value;
             const regionSelect = document.getElementById('filter-region');
-            
             regionSelect.innerHTML = '<option value="الكل">كل المناطق 🔻</option>';
-
             if (selectedCity === 'الكل') return;
 
             const cityAds = globalAdsData.filter(ad => ad.city === selectedCity);
             const uniqueRegions = [...new Set(cityAds.map(ad => ad.region))].filter(r => r && r !== 'غير محدد' && r !== '-');
+            uniqueRegions.forEach(region => { regionSelect.innerHTML += `<option value="${region}">${region}</option>`; });
+        }
 
-            uniqueRegions.forEach(region => {
-                regionSelect.innerHTML += `<option value="${region}">${region}</option>`;
-            });
+        function setMainFilter(filterType) {
+            currentMainFilter = filterType;
+            document.querySelectorAll('.main-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('filter-btn-' + filterType).classList.add('active');
+            applyFilters();
+        }
+
+        function resetCategory() {
+            document.getElementById('search-box').value = '';
+            document.getElementById('filter-category').value = 'الكل';
+            document.getElementById('filter-city').value = 'الكل';
+            updateRegionDropdown();
+            document.getElementById('filter-region').value = 'الكل';
+            setMainFilter('all');
         }
 
         function applyFilters() {
+            let input = document.getElementById('search-box').value.toLowerCase();
             const selectedCat = document.getElementById('filter-category').value;
             const selectedCity = document.getElementById('filter-city').value;
             const selectedRegion = document.getElementById('filter-region').value;
 
+            // تحديث شريط الفلتر الثابت
+            let filterNames = [];
+            if(selectedCat !== 'الكل') filterNames.push(selectedCat);
+            if(selectedCity !== 'الكل') filterNames.push(selectedCity);
+            if(selectedRegion !== 'الكل') filterNames.push(selectedRegion);
+            
+            if(filterNames.length > 0 || currentMainFilter !== 'all' || input !== '') {
+                document.getElementById('sticky-cat').style.display = 'flex';
+                let text = filterNames.join(' - ');
+                if(currentMainFilter === 'products') text = (text ? text + ' | ' : '') + 'المنتجات';
+                if(currentMainFilter === 'places') text = (text ? text + ' | ' : '') + 'الأماكن';
+                if(input) text = (text ? text + ' | ' : '') + 'بحث';
+                if(!text) text = 'تصفية النشاط';
+                document.getElementById('sticky-cat-name').innerText = text;
+            } else {
+                document.getElementById('sticky-cat').style.display = 'none';
+            }
+
             const filteredAds = globalAdsData.filter(ad => {
-                let cleanAdCat = ad.category.replace(/[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF]/g, "").trim();
-                let cleanSelectedCat = selectedCat.replace(/[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF]/g, "").trim();
+                let cleanAdCat = ad.category.replace(/[\uE000-\uF8FF]/g, "").trim();
+                let cleanSelectedCat = selectedCat.replace(/[\uE000-\uF8FF]/g, "").trim();
                 
                 const matchCat = (selectedCat === 'الكل') || cleanAdCat.includes(cleanSelectedCat);
                 const matchCity = (selectedCity === 'الكل') || (ad.city === selectedCity);
                 const matchRegion = (selectedRegion === 'الكل') || (ad.region === selectedRegion);
+                const matchSearch = (ad.title.toLowerCase().includes(input) || ad.desc.toLowerCase().includes(input));
+                
+                let matchType = true;
+                if (currentMainFilter === 'products') matchType = (ad.newPrice && ad.newPrice.trim() !== '');
+                if (currentMainFilter === 'places') matchType = (!ad.newPrice || ad.newPrice.trim() === '');
 
-                return matchCat && matchCity && matchRegion;
+                return matchCat && matchCity && matchRegion && matchSearch && matchType;
             });
 
             renderAds(filteredAds);
@@ -592,10 +647,7 @@
                 
                 let hasLocation = ad.location && ad.location.trim() !== '' && ad.location.trim() !== '-' && ad.location.trim().length > 5;
                 
-                // 🛍️ حساب أسعار المنتج وتجهيز الشارات
-                let priceHtml = "";
-                let badgeHtml = "";
-                let deliveryHtml = "";
+                let priceHtml = ""; let badgeHtml = ""; let deliveryHtml = "";
 
                 if (ad.newPrice && ad.newPrice !== "") {
                     if (ad.oldPrice && ad.oldPrice !== "") {
@@ -608,44 +660,34 @@
                         priceHtml = `<div class="price-container"><span class="new-price-card">${ad.newPrice} ج</span></div>`;
                     }
                 }
+                if (ad.delivery && ad.delivery !== "") { deliveryHtml = `<div class="delivery-badge">${ad.delivery}</div>`; }
 
-                if (ad.delivery && ad.delivery !== "") {
-                    deliveryHtml = `<div class="delivery-badge">${ad.delivery}</div>`;
-                }
+                let buttonsHtml = '';
+                if (cleanPhone) buttonsHtml += `<a href="${waUrl}" target="_blank" class="icon-btn btn-wa" title="واتساب"><img src="1000031449.png" alt="WhatsApp" style="width: 100%; height: 100%; object-fit: contain;"></a>`;
+                if (cleanCall) buttonsHtml += `<a href="tel:${cleanCall}" class="icon-btn btn-call" title="اتصال"><img src="1000031452.png" alt="Call" style="width: 100%; height: 100%; object-fit: contain;"></a>`;
+                if (hasLocation) buttonsHtml += `<a href="${ad.location}" target="_blank" class="icon-btn btn-loc" title="الموقع"><img src="1000031450.png" alt="Location" style="width: 100%; height: 100%; object-fit: contain;"></a>`;
 
                 if (ad.type === 'vip') {
                     vipAdsCount++;
-                    let vipButtons = '';
-                    
-                    if (cleanPhone) vipButtons += `<a href="${waUrl}" target="_blank" class="icon-btn btn-wa" title="واتساب" style="background: transparent; box-shadow: none;"><img src="1000031449.png" alt="WhatsApp" style="width: 45px; height: 45px; object-fit: contain; border: none; border-radius: 0;"></a>`;
-                    if (cleanCall) vipButtons += `<a href="tel:${cleanCall}" class="icon-btn btn-call" title="اتصال" style="background: transparent; box-shadow: none;"><img src="1000031452.png" alt="Call" style="width: 45px; height: 45px; object-fit: contain; border: none; border-radius: 0;"></a>`;
-                    if (hasLocation) vipButtons += `<a href="${ad.location}" target="_blank" class="icon-btn btn-loc" title="الموقع الجغرافي" style="background: transparent; box-shadow: none;"><img src="1000031450.png" alt="Location" style="width: 45px; height: 45px; object-fit: contain; border: none; border-radius: 0;"></a>`;
-
                     vipContainer.innerHTML += `
                         <div class="vip-card shimmer-effect">
                             <div class="vip-badge">👑 VIP</div>
                             ${badgeHtml}
-                            <img src="${displayImg}" alt="VIP Ad" style="width: 100%; height: 180px; object-fit: cover; border-bottom: 3px solid #D4AF37;">
+                            <img src="${displayImg}" alt="VIP Ad">
                             <div class="vip-info">
                                 <h3>${ad.title}</h3>
                                 ${priceHtml}
                                 ${deliveryHtml}
                                 <p>${ad.desc}</p>
-                                <div class="action-buttons-container" style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
-                                    ${vipButtons}
-                                    <button onclick="shareAd('${ad.title}')" class="icon-btn btn-share" title="مشاركة" style="width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px;">🔗</button>
+                                <div class="action-buttons-container">
+                                    ${buttonsHtml}
+                                    <button onclick="shareAd('${ad.title}')" class="icon-btn btn-share" title="مشاركة">🔗</button>
                                 </div>
                             </div>
                         </div>
                     `;
                 } else {
                     normalAdsCount++;
-                    let normalButtons = '';
-                    
-                    if (cleanPhone) normalButtons += `<a href="${waUrl}" target="_blank" class="icon-btn" title="واتساب" style="background: transparent; box-shadow: none; width: 35px; height: 35px; padding: 0;"><img src="1000031449.png" alt="WhatsApp" style="width: 100%; height: 100%; object-fit: contain;"></a>`;
-                    if (cleanCall) normalButtons += `<a href="tel:${cleanCall}" class="icon-btn" title="اتصال" style="background: transparent; box-shadow: none; width: 35px; height: 35px; padding: 0;"><img src="1000031452.png" alt="Call" style="width: 100%; height: 100%; object-fit: contain;"></a>`;
-                    if (hasLocation) normalButtons += `<a href="${ad.location}" target="_blank" class="icon-btn" title="الموقع الجغرافي" style="background: transparent; box-shadow: none; width: 35px; height: 35px; padding: 0;"><img src="1000031450.png" alt="Location" style="width: 100%; height: 100%; object-fit: contain;"></a>`;
-
                     adsContainer.innerHTML += `
                         <div class="ad-card" style="position: relative;">
                             ${badgeHtml}
@@ -657,9 +699,9 @@
                                     ${deliveryHtml}
                                     <p>${ad.desc}</p>
                                 </div>
-                                <div style="display: flex; gap: 12px; margin-top: 10px; align-items: center; flex-wrap: wrap;">
-                                    ${normalButtons}
-                                    <button onclick="shareAd('${ad.title}')" class="icon-btn" title="مشاركة" style="width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; background: #f9f9f9; border: 1px solid #ccc; color: #555; padding: 0;">🔗</button>
+                                <div class="action-buttons-container" style="justify-content: flex-start; margin-top: 10px; gap: 10px;">
+                                    ${buttonsHtml.replace(/btn-wa|btn-call|btn-loc/g, '').replace(/100%/g, '35px').replace(/width: 45px; height: 45px;/g, 'width: 35px; height: 35px; background: transparent; box-shadow: none; padding: 0;')}
+                                    <button onclick="shareAd('${ad.title}')" class="icon-btn" title="مشاركة" style="width: 35px; height: 35px; font-size: 16px; background: #f9f9f9; border: 1px solid #ccc; color: #555;">🔗</button>
                                 </div>
                             </div>
                         </div>
@@ -673,19 +715,63 @@
             }
         }
 
+        // 🚀 نظام المشاركة الاحترافي (Deep Linking)
+        function checkDeepLink() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const adTitle = urlParams.get('ad');
+            if (adTitle) {
+                const ad = globalAdsData.find(a => a.title === adTitle);
+                if (ad) { showSingleAd(ad); }
+            }
+        }
+
+        function showSingleAd(ad) {
+            const displayImg = ad.img ? ad.img : 'https://i.ibb.co/pjxDzJxM/file-00000000335471f48a03a0acb621d53c.png';
+            let waStr = convertArabicToEnglishNumbers(ad.whatsapp).trim();
+            let cleanPhone = waStr.replace(/[^0-9]/g, '');
+            if (cleanPhone.startsWith('01') && cleanPhone.length === 11) { cleanPhone = '2' + cleanPhone; }
+            const waUrl = cleanPhone ? `https://wa.me/${cleanPhone}` : '';
+
+            let priceHtml = ""; let badgeHtml = ""; let deliveryHtml = "";
+            if (ad.newPrice && ad.newPrice !== "") {
+                if (ad.oldPrice && ad.oldPrice !== "") {
+                    let oldP = parseFloat(ad.oldPrice);
+                    let newP = parseFloat(ad.newPrice);
+                    let discount = Math.round(((oldP - newP) / oldP) * 100);
+                    badgeHtml = `<div class="discount-badge" style="font-size: 15px; padding: 8px 15px;">خصم ${discount}% 🔥</div>`;
+                    priceHtml = `<div class="price-container" style="margin: 15px 0;"><span class="old-price-card" style="font-size: 18px;">${ad.oldPrice} ج</span> <span class="new-price-card" style="font-size: 26px;">${ad.newPrice} ج</span></div>`;
+                } else {
+                    priceHtml = `<div class="price-container" style="margin: 15px 0;"><span class="new-price-card" style="font-size: 26px;">${ad.newPrice} ج</span></div>`;
+                }
+            }
+            if (ad.delivery && ad.delivery !== "") { deliveryHtml = `<div class="delivery-badge" style="font-size: 14px; padding: 6px 12px;">${ad.delivery}</div>`; }
+
+            let contentBox = document.getElementById('single-ad-content-box');
+            contentBox.innerHTML = `
+                <div style="position: relative;">
+                    ${badgeHtml}
+                    <img src="${displayImg}" class="single-ad-img" alt="Ad">
+                </div>
+                <div class="single-ad-content">
+                    <h3 style="font-size: 22px; font-weight: 900; color: #0f2027; margin-bottom: 10px;">${ad.title}</h3>
+                    ${priceHtml}
+                    ${deliveryHtml}
+                    <p style="font-size: 15px; color: #555; line-height: 1.6; margin-bottom: 20px; font-weight: bold;">${ad.desc}</p>
+                    <a href="${waUrl}" target="_blank" style="display: block; width: 100%; background: linear-gradient(90deg, #25D366, #128C7E); color: white; padding: 15px; border-radius: 12px; font-size: 18px; font-weight: 900; text-decoration: none; box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);">طلب عبر الواتساب 💬</a>
+                </div>
+            `;
+            document.getElementById('single-ad-overlay').style.display = 'flex';
+        }
+
+        function closeSingleAd() {
+            document.getElementById('single-ad-overlay').style.display = 'none';
+            window.history.pushState({}, document.title, window.location.pathname); // يمسح اللينك بدون ريفريش
+        }
+
         window.addEventListener('scroll', () => {
             let btn = document.getElementById('back-to-top');
             btn.style.display = window.scrollY > 300 ? 'flex' : 'none';
         });
-
-        function liveSearch() {
-            let input = document.getElementById('search-box').value.toLowerCase();
-            document.querySelectorAll('.ad-card, .vip-card').forEach(card => {
-                let title = card.querySelector('h3').innerText.toLowerCase();
-                let desc = card.querySelector('p') ? card.querySelector('p').innerText.toLowerCase() : '';
-                card.style.display = (title.includes(input) || desc.includes(input)) ? '' : 'none';
-            });
-        }
 
         let headerClicks = 0;
         document.getElementById('admin-trigger').addEventListener('click', () => {
@@ -698,7 +784,7 @@
             }
         });
 
-        // 🚀 أكواد نافذة إضافة الإعلان (المحافظات، الأسعار، الواتساب)
+        // 🚀 أكواد نافذة إضافة الإعلان
         const regionsData = {
             "الإسكندرية": ["أبو قير", "العجمي", "العصافرة", "المكس", "المندرة", "المنتزه", "باكوس", "جليم", "رشدي", "سان ستيفانو", "سبورتنج", "سموحة", "سيدي بشر", "سيدي جابر", "كليوباترا", "لوران", "محطة الرمل", "ميامي"],
             "القاهرة": ["التجمع الخامس", "الدقي", "الرحاب", "الزمالك", "الشروق", "العجوزة", "العبور", "المعادي", "المقطم", "المهندسين", "جسر السويس", "حلوان", "روكسي", "شبرا", "عين شمس", "مدينة نصر", "مدينتي", "مصر الجديدة", "وسط البلد"],
@@ -728,7 +814,7 @@
 
         let selectedDays = 7; 
 
-        function toggleAdType(type) {
+        function toggleFormType(type) {
             document.getElementById('form-ad-type-hidden').value = type;
             if (type === 'منتج') {
                 document.getElementById('btn-type-product').classList.add('active');
@@ -845,7 +931,6 @@
             let loc = document.getElementById('form-loc').value.trim();
             let promo = document.getElementById('form-promo').value.trim().toUpperCase();
             
-            // بيانات المنتج الجديدة
             let oldPrice = document.getElementById('form-old-price').value.trim();
             let newPrice = document.getElementById('form-new-price').value.trim();
             let delivery = document.getElementById('form-delivery').value;
