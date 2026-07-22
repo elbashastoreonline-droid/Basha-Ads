@@ -268,8 +268,25 @@
         body.dark-mode .ad-modal h2, body.dark-mode .form-group label { color: #f4f7f6; }
         body.dark-mode .form-group input, body.dark-mode .form-group select { background: #242424; color: #fff; border-color: #444; }
         body.dark-mode .offer-btn { background: #242424; color: #aaa; border-color: #444; }
-        body.dark-mode .offer-btn.active { border-color: #D4AF37; }
+                body.dark-mode .offer-btn.active { border-color: #D4AF37; }
+
+        /* 🛍️ إضافات المنتجات والفورمة الذكية */
+        .type-toggle { display: flex; gap: 10px; margin-bottom: 15px; }
+        .type-btn { flex: 1; padding: 12px; border-radius: 12px; border: 2px solid #ddd; background: #fff; font-weight: bold; cursor: pointer; transition: 0.3s; text-align: center; color: #555; }
+        .type-btn.active { border-color: #D4AF37; background: #0f2027; color: #D4AF37; }
+        
+        .discount-badge { position: absolute; top: 10px; left: 10px; background: #e74c3c; color: white; padding: 5px 10px; border-radius: 8px; font-weight: bold; font-size: 13px; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.2); border: 1px solid #fff; }
+        .price-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 10px 0; font-family: 'Tajawal', sans-serif; }
+        .price-container .old-price-card { text-decoration: line-through; color: #999; font-size: 14px; }
+        .price-container .new-price-card { color: #27ae60; font-size: 20px; font-weight: 900; }
+        .delivery-badge { display: inline-block; background: #f39c12; color: #fff; padding: 4px 10px; border-radius: 5px; font-size: 12px; font-weight: bold; margin-bottom: 10px; }
+        
+        .image-instruction { background: rgba(212, 175, 55, 0.1); border-right: 4px solid #D4AF37; padding: 12px; border-radius: 5px; font-size: 13px; font-weight: bold; color: #333; margin-top: 15px; line-height: 1.6; }
+        body.dark-mode .image-instruction { color: #ddd; background: rgba(212, 175, 55, 0.05); }
+        body.dark-mode .type-btn { background: #242424; color: #aaa; border-color: #444; }
+        body.dark-mode .type-btn.active { background: #0f2027; color: #D4AF37; border-color: #D4AF37; }
     </style>
+
 </head>
 <body>
 
@@ -391,15 +408,22 @@
         <div id="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">⬆️</div>
                 <button class="floating-btn" onclick="openAdModal()">+ أضف إعلانك معنا</button>
 
-        <!-- 📝 نافذة إضافة إعلان (Modal) الشاملة -->
+                <!-- 📝 نافذة الفورمة الذكية (أماكن + منتجات) -->
         <div class="ad-modal-overlay" id="ad-modal-overlay">
             <div class="ad-modal">
                 <span class="close-modal" onclick="closeAdModal()">×</span>
                 <h2>🚀 أضف إعلانك في دليلك</h2>
                 
+                <!-- أزرار اختيار نوع الإعلان -->
+                <div class="type-toggle">
+                    <div class="type-btn active" id="btn-type-place" onclick="toggleAdType('مكان')">🏢 مكان / خدمة</div>
+                    <div class="type-btn" id="btn-type-product" onclick="toggleAdType('منتج')">🛍️ منتج / عرض</div>
+                </div>
+                <input type="hidden" id="form-ad-type-hidden" value="مكان">
+                
                 <div class="form-group">
-                    <label>اسم النشاط / الإعلان:</label>
-                    <input type="text" id="form-name" placeholder="مثال: مطعم الباشا، صيدلية د.أحمد...">
+                    <label>الاسم (النشاط أو المنتج):</label>
+                    <input type="text" id="form-name" placeholder="مثال: مطعم الباشا، أو شامبو كابيكسي...">
                 </div>
 
                 <div class="form-group">
@@ -447,12 +471,35 @@
                     <input type="text" id="form-other-region" placeholder="اكتب المنطقة هنا...">
                 </div>
 
-                <div class="form-group">
-                    <label>وصف الإعلان:</label>
-                    <input type="text" id="form-desc" placeholder="اكتب تفاصيل العرض أو الخصم...">
+                <!-- 🛍️ حقول المنتجات (مخفية وتظهر للمنتج فقط) -->
+                <div id="product-extra-fields" style="display: none; background: rgba(212, 175, 55, 0.05); padding: 15px; border-radius: 12px; border: 1px dashed #D4AF37; margin-bottom: 15px;">
+                    <h4 style="margin-top: 0; color: #D4AF37; margin-bottom: 10px; font-size: 14px;">💰 تفاصيل العرض والأسعار</h4>
+                    <div style="display: flex; gap: 10px;">
+                        <div class="form-group" style="flex: 1;">
+                            <label>السعر قبل (ج):</label>
+                            <input type="number" id="form-old-price" placeholder="مثال: 200">
+                        </div>
+                        <div class="form-group" style="flex: 1;">
+                            <label>السعر بعد (ج):</label>
+                            <input type="number" id="form-new-price" placeholder="مثال: 150">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label>حالة التوصيل (اختياري):</label>
+                        <select id="form-delivery">
+                            <option value="">لا يوجد / غير محدد</option>
+                            <option value="متاح توصيل دليفري">🚚 متاح توصيل دليفري</option>
+                            <option value="شحن لجميع المحافظات">📦 شحن لجميع المحافظات</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="form-group">
+                    <label>الوصف:</label>
+                    <input type="text" id="form-desc" placeholder="اكتب تفاصيل العرض أو الخصم...">
+                </div>
+
+                <div class="form-group" id="location-link-group">
                     <label>رابط اللوكيشن (Google Maps):</label>
                     <input type="url" id="form-loc" placeholder="https://maps.app.goo.gl/..." dir="ltr">
                 </div>
@@ -464,7 +511,7 @@
                     </div>
                     <div class="form-group" style="flex: 1;">
                         <label>رقم اتصال آخر:</label>
-                        <input type="number" id="form-call" placeholder="لو مختلف عن الواتس (اختياري)">
+                        <input type="number" id="form-call" placeholder="لو مختلف (اختياري)">
                     </div>
                 </div>
 
@@ -479,14 +526,21 @@
                     <div style="font-size: 13px; color: #ddd; margin-top: 15px; line-height: 1.8; font-weight: bold;">
                         يرجى الدفع بالنسخ والتحويل على:<br>
                         🟣 <b>إنستاباي أو We Pay:</b> <span class="copy-number" onclick="copyNumber('01550720161')">01550720161</span><br>
-                        🔴 <b>فودافون كاش:</b> <span class="copy-number" onclick="copyNumber('01288023436')">01288023436</span><br>
-                        <span style="color: #D4AF37; font-size: 11px;">(يرجى أخذ سكرين شوت للتحويل لإرسالها في الواتساب)</span>
+                        🔴 <b>فودافون كاش:</b> <span class="copy-number" onclick="copyNumber('01288023436')">01288023436</span>
                     </div>
+                </div>
+
+                <!-- ⚠️ تنبيه رفع الصور -->
+                <div class="image-instruction">
+                    📸 <b>هام جداً:</b> بعد الضغط على "إرسال"، سيتم فتح الواتساب. يرجى إرفاق: <br>
+                    1- صورة إثبات دفع الباقة (سكرين شوت).<br>
+                    2- صورة الإعلان أو المنتج الخاصة بك ليتم إضافتها.
                 </div>
 
                 <button class="submit-ad-btn" onclick="sendAdToWhatsApp()">إرسال الطلب عبر الواتساب 🚀</button>
             </div>
         </div>
+
 
 
     </div>
@@ -613,7 +667,11 @@
                         city: columns[8] ? columns[8].trim() : 'غير محدد',     
                         region: columns[9] ? columns[9].trim() : 'غير محدد',   
                         location: columns[14] ? columns[14].trim() : '', 
-                        callPhone: columns[15] ? columns[15].trim() : ''
+                        callPhone: columns[15] ? columns[15].trim() : '',
+                        oldPrice: columns[17] ? columns[17].trim() : '',
+                        newPrice: columns[18] ? columns[18].trim() : '',
+                        delivery: columns[19] ? columns[19].trim() : ''
+
                     });
                 }
 
@@ -703,6 +761,26 @@
                 if (cleanCall.length < 8) { cleanCall = ''; } // تصفير لو الرقم مش حقيقي
                 
                 let hasLocation = ad.location && ad.location.trim() !== '' && ad.location.trim() !== '-' && ad.location.trim().length > 5;
+                // 🛍️ حساب أسعار المنتج وتجهيز الشارات
+                let priceHtml = "";
+                let badgeHtml = "";
+                let deliveryHtml = "";
+
+                if (ad.newPrice && ad.newPrice !== "") {
+                    if (ad.oldPrice && ad.oldPrice !== "") {
+                        let oldP = parseFloat(ad.oldPrice);
+                        let newP = parseFloat(ad.newPrice);
+                        let discount = Math.round(((oldP - newP) / oldP) * 100);
+                        badgeHtml = `<div class="discount-badge">خصم ${discount}% 🔥</div>`;
+                        priceHtml = `<div class="price-container"><span class="old-price-card">${ad.oldPrice} ج</span> <span class="new-price-card">${ad.newPrice} ج</span></div>`;
+                    } else {
+                        priceHtml = `<div class="price-container"><span class="new-price-card">${ad.newPrice} ج</span></div>`;
+                    }
+                }
+
+                if (ad.delivery && ad.delivery !== "") {
+                    deliveryHtml = `<div class="delivery-badge">${ad.delivery}</div>`;
+                }
 
                 if (ad.type === 'vip') {
                     vipAdsCount++;
@@ -715,9 +793,12 @@
                     vipContainer.innerHTML += `
                         <div class="vip-card shimmer-effect">
                             <div class="vip-badge">👑 VIP</div>
+                            ${badgeHtml}
                             <img src="${displayImg}" alt="VIP Ad" style="width: 100%; height: 180px; object-fit: cover; border-bottom: 3px solid #D4AF37;">
                             <div class="vip-info">
                                 <h3>${ad.title}</h3>
+                                ${priceHtml}
+                                ${deliveryHtml}
                                 <p>${ad.desc}</p>
                                 <div class="action-buttons-container" style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
                                     ${vipButtons}
@@ -725,6 +806,36 @@
                                 </div>
                             </div>
                         </div>
+                    `;
+                } else {
+                    normalAdsCount++;
+                    let normalButtons = '';
+                    
+                    if (cleanPhone) normalButtons += `<a href="${waUrl}" target="_blank" class="icon-btn" title="واتساب" style="background: transparent; box-shadow: none; width: 35px; height: 35px; padding: 0;"><img src="1000031449.png" alt="WhatsApp" style="width: 100%; height: 100%; object-fit: contain;"></a>`;
+                    if (cleanCall) normalButtons += `<a href="tel:${cleanCall}" class="icon-btn" title="اتصال" style="background: transparent; box-shadow: none; width: 35px; height: 35px; padding: 0;"><img src="1000031452.png" alt="Call" style="width: 100%; height: 100%; object-fit: contain;"></a>`;
+                    if (hasLocation) normalButtons += `<a href="${ad.location}" target="_blank" class="icon-btn" title="الموقع الجغرافي" style="background: transparent; box-shadow: none; width: 35px; height: 35px; padding: 0;"><img src="1000031450.png" alt="Location" style="width: 100%; height: 100%; object-fit: contain;"></a>`;
+
+                    adsContainer.innerHTML += `
+                        <div class="ad-card" style="position: relative;">
+                            ${badgeHtml}
+                            <img src="${displayImg}" alt="Ad Image">
+                            <div class="ad-details">
+                                <div>
+                                    <h3>${ad.title}</h3>
+                                    ${priceHtml}
+                                    ${deliveryHtml}
+                                    <p>${ad.desc}</p>
+                                </div>
+                                <div style="display: flex; gap: 12px; margin-top: 10px; align-items: center; flex-wrap: wrap;">
+                                    ${normalButtons}
+                                    <button onclick="shareAd('${ad.title}')" class="icon-btn" title="مشاركة" style="width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; background: #f9f9f9; border: 1px solid #ccc; color: #555; padding: 0;">🔗</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
                     `;
                 } else {
                     normalAdsCount++;
@@ -812,7 +923,24 @@
             "مطروح": ["الحمام", "الضبعة", "العلمين", "سيدي براني", "مرسى مطروح"]
         };
 
-        let selectedDays = 7; // افتراضي أسبوع
+                let selectedDays = 7; 
+
+        function toggleAdType(type) {
+            document.getElementById('form-ad-type-hidden').value = type;
+            if (type === 'منتج') {
+                document.getElementById('btn-type-product').classList.add('active');
+                document.getElementById('btn-type-place').classList.remove('active');
+                document.getElementById('product-extra-fields').style.display = 'block';
+                document.getElementById('form-name').placeholder = "مثال: شامبو كابيكسي، حذاء رياضي...";
+                document.getElementById('location-link-group').style.display = 'none';
+            } else {
+                document.getElementById('btn-type-place').classList.add('active');
+                document.getElementById('btn-type-product').classList.remove('active');
+                document.getElementById('product-extra-fields').style.display = 'none';
+                document.getElementById('form-name').placeholder = "مثال: مطعم الباشا، صيدلية د.أحمد...";
+                document.getElementById('location-link-group').style.display = 'block';
+            }
+        }
 
         function initGovDropdown() {
             let govSelect = document.getElementById('form-gov');
@@ -878,7 +1006,6 @@
                 else total = oldTotal;
             }
 
-            // تطبيق البروموكود لأسبوع مجاني
             if (promo === 'FREEWEEK' && selectedDays === 7) { total = 0; }
 
             let displayHtml = '';
@@ -902,6 +1029,7 @@
         function closeAdModal() { document.getElementById('ad-modal-overlay').style.display = 'none'; }
 
         function sendAdToWhatsApp() {
+            let adType = document.getElementById('form-ad-type-hidden').value;
             let name = document.getElementById('form-name').value.trim();
             let type = document.getElementById('form-type').value;
             let category = document.getElementById('form-category').value;
@@ -913,6 +1041,11 @@
             let call = document.getElementById('form-call').value.trim();
             let loc = document.getElementById('form-loc').value.trim();
             let promo = document.getElementById('form-promo').value.trim().toUpperCase();
+            
+            // بيانات المنتج الجديدة
+            let oldPrice = document.getElementById('form-old-price').value.trim();
+            let newPrice = document.getElementById('form-new-price').value.trim();
+            let delivery = document.getElementById('form-delivery').value;
             let total = document.getElementById('calc-total').innerText;
 
             if(!name || !gov || !region || !wa) {
@@ -922,25 +1055,36 @@
 
             let message = `📌 *طلب إعلان جديد - دليلك*\n`;
             message += `-----------------------------------\n`;
-            message += `🏷️ *اسم النشاط:* ${name}\n`;
-            message += `👑 *نوع الباقة:* ${type}\n`;
+            message += `🏷️ *الاسم:* ${name}\n`;
+            message += `🎯 *النوع:* ${adType}\n`;
+            message += `👑 *الباقة:* ${type}\n`;
             message += `⏱️ *المدة المطلوبة:* ${selectedDays} أيام\n`;
             message += `💵 *المبلغ المطلوب:* ${total}\n`;
-            if (promo) message += `🎁 *بروموكود مستخدم:* ${promo}\n`;
+            if (promo) message += `🎁 *بروموكود:* ${promo}\n`;
             message += `-----------------------------------\n`;
             message += `📂 *القسم:* ${category}\n`;
             message += `📍 *المكان:* ${gov} - ${region}\n`;
-            if (loc) message += `🗺️ *رابط اللوكيشن:* ${loc}\n`;
+            
+            if (adType === 'منتج') {
+                message += `-----------------------------------\n`;
+                message += `🛍️ *تفاصيل المنتج:*\n`;
+                if (oldPrice) message += `❌ *السعر قبل:* ${oldPrice} جنيه\n`;
+                if (newPrice) message += `✅ *السعر بعد:* ${newPrice} جنيه\n`;
+                if (delivery) message += `🚚 *التوصيل:* ${delivery}\n`;
+            }
+
+            if (adType === 'مكان' && loc) message += `🗺️ *رابط اللوكيشن:* ${loc}\n`;
             if (desc) message += `📝 *الوصف:* ${desc}\n`;
             message += `💬 *واتساب التواصل:* ${wa}\n`;
             if (call) message += `📞 *رقم اتصال آخر:* ${call}\n`;
             message += `-----------------------------------\n`;
-            message += `*(يرجى إرفاق سكرين إثبات الدفع مع هذه الرسالة)*`;
+            message += `*(يرجى إرفاق سكرين الدفع + صورة الإعلان/المنتج مع هذه الرسالة)*`;
 
             let encodedMessage = encodeURIComponent(message);
             window.open(`https://wa.me/201288023436?text=${encodedMessage}`, '_blank');
             closeAdModal();
-                    }
+        }
+
             
         fetchAdsFromGoogleSheet();
     </script>
