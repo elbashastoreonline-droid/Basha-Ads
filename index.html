@@ -234,6 +234,41 @@
         body.dark-mode .status-msg { color: #aaa; }
         body.dark-mode .normal-wa-btn { background: #333; color: #25D366; border-color: #25D366; }
         body.dark-mode button[onclick^="shareAd"] { background: #333 !important; color: #ddd !important; border-color: #555 !important; }
+          /* 📝 تصميم نافذة الفورمة الشاملة */
+        .ad-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 3000; display: none; align-items: center; justify-content: center; }
+        .ad-modal { background: #f4f7f6; width: 95%; max-width: 500px; max-height: 90vh; overflow-y: auto; border-radius: 20px; padding: 25px 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 2px solid #D4AF37; animation: fadeIn 0.3s ease-out; position: relative; scrollbar-width: none; }
+        .ad-modal::-webkit-scrollbar { display: none; }
+        .ad-modal h2 { color: #0f2027; text-align: center; font-weight: 900; margin-bottom: 20px; font-size: 22px; border-bottom: 2px solid #D4AF37; padding-bottom: 10px; }
+        .close-modal { position: absolute; top: 15px; left: 20px; font-size: 28px; color: #e74c3c; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .close-modal:hover { transform: scale(1.1); }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-weight: bold; font-size: 14px; color: #111; margin-bottom: 6px; }
+        .form-group input, .form-group select { width: 100%; padding: 12px; border-radius: 12px; border: 2px solid #ddd; font-family: 'Tajawal', sans-serif; font-weight: bold; font-size: 14px; outline: none; transition: 0.3s; }
+        .form-group input:focus, .form-group select:focus { border-color: #D4AF37; box-shadow: 0 0 8px rgba(212, 175, 55, 0.3); }
+        
+        /* تصميم زراير الباقات */
+        .offers-container { display: flex; gap: 8px; margin-bottom: 10px; }
+        .offer-btn { flex: 1; padding: 10px 5px; background: #fff; border: 2px solid #ddd; border-radius: 10px; cursor: pointer; font-family: 'Tajawal', sans-serif; font-weight: 900; font-size: 13px; color: #555; transition: 0.3s; text-align: center; }
+        .offer-btn.active { background: linear-gradient(135deg, #0f2027, #2c5364); color: #D4AF37; border-color: #0f2027; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .offer-discount { display: block; font-size: 10px; color: #e74c3c; text-decoration: line-through; margin-bottom: 2px; }
+
+        /* منطقة الحساب والدفع */
+        .price-calculator { background: linear-gradient(135deg, #0f2027, #2c5364); color: white; padding: 20px; border-radius: 15px; text-align: center; margin-top: 20px; border: 2px solid #D4AF37; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .price-calculator h3 { color: #D4AF37; margin-bottom: 5px; font-size: 24px; font-weight: 900; display: flex; justify-content: center; align-items: center; gap: 10px; }
+        .price-calculator .old-price { font-size: 16px; color: #aaa; text-decoration: line-through; font-weight: normal; }
+        
+        .copy-number { display: inline-block; background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 8px; border: 1px solid #D4AF37; cursor: pointer; color: #D4AF37; font-weight: bold; margin: 3px 0; transition: 0.3s; }
+        .copy-number:hover { background: #D4AF37; color: #0f2027; transform: scale(1.05); }
+        .copy-number::after { content: " 📋"; }
+
+        .submit-ad-btn { width: 100%; background: linear-gradient(90deg, #25D366, #128C7E); color: white; padding: 14px; border: none; border-radius: 12px; font-size: 18px; font-weight: 900; cursor: pointer; margin-top: 20px; box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4); transition: 0.3s; }
+        .submit-ad-btn:active { transform: scale(0.95); }
+
+        body.dark-mode .ad-modal { background: #1a1a1a; }
+        body.dark-mode .ad-modal h2, body.dark-mode .form-group label { color: #f4f7f6; }
+        body.dark-mode .form-group input, body.dark-mode .form-group select { background: #242424; color: #fff; border-color: #444; }
+        body.dark-mode .offer-btn { background: #242424; color: #aaa; border-color: #444; }
+        body.dark-mode .offer-btn.active { border-color: #D4AF37; }
     </style>
 </head>
 <body>
@@ -354,7 +389,105 @@
     </div>
         <!-- زرار الطلوع لفوق -->
         <div id="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">⬆️</div>
-        <a class="floating-btn" href="https://wa.me/201288023436?text=السلام%20عليكم%20كنت%20عايز%20اضيف%20اعلان%20في%20موقع%20دليلك%20ايه%20هي%20الاسعار%20المتاحه%20للعادي%20وال%20VIP" target="_blank">+ أضف إعلانك معنا</a>
+                <button class="floating-btn" onclick="openAdModal()">+ أضف إعلانك معنا</button>
+
+        <!-- 📝 نافذة إضافة إعلان (Modal) الشاملة -->
+        <div class="ad-modal-overlay" id="ad-modal-overlay">
+            <div class="ad-modal">
+                <span class="close-modal" onclick="closeAdModal()">×</span>
+                <h2>🚀 أضف إعلانك في دليلك</h2>
+                
+                <div class="form-group">
+                    <label>اسم النشاط / الإعلان:</label>
+                    <input type="text" id="form-name" placeholder="مثال: مطعم الباشا، صيدلية د.أحمد...">
+                </div>
+
+                <div class="form-group">
+                    <label>نوع الباقة:</label>
+                    <select id="form-type" onchange="calcPrice()">
+                        <option value="عادي">باقة عادي (5 ج/يوم) 📦</option>
+                        <option value="VIP">باقة VIP (10 ج/يوم) 👑</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>🔥 باقات التوفير (اختر المدة):</label>
+                    <div class="offers-container">
+                        <button class="offer-btn active" id="btn-7" onclick="selectOffer(7)">أسبوع</button>
+                        <button class="offer-btn" id="btn-15" onclick="selectOffer(15)">15 يوم</button>
+                        <button class="offer-btn" id="btn-30" onclick="selectOffer(30)">شهر</button>
+                    </div>
+                    <input type="number" id="form-custom-days" placeholder="أو أدخل عدد أيام مخصص هنا..." onkeyup="customDaysInput()" onchange="customDaysInput()" style="margin-top: 8px;">
+                </div>
+
+                <div class="form-group">
+                    <label>القسم / الفئة:</label>
+                    <select id="form-category">
+                        <option value="الرعاية الصحية">🏥 الرعاية الصحية</option><option value="المطاعم والمقاهي">🍽️ المطاعم والمقاهي</option><option value="التسوق">🛍️ التسوق</option><option value="الأزياء والموضة">👕 الأزياء والموضة</option><option value="الجمال والعناية">💄 الجمال والعناية</option><option value="التقنية والإلكترونيات">📱 التقنية والإلكترونيات</option><option value="السيارات">🚗 السيارات</option><option value="المنزل والصيانة">🏠 المنزل والصيانة</option><option value="العقارات">🏢 العقارات</option><option value="التعليم">🎓 التعليم</option><option value="الخدمات">💼 الخدمات</option><option value="الرياضة والترفيه">⚽ الرياضة والترفيه</option><option value="المناسبات">🎉 المناسبات</option><option value="السفر والسياحة">✈️ السفر والسياحة</option><option value="الحيوانات الأليفة">🐾 الحيوانات الأليفة</option><option value="الخدمات المالية">💳 الخدمات المالية</option><option value="الشحن والتوصيل">🚚 الشحن والتوصيل</option><option value="أخرى">📌 أخرى</option>
+                    </select>
+                </div>
+
+                <div style="display: flex; gap: 10px;">
+                    <div class="form-group" style="flex: 1;">
+                        <label>المحافظة:</label>
+                        <select id="form-gov" onchange="updateModalRegions()">
+                            <option value="">جاري التحميل...</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>المنطقة:</label>
+                        <select id="form-region" onchange="checkOtherRegion()">
+                            <option value="">اختر المحافظة أولاً</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- حقل مخفي لكتابة المنطقة اليدوية -->
+                <div class="form-group" id="other-region-div" style="display: none;">
+                    <label>اكتب اسم منطقتك:</label>
+                    <input type="text" id="form-other-region" placeholder="اكتب المنطقة هنا...">
+                </div>
+
+                <div class="form-group">
+                    <label>وصف الإعلان:</label>
+                    <input type="text" id="form-desc" placeholder="اكتب تفاصيل العرض أو الخصم...">
+                </div>
+
+                <div class="form-group">
+                    <label>رابط اللوكيشن (Google Maps):</label>
+                    <input type="url" id="form-loc" placeholder="https://maps.app.goo.gl/..." dir="ltr">
+                </div>
+
+                <div style="display: flex; gap: 10px;">
+                    <div class="form-group" style="flex: 1;">
+                        <label>رقم الواتساب:</label>
+                        <input type="number" id="form-wa" placeholder="01234567890">
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>رقم اتصال آخر:</label>
+                        <input type="number" id="form-call" placeholder="لو مختلف عن الواتس (اختياري)">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>كود خصم (إن وجد):</label>
+                    <input type="text" id="form-promo" placeholder="أدخل الكود هنا..." onkeyup="calcPrice()" style="text-transform: uppercase;">
+                </div>
+
+                <div class="price-calculator">
+                    <p style="font-weight: bold; font-size: 15px; color: #ddd;">إجمالي المبلغ المطلوب:</p>
+                    <h3 id="calc-total">0 جنيه</h3>
+                    <div style="font-size: 13px; color: #ddd; margin-top: 15px; line-height: 1.8; font-weight: bold;">
+                        يرجى الدفع بالنسخ والتحويل على:<br>
+                        🟣 <b>إنستاباي أو We Pay:</b> <span class="copy-number" onclick="copyNumber('01550720161')">01550720161</span><br>
+                        🔴 <b>فودافون كاش:</b> <span class="copy-number" onclick="copyNumber('01288023436')">01288023436</span><br>
+                        <span style="color: #D4AF37; font-size: 11px;">(يرجى أخذ سكرين شوت للتحويل لإرسالها في الواتساب)</span>
+                    </div>
+                </div>
+
+                <button class="submit-ad-btn" onclick="sendAdToWhatsApp()">إرسال الطلب عبر الواتساب 🚀</button>
+            </div>
+        </div>
+
 
     </div>
 
@@ -651,7 +784,164 @@
                 headerClicks = 0;
             }
         });
+        // 🚀 أكواد نافذة إضافة الإعلان (المحافظات، الأسعار، الواتساب)
+        const regionsData = {
+            "الإسكندرية": ["أبو قير", "العجمي", "العصافرة", "المكس", "المندرة", "المنتزه", "باكوس", "جليم", "رشدي", "سان ستيفانو", "سبورتنج", "سموحة", "سيدي بشر", "سيدي جابر", "كليوباترا", "لوران", "محطة الرمل", "ميامي"],
+            "القاهرة": ["التجمع الخامس", "الدقي", "الرحاب", "الزمالك", "الشروق", "العجوزة", "العبور", "المعادي", "المقطم", "المهندسين", "جسر السويس", "حلوان", "روكسي", "شبرا", "عين شمس", "مدينة نصر", "مدينتي", "مصر الجديدة", "وسط البلد"],
+            "الجيزة": ["6 أكتوبر", "أبو النمرس", "البدرشين", "الشيخ زايد", "الهرم", "فيصل"],
+            "القليوبية": ["القناطر الخيرية", "بنها", "شبرا الخيمة", "قليوب", "قها"],
+            "الدقهلية": ["المنصورة", "بلقاس", "دكرنس", "سنبلاوين", "ميت غمر"],
+            "الشرقية": ["العاشر من رمضان", "بلبيس", "زقازيق", "فاقوس", "منيا القمح"],
+            "الغربية": ["المحلة الكبرى", "زفتى", "سمنود", "طنطا", "كفر الزيات"],
+            "المنوفية": ["السادات", "تلا", "شبين الكوم", "قويسنا", "منوف"],
+            "البحيرة": ["أبو حمص", "إيتاي البارود", "دمنهور", "رشيد", "كفر الدوار"],
+            "الإسماعيلية": ["القصاصين", "حي أول", "حي ثان", "حي ثالث", "فايد"],
+            "بورسعيد": ["حي الإفرنج", "حي الشرق", "حي العرب", "حي المناخ", "حي الزهور"],
+            "السويس": ["الأربعين", "الجناين", "السويس", "فيصل"],
+            "دمياط": ["الزرقا", "دمياط", "رأس البر", "فارسكور", "كفر سعد"],
+            "كفر الشيخ": ["بيلا", "دسوق", "سيدي سالم", "فوه", "كفر الشيخ"],
+            "الفيوم": ["إطسا", "الفيوم", "سنورس", "طامية", "يوسف الصديق"],
+            "بني سويف": ["إهناسيا", "الواسطى", "ببا", "بني سويف", "ناصر"],
+            "المنيا": ["المنيا", "بني مزار", "ديرمواس", "سمالوط", "مغاغة", "ملوي"],
+            "أسيوط": ["أبو تيج", "أسيوط", "أبنوب", "ديروط", "منفلوط"],
+            "سوهاج": ["إخميم", "المراغة", "جرجا", "سوهاج", "طهطا"],
+            "قنا": ["دشنا", "فرشوط", "قنا", "قوص", "نجع حمادي"],
+            "الأقصر": ["أرمنت", "إسنا", "الأقصر", "القرنة"],
+            "أسوان": ["أسوان", "إدفو", "دراو", "كوم أمبو"],
+            "البحر الأحمر": ["الغردقة", "القصير", "رأس غارب", "سفاجا", "مرسى علم"],
+            "مطروح": ["الحمام", "الضبعة", "العلمين", "سيدي براني", "مرسى مطروح"]
+        };
 
+        let selectedDays = 7; // افتراضي أسبوع
+
+        function initGovDropdown() {
+            let govSelect = document.getElementById('form-gov');
+            govSelect.innerHTML = '<option value="">اختر المحافظة...</option>';
+            let sortedGovs = Object.keys(regionsData).sort((a, b) => a.localeCompare(b, 'ar'));
+            sortedGovs.forEach(gov => { govSelect.innerHTML += `<option value="${gov}">${gov}</option>`; });
+        }
+
+        function updateModalRegions() {
+            let gov = document.getElementById('form-gov').value;
+            let regionSelect = document.getElementById('form-region');
+            regionSelect.innerHTML = '<option value="">اختر المنطقة...</option>';
+            document.getElementById('other-region-div').style.display = 'none';
+
+            if (regionsData[gov]) {
+                let sortedRegions = regionsData[gov].sort((a, b) => a.localeCompare(b, 'ar'));
+                sortedRegions.forEach(reg => { regionSelect.innerHTML += `<option value="${reg}">${reg}</option>`; });
+            }
+            regionSelect.innerHTML += `<option value="أخرى">📌 أخرى (سأكتبها بنفسي)</option>`;
+        }
+
+        function checkOtherRegion() {
+            let val = document.getElementById('form-region').value;
+            document.getElementById('other-region-div').style.display = (val === 'أخرى') ? 'block' : 'none';
+        }
+
+        function selectOffer(days) {
+            selectedDays = days;
+            document.getElementById('form-custom-days').value = '';
+            document.querySelectorAll('.offer-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`btn-${days}`).classList.add('active');
+            calcPrice();
+        }
+
+        function customDaysInput() {
+            let val = document.getElementById('form-custom-days').value;
+            if (val && parseInt(val) > 0) {
+                selectedDays = parseInt(val);
+                document.querySelectorAll('.offer-btn').forEach(btn => btn.classList.remove('active'));
+            } else {
+                selectedDays = 7;
+                document.getElementById('btn-7').classList.add('active');
+            }
+            calcPrice();
+        }
+
+        function calcPrice() {
+            let type = document.getElementById('form-type').value;
+            let promo = document.getElementById('form-promo').value.trim().toUpperCase();
+            let total = 0, oldTotal = 0;
+
+            if (type === 'عادي') {
+                oldTotal = selectedDays * 5;
+                if (selectedDays === 7) total = 30;
+                else if (selectedDays === 15) total = 60;
+                else if (selectedDays === 30) total = 120;
+                else total = oldTotal;
+            } else {
+                oldTotal = selectedDays * 10;
+                if (selectedDays === 7) total = 60;
+                else if (selectedDays === 15) total = 120;
+                else if (selectedDays === 30) total = 220;
+                else total = oldTotal;
+            }
+
+            // تطبيق البروموكود لأسبوع مجاني
+            if (promo === 'FREEWEEK' && selectedDays === 7) { total = 0; }
+
+            let displayHtml = '';
+            if (total < oldTotal) { displayHtml = `<span class="old-price">${oldTotal} ج</span> ${total} جنيه`; } 
+            else if (total === 0 && promo === 'FREEWEEK') { displayHtml = `🎉 مجاناً بالبروموكود`; }
+            else { displayHtml = `${total} جنيه`; }
+
+            document.getElementById('calc-total').innerHTML = displayHtml;
+        }
+
+        function copyNumber(num) {
+            navigator.clipboard.writeText(num).then(() => { alert('✅ تم نسخ الرقم: ' + num); });
+        }
+
+        function openAdModal() {
+            document.getElementById('ad-modal-overlay').style.display = 'flex';
+            if (document.getElementById('form-gov').options.length <= 1) { initGovDropdown(); }
+            selectOffer(7); 
+        }
+
+        function closeAdModal() { document.getElementById('ad-modal-overlay').style.display = 'none'; }
+
+        function sendAdToWhatsApp() {
+            let name = document.getElementById('form-name').value.trim();
+            let type = document.getElementById('form-type').value;
+            let category = document.getElementById('form-category').value;
+            let gov = document.getElementById('form-gov').value;
+            let region = document.getElementById('form-region').value;
+            if (region === 'أخرى') region = document.getElementById('form-other-region').value.trim();
+            let desc = document.getElementById('form-desc').value.trim();
+            let wa = document.getElementById('form-wa').value.trim();
+            let call = document.getElementById('form-call').value.trim();
+            let loc = document.getElementById('form-loc').value.trim();
+            let promo = document.getElementById('form-promo').value.trim().toUpperCase();
+            let total = document.getElementById('calc-total').innerText;
+
+            if(!name || !gov || !region || !wa) {
+                alert("⚠️ يرجى ملء الحقول الأساسية (الاسم، المحافظة، المنطقة، ورقم الواتساب)!");
+                return;
+            }
+
+            let message = `📌 *طلب إعلان جديد - دليلك*\n`;
+            message += `-----------------------------------\n`;
+            message += `🏷️ *اسم النشاط:* ${name}\n`;
+            message += `👑 *نوع الباقة:* ${type}\n`;
+            message += `⏱️ *المدة المطلوبة:* ${selectedDays} أيام\n`;
+            message += `💵 *المبلغ المطلوب:* ${total}\n`;
+            if (promo) message += `🎁 *بروموكود مستخدم:* ${promo}\n`;
+            message += `-----------------------------------\n`;
+            message += `📂 *القسم:* ${category}\n`;
+            message += `📍 *المكان:* ${gov} - ${region}\n`;
+            if (loc) message += `🗺️ *رابط اللوكيشن:* ${loc}\n`;
+            if (desc) message += `📝 *الوصف:* ${desc}\n`;
+            message += `💬 *واتساب التواصل:* ${wa}\n`;
+            if (call) message += `📞 *رقم اتصال آخر:* ${call}\n`;
+            message += `-----------------------------------\n`;
+            message += `*(يرجى إرفاق سكرين إثبات الدفع مع هذه الرسالة)*`;
+
+            let encodedMessage = encodeURIComponent(message);
+            window.open(`https://wa.me/201288023436?text=${encodedMessage}`, '_blank');
+            closeAdModal();
+                    }
+            
         fetchAdsFromGoogleSheet();
     </script>
 
