@@ -42,14 +42,21 @@
         .sidebar.active { right: 0; }
         .close-btn { font-size: 35px; cursor: pointer; color: #e74c3c; float: left; margin-top: -15px; }
         .sidebar h3 { margin-bottom: 20px; color: #0f2027; border-bottom: 3px solid #D4AF37; padding-bottom: 10px; clear: both; font-weight: 900; }
-        .sidebar .cat-btn-side { display: block; width: 100%; text-align: right; background: #f9f9f9; border: 1px solid #eee; padding: 12px 15px; border-radius: 12px; margin-bottom: 10px; color: #333; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 15px; }
-        .sidebar .cat-btn-side:hover, .sidebar .cat-btn-side.active { background: #0f2027; color: #D4AF37; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .sidebar .cat-btn-side { display: block; width: 100%; text-align: center; background: #f9f9f9; border: 1px solid #eee; padding: 12px 10px; border-radius: 12px; margin-bottom: 10px; color: #333; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 14px; line-height: 1.4; }
+        .sidebar .cat-btn-side:hover { background: #0f2027; color: #D4AF37; border-color: #D4AF37; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        
+        .sidebar-accordion summary { font-weight: 900; color: #0f2027; cursor: pointer; padding: 12px; background: rgba(212, 175, 55, 0.2); border-radius: 8px; border: 1px solid #D4AF37; outline: none; list-style: none; font-size: 15px; }
+        .sidebar-accordion summary::-webkit-details-marker { display: none; }
+        .gb-link { display: flex; align-items: center; justify-content: center; background: #fff; border: 1px solid #ddd; padding: 8px; border-radius: 8px; text-decoration: none; color: #333; font-weight: bold; font-size: 11px; transition: 0.3s; text-align: center; }
+        .gb-link:hover { border-color: #D4AF37; background: #0f2027; color: #D4AF37; }
+
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(3px); z-index: 1500; display: none; }
         .overlay.active { display: block; }
 
-        /* زر الفلترة الرئيسي (منتجات / أماكن) */
-        .main-toggle-container { display: flex; max-width: 1200px; margin: 15px auto 0; padding: 0 15px; gap: 10px; }
-        .main-btn { flex: 1; padding: 12px; border-radius: 12px; font-weight: 900; cursor: pointer; text-align: center; background: #fff; border: 2px solid #D4AF37; color: #0f2027; transition: 0.3s; font-size: 14px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        /* زر الفلترة الرئيسي الموحد (الكل / أماكن / منتجات) */
+        .main-toggle-container { display: flex; max-width: 1200px; margin: 15px auto 0; padding: 0 15px; gap: 10px; justify-content: center; }
+        .main-btn { flex: 1; padding: 10px 5px; border-radius: 12px; font-weight: 900; cursor: pointer; text-align: center; background: #fff; border: 2px solid #D4AF37; color: #0f2027; transition: 0.3s; font-size: 14px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .main-btn span { font-size: 20px; display: block; margin-bottom: 5px; }
         .main-btn.active { background: linear-gradient(135deg, #0f2027, #2c5364); color: #D4AF37; border-color: #0f2027; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.2); }
 
         /* VIP */
@@ -70,14 +77,12 @@
         .vip-info h3 { color: #0f2027; font-size: 20px; font-weight: 900; margin-bottom: 8px; }
         .vip-info p { font-size: 14px; color: #555; margin: 0 auto 15px; line-height: 1.5; font-weight: bold; white-space: normal; word-wrap: break-word; overflow-wrap: anywhere; width: 100%; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
 
-        /* الأزرار والأيقونات */
+        /* الأزرار والأيقونات (معدلة بدون إطارات غريبة) */
         .action-buttons-container { display: flex; gap: 15px; justify-content: center; align-items: center; margin-top: 15px; }
-        .icon-btn { width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; text-decoration: none; box-shadow: 0 4px 10px rgba(0,0,0,0.15); transition: 0.3s; cursor: pointer; border: none; }
+        .icon-btn { width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; text-decoration: none; box-shadow: 0 4px 10px rgba(0,0,0,0.15); transition: 0.3s; cursor: pointer; border: none; background: transparent; outline: none; }
         .icon-btn:active { transform: scale(0.9); }
-        .btn-wa { background: linear-gradient(90deg, #25D366, #128C7E); color: white; }
-        .btn-call { background: #3498db; color: white; }
-        .btn-loc { background: #e74c3c; color: white; }
-        .btn-share { background: #fff; border: 2px solid #D4AF37; color: #0f2027; }
+        .icon-img { width: 100%; height: 100%; object-fit: contain; background: transparent; border: none; border-radius: 50%; display: block; }
+        .btn-share { background: #f9f9f9; border: 1px solid #ccc; color: #555; }
 
         /* الإعلانات العادية */
         .ad-list { padding: 0 15px 20px 15px; display: flex; flex-direction: column; gap: 15px; }
@@ -87,12 +92,15 @@
         .ad-details h3 { font-size: 16px; color: #222; font-weight: 900; }
         .ad-details p { font-size: 12px; color: #777; margin-top: 5px; line-height: 1.4; word-wrap: break-word; white-space: pre-wrap; overflow: hidden; }
 
-        /* شارات المنتجات والخصومات */
-        .discount-badge { position: absolute; top: 10px; left: 10px; background: #e74c3c; color: white; padding: 5px 10px; border-radius: 8px; font-weight: bold; font-size: 12px; z-index: 10; border: 1px solid #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        /* الشارات (خصم، جديد، اسم المكان، توصيل) */
+        .new-badge { position: absolute; top: 10px; right: 10px; background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 5px 12px; border-radius: 8px; font-weight: 900; font-size: 12px; z-index: 10; border: 1px solid #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.3); animation: pulse 2s infinite; }
+        .discount-badge { position: absolute; top: 10px; left: 10px; background: #27ae60; color: white; padding: 5px 10px; border-radius: 8px; font-weight: bold; font-size: 12px; z-index: 10; border: 1px solid #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .place-badge { display: inline-block; background: rgba(212, 175, 55, 0.15); color: #0f2027; padding: 3px 10px; border-radius: 5px; font-size: 11px; font-weight: 900; margin-bottom: 5px; border: 1px solid rgba(212, 175, 55, 0.5); }
+        .delivery-badge { display: inline-block; background: #f39c12; color: #fff; padding: 3px 10px; border-radius: 5px; font-size: 11px; font-weight: bold; margin-bottom: 5px; margin-right: 5px; }
         .price-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 10px 0; }
         .price-container .old-price-card { text-decoration: line-through; color: #999; font-size: 14px; }
         .price-container .new-price-card { color: #27ae60; font-size: 18px; font-weight: 900; }
-        .delivery-badge { display: inline-block; background: #f39c12; color: #fff; padding: 4px 10px; border-radius: 5px; font-size: 11px; font-weight: bold; margin-bottom: 5px; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
         /* شاشة المنتج المنفرد (Popup) */
         .single-ad-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 4000; display: none; align-items: center; justify-content: center; }
@@ -101,11 +109,6 @@
         .single-ad-img { width: 100%; height: 250px; object-fit: cover; }
         .single-ad-content { padding: 20px; text-align: center; }
         
-        /* تأثير اللمعة */
-        .shimmer-effect { position: relative; overflow: hidden; }
-        .shimmer-effect::after { content: ""; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); animation: shimmer 3s infinite; }
-        @keyframes shimmer { 0% { left: -100%; } 100% { left: 100%; } }
-
         /* الأزرار العائمة */
         #back-to-top { position: fixed; bottom: 85px; right: 20px; background: #D4AF37; color: #0f2027; width: 45px; height: 45px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); cursor: pointer; z-index: 1000; border: 2px solid #fff; transition: 0.3s; }
         .floating-btn { position: fixed; bottom: 25px; left: 0; right: 0; max-width: 250px; margin: 0 auto; background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 14px 20px; border-radius: 30px; font-size: 16px; font-weight: 900; box-shadow: 0 8px 20px rgba(231, 76, 60, 0.4); border: 2px solid #fff; cursor: pointer; z-index: 1000; text-align: center; transition: 0.3s; border: none; }
@@ -127,10 +130,13 @@
         body.dark-mode .sidebar { background: #1a1a1a; }
         body.dark-mode .sidebar h3 { color: #D4AF37; border-bottom-color: #555; }
         body.dark-mode .sidebar .cat-btn-side { background: #242424; color: #ddd; border-color: #444; }
-        body.dark-mode .sidebar .cat-btn-side:hover { background: #D4AF37; color: #0f2027; }
-        body.dark-mode .news-ticker-wrapper { background: #1a1a1a; border-color: #555; }
+        body.dark-mode .sidebar .cat-btn-side:hover { background: #0f2027; color: #D4AF37; }
+        body.dark-mode .sidebar-accordion summary { background: rgba(212, 175, 55, 0.1); color: #D4AF37; border-color: #444; }
+        body.dark-mode .gb-link { background: #242424; color: #aaa; border-color: #444; }
+        body.dark-mode .gb-link:hover { background: #0f2027; color: #D4AF37; border-color: #D4AF37; }
         body.dark-mode .main-btn { background: #242424; color: #aaa; border-color: #444; }
         body.dark-mode .main-btn.active { background: linear-gradient(135deg, #0f2027, #2c5364); color: #D4AF37; border-color: #D4AF37; }
+        body.dark-mode .place-badge { color: #D4AF37; border-color: #555; }
 
         /* 📝 نافذة الفورمة (Modal) */
         .ad-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 3000; display: none; align-items: center; justify-content: center; }
@@ -182,7 +188,6 @@
                 <h1>دليلك | Daleelak</h1>
                 <p>دليلك لأفضل العروض</p>
             </div>
-            <!-- تم نقل زرار الوضع الليلي للقائمة الجانبية -->
             <div style="width: 28px;"></div>
         </div>
 
@@ -198,14 +203,37 @@
             <span class="close-btn" onclick="toggleMenu()">×</span>
             <h3 style="margin-top: 10px;">⚙️ لوحة التحكم</h3>
             
-            <button class="cat-btn-side" style="background: linear-gradient(135deg, #0f2027, #2c5364); color: #D4AF37; border: none; text-align: center;" onclick="setMainFilter('products'); toggleMenu();">🛍️ عرض المنتجات فقط</button>
-            <button class="cat-btn-side" style="background: #f4f7f6; color: #0f2027; border: 2px solid #D4AF37; text-align: center; margin-bottom: 20px;" onclick="setMainFilter('places'); toggleMenu();">🏢 عرض الأماكن فقط</button>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
+                <button class="cat-btn-side" onclick="setMainFilter('all'); toggleMenu();">🌍<br>الكل</button>
+                <button class="cat-btn-side" style="color: #e74c3c;" onclick="setMainFilter('latest'); toggleMenu();">🔥<br>أحدث الإعلانات</button>
+                <button class="cat-btn-side" onclick="setMainFilter('places'); toggleMenu();">🏢<br>الأماكن فقط</button>
+                <button class="cat-btn-side" onclick="setMainFilter('products'); toggleMenu();">🛍️<br>المنتجات فقط</button>
+            </div>
             
-            <button class="cat-btn-side" style="text-align: center;" onclick="toggleDarkMode()">☀️ / 🌙 تبديل الوضع الليلي</button>
-            <button class="cat-btn-side" style="background: linear-gradient(90deg, #25D366, #128C7E); color: white; border: none; text-align: center; margin-bottom: 20px;" onclick="openAdModal(); toggleMenu();">🚀 أضف إعلانك معنا</button>
+            <button class="cat-btn-side" style="width: 100%; font-size: 15px;" onclick="toggleDarkMode()">☀️ / 🌙 تبديل الوضع الليلي</button>
+            <button class="cat-btn-side" style="width: 100%; background: linear-gradient(90deg, #25D366, #128C7E); color: white; border: none; font-size: 15px; margin-bottom: 20px;" onclick="openAdModal(); toggleMenu();">🚀 أضف إعلانك معنا</button>
             
-            <h3>أقسام الدليل</h3>
-            <div id="sidebar-categories-box"></div>
+            <details class="sidebar-accordion">
+                <summary>📂 تصفح أقسام الدليل 🔻</summary>
+                <div id="sidebar-categories-box" style="margin-top: 10px;">
+                    <!-- الفئات تضاف برمجياً هنا -->
+                </div>
+            </details>
+
+            <details class="sidebar-accordion" style="margin-top: 10px;">
+                <summary>🎧 مركز خدمات GAME BASHA 🔻</summary>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px;">
+                    <a href="#" class="gb-link">💬 قناة واتساب</a>
+                    <a href="#" class="gb-link">👥 جروب واتساب</a>
+                    <a href="#" class="gb-link">📘 صفحة فيسبوك</a>
+                    <a href="#" class="gb-link">👥 جروب فيسبوك</a>
+                    <a href="#" class="gb-link">✈️ قناة تليجرام</a>
+                    <a href="#" class="gb-link">👥 جروب تليجرام</a>
+                    <a href="tel:01288023436" class="gb-link">📞 اتصال مباشر</a>
+                    <a href="https://wa.me/201288023436" class="gb-link">📱 واتساب مباشر</a>
+                    <a href="#" class="gb-link" style="grid-column: span 2;">🌐 الموقع الرسمي (قريباً)</a>
+                </div>
+            </details>
         </div>
 
         <!-- لوحة تحكم الإدارة المخفية -->
@@ -230,11 +258,11 @@
             <input type="text" id="search-box" onkeyup="applyFilters()" placeholder="🔍 ابحث عن مطعم، خدمة، منتج..." style="width: 100%; padding: 12px 15px; border-radius: 25px; border: 2px solid #D4AF37; outline: none; font-size: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); text-align: right; color: #333; font-weight: bold;">
         </div>
 
-        <!-- أزرار الفلترة الذكية (منتجات / أماكن) -->
+        <!-- أزرار الفلترة الذكية الأساسية -->
         <div class="main-toggle-container">
-            <div class="main-btn active" id="filter-btn-all" onclick="setMainFilter('all')">🌍 الكل</div>
-            <div class="main-btn" id="filter-btn-places" onclick="setMainFilter('places')">🏢 الأماكن</div>
-            <div class="main-btn" id="filter-btn-products" onclick="setMainFilter('products')">🛍️ المنتجات</div>
+            <div class="main-btn active" id="filter-btn-all" onclick="setMainFilter('all')"><span>🌍</span>الكل</div>
+            <div class="main-btn" id="filter-btn-places" onclick="setMainFilter('places')"><span>🏢</span>الأماكن</div>
+            <div class="main-btn" id="filter-btn-products" onclick="setMainFilter('products')"><span>🛍️</span>المنتجات</div>
         </div>
 
         <!-- بنر باشا الشحن -->
@@ -271,7 +299,7 @@
 
         <!-- الإعلانات العادية -->
         <div class="ad-list">
-            <h3 id="ads-section-title" style="margin-top: 10px; margin-bottom: 5px; color: #111; font-size: 18px; font-weight: 900;">🔥 أحدث الإعلانات</h3>
+            <h3 id="ads-section-title" style="margin-top: 10px; margin-bottom: 5px; color: #111; font-size: 18px; font-weight: 900;">🔥 الإعلانات</h3>
             <div id="loading-msg" style="text-align: center; padding: 40px 20px;">
                 <img src="https://i.ibb.co/M5StFDSQ/file-00000000335471f48a03a0acb621d53c.png" alt="دليلك - جاري التحميل" style="width: 85px; height: 85px; border-radius: 50%; border: 2px solid #D4AF37; margin-bottom: 15px; background-color: #fff; padding: 2px; animation: pulse-logo 1.5s infinite;">
                 <h3 style="color: #0f2027; font-size: 16px; font-weight: bold;">جاري تحميل الإعلانات...</h3>
@@ -343,7 +371,20 @@
                 <div class="form-group">
                     <label>القسم / الفئة:</label>
                     <select id="form-category">
-                        <option value="الرعاية الصحية">🏥 الرعاية الصحية</option><option value="المطاعم والمقاهي">🍽️ المطاعم والمقاهي</option><option value="التسوق">🛍️ التسوق</option><option value="الأزياء والموضة">👕 الأزياء والموضة</option><option value="الجمال والعناية">💄 الجمال والعناية</option><option value="التقنية والإلكترونيات">📱 التقنية والإلكترونيات</option><option value="السيارات">🚗 السيارات</option><option value="المنزل والصيانة">🏠 المنزل والصيانة</option><option value="العقارات">🏢 العقارات</option><option value="التعليم">🎓 التعليم</option><option value="الخدمات">💼 الخدمات</option><option value="الرياضة والترفيه">⚽ الرياضة والترفيه</option><option value="المناسبات">🎉 المناسبات</option><option value="السفر والسياحة">✈️ السفر والسياحة</option><option value="الحيوانات الأليفة">🐾 الحيوانات الأليفة</option><option value="الخدمات المالية">💳 الخدمات المالية</option><option value="الشحن والتوصيل">🚚 الشحن والتوصيل</option><option value="أخرى">📌 أخرى</option>
+                        <!-- تم التحديث للفئات المطلوبة بدقة -->
+                        <option value="سوبر ماركت وبقالة">🛒 سوبر ماركت وبقالة</option>
+                        <option value="صيدليات ومستلزمات طبية">💊 صيدليات ومستلزمات طبية</option>
+                        <option value="إكسسوارات وأدوات تجميل">💄 إكسسوارات وأدوات تجميل</option>
+                        <option value="مطاعم وكافيهات">🍔 مطاعم وكافيهات</option>
+                        <option value="ملابس وأحذية">👗 ملابس وأحذية</option>
+                        <option value="مستلزمات أطفال">👶 مستلزمات أطفال</option>
+                        <option value="شحن ألعاب وخدمات">🎮 شحن ألعاب وخدمات</option>
+                        <option value="إلكترونيات وموبايلات">📱 إلكترونيات وموبايلات</option>
+                        <option value="خدمات وصيانة">🛠️ خدمات وصيانة</option>
+                        <option value="مستشفيات وعيادات وأطباء">🏥 مستشفيات وعيادات وأطباء</option>
+                        <option value="عقارات وديكور">🏢 عقارات وديكور</option>
+                        <option value="سيارات ومواصلات">🚗 سيارات ومواصلات</option>
+                        <option value="أخرى">📌 أخرى</option>
                     </select>
                 </div>
 
@@ -368,7 +409,14 @@
 
                 <!-- 🛍️ حقول المنتجات -->
                 <div id="product-extra-fields" style="display: none; background: rgba(212, 175, 55, 0.05); padding: 15px; border-radius: 12px; border: 1px dashed #D4AF37; margin-bottom: 15px;">
-                    <h4 style="margin-top: 0; color: #D4AF37; margin-bottom: 10px; font-size: 14px;">💰 تفاصيل العرض والأسعار</h4>
+                    <h4 style="margin-top: 0; color: #D4AF37; margin-bottom: 10px; font-size: 14px;">💰 تفاصيل المنتج والأسعار</h4>
+                    
+                    <!-- حقل اسم المكان (العمود T) -->
+                    <div class="form-group">
+                        <label>يُباع في (اسم المكان/المحل):</label>
+                        <input type="text" id="form-place-name" placeholder="مثال: صيدلية د. أحمد...">
+                    </div>
+
                     <div style="display: flex; gap: 10px;">
                         <div class="form-group" style="flex: 1;">
                             <label>السعر قبل (ج):</label>
@@ -380,12 +428,9 @@
                         </div>
                     </div>
                     <div class="form-group" style="margin-bottom: 0;">
-                        <label>حالة التوصيل (اختياري):</label>
-                        <select id="form-delivery">
-                            <option value="">لا يوجد / غير محدد</option>
-                            <option value="متاح توصيل دليفري">🚚 متاح توصيل دليفري</option>
-                            <option value="شحن لجميع المحافظات">📦 شحن لجميع المحافظات</option>
-                        </select>
+                        <!-- حالة التوصيل (العمود U) -->
+                        <label>حالة الاستلام / التوصيل:</label>
+                        <input type="text" id="form-delivery" placeholder="مثال: متاح توصيل، استلام من الفرع...">
                     </div>
                 </div>
 
@@ -441,18 +486,16 @@
     <script>
         const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTA9f759D07O_z3VnIh8krMD0iKpFkwGQCF08_IymtIa08W2XGuhDpjhtgb1Zao-5YKGJ-mHsb3qt70/pub?gid=1257423716&single=true&output=csv';
         let globalAdsData = []; 
-        let currentMainFilter = 'all'; // all, places, products
+        let currentMainFilter = 'all'; // all, places, products, latest
 
         const appCategories = [
-            '🏥 الرعاية الصحية', '🍽️ المطاعم والمقاهي', '🛍️ التسوق', '👕 الأزياء والموضة', 
-            '💄 الجمال والعناية', '📱 التقنية والإلكترونيات', '🚗 السيارات', '🏠 المنزل والصيانة', 
-            '🏢 العقارات', '🎓 التعليم', '💼 الخدمات', '⚽ الرياضة والترفيه', '🎉 المناسبات', 
-            '✈️ السفر والسياحة', '🐾 الحيوانات الأليفة', '💳 الخدمات المالية', '🚚 الشحن والتوصيل', '📌 أخرى'
+            '🛒 سوبر ماركت وبقالة', '💊 صيدليات ومستلزمات طبية', '💄 إكسسوارات وأدوات تجميل', 
+            '🍔 مطاعم وكافيهات', '👗 ملابس وأحذية', '👶 مستلزمات أطفال', '🎮 شحن ألعاب وخدمات', 
+            '📱 إلكترونيات وموبايلات', '🛠️ خدمات وصيانة', '🏥 مستشفيات وعيادات وأطباء', 
+            '🏢 عقارات وديكور', '🚗 سيارات ومواصلات', '📌 أخرى'
         ];
 
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
-        }
+        function toggleDarkMode() { document.body.classList.toggle('dark-mode'); }
 
         function toggleMenu() {
             document.getElementById('sidebar').classList.toggle('active');
@@ -463,7 +506,8 @@
             const box = document.getElementById('sidebar-categories-box');
             box.innerHTML = '';
             appCategories.forEach(cat => {
-                box.innerHTML += `<button class="cat-btn-side" onclick="document.getElementById('filter-category').value='${cat}'; applyFilters(); toggleMenu();">${cat}</button>`;
+                let cleanCatName = cat.replace(/[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF]/g, "").trim();
+                box.innerHTML += `<div class="cat-btn-side" style="text-align: right;" onclick="document.getElementById('filter-category').value='${cleanCatName}'; applyFilters(); toggleMenu();">${cat}</div>`;
             });
         }
 
@@ -510,8 +554,27 @@
                 for (let i = 1; i < rows.length; i++) {
                     const columns = rows[i];
                     if (!columns[1] || columns[1].trim() === "") continue; 
+                    
+                    // حساب مدة الإعلان لمعرفة إذا كان "جديد"
+                    let isNew = false;
+                    if(columns[0]) {
+                        let adDate = new Date(columns[0]);
+                        if(!isNaN(adDate)) {
+                            let diff = (new Date() - adDate) / (1000 * 60 * 60 * 24);
+                            if(diff >= 0 && diff <= 3) isNew = true;
+                        } else {
+                            let parts = columns[0].split(/[\s/:]+/);
+                            if(parts.length >= 3) {
+                                let pDate = new Date(parts[2], parts[1]-1, parts[0]);
+                                let diff = (new Date() - pDate) / (1000 * 60 * 60 * 24);
+                                if(diff >= 0 && diff <= 3) isNew = true;
+                            }
+                        }
+                    }
 
                     globalAdsData.push({
+                        timestamp: columns[0] ? columns[0] : '',
+                        isNew: isNew,
                         title: columns[1] ? columns[1].trim() : '',
                         desc: columns[2] ? columns[2].trim() : '',
                         category: columns[3] ? columns[3].trim() : '📌 أخرى',
@@ -525,12 +588,13 @@
                         callPhone: columns[15] ? columns[15].trim() : '',
                         oldPrice: columns[17] ? columns[17].trim() : '',
                         newPrice: columns[18] ? columns[18].trim() : '',
-                        delivery: columns[19] ? columns[19].trim() : ''
+                        placeName: columns[19] ? columns[19].trim() : '', // العمود T
+                        delivery: columns[20] ? columns[20].trim() : ''   // العمود U
                     });
                 }
 
                 document.getElementById('loading-msg').style.display = 'none';
-                globalAdsData.sort(() => Math.random() - 0.5);
+                globalAdsData.sort(() => Math.random() - 0.5); // ترتيب عشوائي لإنعاش الصفحة
                 
                 buildFilterDropdowns();
                 buildSidebarCategories();
@@ -544,8 +608,12 @@
         function buildFilterDropdowns() {
             const catSelect = document.getElementById('filter-category');
             const citySelect = document.getElementById('filter-city');
-
-            appCategories.forEach(cat => { catSelect.innerHTML += `<option value="${cat}">${cat}</option>`; });
+            
+            // إضافة الأقسام من دون إيموجي لتسهيل البحث
+            appCategories.forEach(cat => { 
+                let cleanName = cat.replace(/[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF]/g, "").trim();
+                catSelect.innerHTML += `<option value="${cleanName}">${cat}</option>`; 
+            });
             const uniqueCities = [...new Set(globalAdsData.map(ad => ad.city))].filter(c => c && c !== 'غير محدد' && c !== '-');
             uniqueCities.forEach(city => { citySelect.innerHTML += `<option value="${city}">${city}</option>`; });
             
@@ -566,7 +634,9 @@
         function setMainFilter(filterType) {
             currentMainFilter = filterType;
             document.querySelectorAll('.main-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('filter-btn-' + filterType).classList.add('active');
+            if(filterType !== 'latest' && document.getElementById('filter-btn-' + filterType)) {
+                document.getElementById('filter-btn-' + filterType).classList.add('active');
+            }
             applyFilters();
         }
 
@@ -596,6 +666,7 @@
                 let text = filterNames.join(' - ');
                 if(currentMainFilter === 'products') text = (text ? text + ' | ' : '') + 'المنتجات';
                 if(currentMainFilter === 'places') text = (text ? text + ' | ' : '') + 'الأماكن';
+                if(currentMainFilter === 'latest') text = '🔥 أحدث الإعلانات';
                 if(input) text = (text ? text + ' | ' : '') + 'بحث';
                 if(!text) text = 'تصفية النشاط';
                 document.getElementById('sticky-cat-name').innerText = text;
@@ -604,7 +675,7 @@
             }
 
             const filteredAds = globalAdsData.filter(ad => {
-                let cleanAdCat = ad.category.replace(/[\uE000-\uF8FF]/g, "").trim();
+                let cleanAdCat = ad.category.replace(/[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF]/g, "").trim();
                 let cleanSelectedCat = selectedCat.replace(/[\uE000-\uF8FF]/g, "").trim();
                 
                 const matchCat = (selectedCat === 'الكل') || cleanAdCat.includes(cleanSelectedCat);
@@ -615,9 +686,15 @@
                 let matchType = true;
                 if (currentMainFilter === 'products') matchType = (ad.newPrice && ad.newPrice.trim() !== '');
                 if (currentMainFilter === 'places') matchType = (!ad.newPrice || ad.newPrice.trim() === '');
+                if (currentMainFilter === 'latest') matchType = (ad.isNew === true);
 
                 return matchCat && matchCity && matchRegion && matchSearch && matchType;
             });
+
+            // لو الفلتر "أحدث الإعلانات"، نرتبهم من الأحدث للأقدم
+            if(currentMainFilter === 'latest') {
+                filteredAds.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            }
 
             renderAds(filteredAds);
         }
@@ -647,34 +724,45 @@
                 
                 let hasLocation = ad.location && ad.location.trim() !== '' && ad.location.trim() !== '-' && ad.location.trim().length > 5;
                 
-                let priceHtml = ""; let badgeHtml = ""; let deliveryHtml = "";
+                let priceHtml = ""; let badgeHtml = ""; let deliveryHtml = ""; let placeHtml = ""; let newAdBadge = "";
+
+                // شارة جديد (آخر 3 أيام)
+                if(ad.isNew) { newAdBadge = `<div class="new-badge">🔥 جديد</div>`; }
 
                 if (ad.newPrice && ad.newPrice !== "") {
                     if (ad.oldPrice && ad.oldPrice !== "") {
                         let oldP = parseFloat(ad.oldPrice);
                         let newP = parseFloat(ad.newPrice);
                         let discount = Math.round(((oldP - newP) / oldP) * 100);
-                        badgeHtml = `<div class="discount-badge">خصم ${discount}% 🔥</div>`;
+                        badgeHtml = `<div class="discount-badge">خصم ${discount}%</div>`;
                         priceHtml = `<div class="price-container"><span class="old-price-card">${ad.oldPrice} ج</span> <span class="new-price-card">${ad.newPrice} ج</span></div>`;
                     } else {
                         priceHtml = `<div class="price-container"><span class="new-price-card">${ad.newPrice} ج</span></div>`;
                     }
                 }
+                
+                // اسم المكان (العمود T)
+                if (ad.placeName && ad.placeName !== "") { placeHtml = `<div class="place-badge">📍 ${ad.placeName}</div>`; }
+                
+                // حالة التوصيل (العمود U)
                 if (ad.delivery && ad.delivery !== "") { deliveryHtml = `<div class="delivery-badge">${ad.delivery}</div>`; }
 
+                // أزرار التواصل والأيقونات
                 let buttonsHtml = '';
-                if (cleanPhone) buttonsHtml += `<a href="${waUrl}" target="_blank" class="icon-btn btn-wa" title="واتساب"><img src="1000031449.png" alt="WhatsApp" style="width: 100%; height: 100%; object-fit: contain;"></a>`;
-                if (cleanCall) buttonsHtml += `<a href="tel:${cleanCall}" class="icon-btn btn-call" title="اتصال"><img src="1000031452.png" alt="Call" style="width: 100%; height: 100%; object-fit: contain;"></a>`;
-                if (hasLocation) buttonsHtml += `<a href="${ad.location}" target="_blank" class="icon-btn btn-loc" title="الموقع"><img src="1000031450.png" alt="Location" style="width: 100%; height: 100%; object-fit: contain;"></a>`;
+                if (cleanPhone) buttonsHtml += `<a href="${waUrl}" target="_blank" class="icon-btn" title="واتساب"><img src="1000031449.png" class="icon-img" alt="WhatsApp"></a>`;
+                if (cleanCall) buttonsHtml += `<a href="tel:${cleanCall}" class="icon-btn" title="اتصال"><img src="1000031452.png" class="icon-img" alt="Call"></a>`;
+                if (hasLocation) buttonsHtml += `<a href="${ad.location}" target="_blank" class="icon-btn" title="الموقع"><img src="1000031450.png" class="icon-img" alt="Location"></a>`;
 
                 if (ad.type === 'vip') {
                     vipAdsCount++;
                     vipContainer.innerHTML += `
                         <div class="vip-card shimmer-effect">
                             <div class="vip-badge">👑 VIP</div>
+                            ${newAdBadge}
                             ${badgeHtml}
                             <img src="${displayImg}" alt="VIP Ad">
                             <div class="vip-info">
+                                ${placeHtml}
                                 <h3>${ad.title}</h3>
                                 ${priceHtml}
                                 ${deliveryHtml}
@@ -690,18 +778,20 @@
                     normalAdsCount++;
                     adsContainer.innerHTML += `
                         <div class="ad-card" style="position: relative;">
+                            ${newAdBadge}
                             ${badgeHtml}
                             <img src="${displayImg}" alt="Ad Image">
                             <div class="ad-details">
                                 <div>
-                                    <h3>${ad.title}</h3>
+                                    ${placeHtml}
+                                    <h3 style="margin-top: 3px;">${ad.title}</h3>
                                     ${priceHtml}
                                     ${deliveryHtml}
                                     <p>${ad.desc}</p>
                                 </div>
                                 <div class="action-buttons-container" style="justify-content: flex-start; margin-top: 10px; gap: 10px;">
-                                    ${buttonsHtml.replace(/btn-wa|btn-call|btn-loc/g, '').replace(/100%/g, '35px').replace(/width: 45px; height: 45px;/g, 'width: 35px; height: 35px; background: transparent; box-shadow: none; padding: 0;')}
-                                    <button onclick="shareAd('${ad.title}')" class="icon-btn" title="مشاركة" style="width: 35px; height: 35px; font-size: 16px; background: #f9f9f9; border: 1px solid #ccc; color: #555;">🔗</button>
+                                    ${buttonsHtml.replace(/width: 45px; height: 45px;/g, 'width: 35px; height: 35px;')}
+                                    <button onclick="shareAd('${ad.title}')" class="icon-btn btn-share" title="مشاركة" style="width: 35px; height: 35px; font-size: 16px;">🔗</button>
                                 </div>
                             </div>
                         </div>
@@ -732,7 +822,7 @@
             if (cleanPhone.startsWith('01') && cleanPhone.length === 11) { cleanPhone = '2' + cleanPhone; }
             const waUrl = cleanPhone ? `https://wa.me/${cleanPhone}` : '';
 
-            let priceHtml = ""; let badgeHtml = ""; let deliveryHtml = "";
+            let priceHtml = ""; let badgeHtml = ""; let deliveryHtml = ""; let placeHtml = "";
             if (ad.newPrice && ad.newPrice !== "") {
                 if (ad.oldPrice && ad.oldPrice !== "") {
                     let oldP = parseFloat(ad.oldPrice);
@@ -744,7 +834,8 @@
                     priceHtml = `<div class="price-container" style="margin: 15px 0;"><span class="new-price-card" style="font-size: 26px;">${ad.newPrice} ج</span></div>`;
                 }
             }
-            if (ad.delivery && ad.delivery !== "") { deliveryHtml = `<div class="delivery-badge" style="font-size: 14px; padding: 6px 12px;">${ad.delivery}</div>`; }
+            if (ad.placeName && ad.placeName !== "") { placeHtml = `<div class="place-badge" style="font-size: 14px; padding: 5px 12px; display: block; width: fit-content; margin: 0 auto 10px;">📍 ${ad.placeName}</div>`; }
+            if (ad.delivery && ad.delivery !== "") { deliveryHtml = `<div class="delivery-badge" style="font-size: 14px; padding: 6px 12px; margin-bottom: 15px;">${ad.delivery}</div>`; }
 
             let contentBox = document.getElementById('single-ad-content-box');
             contentBox.innerHTML = `
@@ -753,6 +844,7 @@
                     <img src="${displayImg}" class="single-ad-img" alt="Ad">
                 </div>
                 <div class="single-ad-content">
+                    ${placeHtml}
                     <h3 style="font-size: 22px; font-weight: 900; color: #0f2027; margin-bottom: 10px;">${ad.title}</h3>
                     ${priceHtml}
                     ${deliveryHtml}
@@ -765,7 +857,7 @@
 
         function closeSingleAd() {
             document.getElementById('single-ad-overlay').style.display = 'none';
-            window.history.pushState({}, document.title, window.location.pathname); // يمسح اللينك بدون ريفريش
+            window.history.pushState({}, document.title, window.location.pathname); 
         }
 
         window.addEventListener('scroll', () => {
@@ -931,9 +1023,10 @@
             let loc = document.getElementById('form-loc').value.trim();
             let promo = document.getElementById('form-promo').value.trim().toUpperCase();
             
+            let placeName = document.getElementById('form-place-name').value.trim();
             let oldPrice = document.getElementById('form-old-price').value.trim();
             let newPrice = document.getElementById('form-new-price').value.trim();
-            let delivery = document.getElementById('form-delivery').value;
+            let delivery = document.getElementById('form-delivery').value.trim();
             let total = document.getElementById('calc-total').innerText;
 
             if(!name || !gov || !region || !wa) {
@@ -956,6 +1049,7 @@
             if (adType === 'منتج') {
                 message += `-----------------------------------\n`;
                 message += `🛍️ *تفاصيل المنتج:*\n`;
+                if (placeName) message += `🏪 *اسم المكان:* ${placeName}\n`;
                 if (oldPrice) message += `❌ *السعر قبل:* ${oldPrice} جنيه\n`;
                 if (newPrice) message += `✅ *السعر بعد:* ${newPrice} جنيه\n`;
                 if (delivery) message += `🚚 *التوصيل:* ${delivery}\n`;
