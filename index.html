@@ -77,17 +77,16 @@
         .vip-info h3 { color: #0f2027; font-size: 20px; font-weight: 900; margin-bottom: 8px; }
         .vip-info p { font-size: 14px; color: #555; margin: 0 auto 15px; line-height: 1.5; font-weight: bold; white-space: normal; word-wrap: break-word; overflow-wrap: anywhere; width: 100%; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
 
-        /* الأزرار والأيقونات (معدلة بدون إطارات غريبة) */
-        .action-buttons-container { display: flex; gap: 15px; justify-content: center; align-items: center; margin-top: 15px; }
-        .icon-btn { width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; text-decoration: none; box-shadow: 0 4px 10px rgba(0,0,0,0.15); transition: 0.3s; cursor: pointer; border: none; background: transparent; outline: none; }
+        /* الأزرار والأيقونات (معدلة للحجم المظبوط 100%) */
+        .action-buttons-container { display: flex; gap: 15px; justify-content: center; align-items: center; margin-top: 15px; flex-wrap: wrap; }
+        .icon-btn { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; transition: 0.3s; cursor: pointer; border: none; background: transparent; outline: none; padding: 0; margin: 0 2px; }
         .icon-btn:active { transform: scale(0.9); }
-        .icon-img { width: 100%; height: 100%; object-fit: contain; background: transparent; border: none; border-radius: 50%; display: block; }
-        .btn-share { background: #f9f9f9; border: 1px solid #ccc; color: #555; }
+        .btn-share { background: #f9f9f9; border: 1px solid #ccc; color: #555; width: 35px; height: 35px; border-radius: 50%; font-size: 16px; }
 
         /* الإعلانات العادية */
         .ad-list { padding: 0 15px 20px 15px; display: flex; flex-direction: column; gap: 15px; }
         .ad-card { background: #fff; border-radius: 16px; display: flex; overflow: hidden; box-shadow: 0 3px 10px rgba(0,0,0,0.06); border: 1px solid #eaeaea; transition: 0.3s; position: relative; }
-        .ad-card img { width: 110px; height: 120px; object-fit: cover; border-left: 1px solid #eaeaea; }
+        .ad-card > img { width: 110px; height: 120px; object-fit: cover; border-left: 1px solid #eaeaea; }
         .ad-details { padding: 12px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; min-width: 0; }
         .ad-details h3 { font-size: 16px; color: #222; font-weight: 900; }
         .ad-details p { font-size: 12px; color: #777; margin-top: 5px; line-height: 1.4; word-wrap: break-word; white-space: pre-wrap; overflow: hidden; }
@@ -109,6 +108,11 @@
         .single-ad-img { width: 100%; height: 250px; object-fit: cover; }
         .single-ad-content { padding: 20px; text-align: center; }
         
+        /* تأثير اللمعة */
+        .shimmer-effect { position: relative; overflow: hidden; }
+        .shimmer-effect::after { content: ""; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); animation: shimmer 3s infinite; }
+        @keyframes shimmer { 0% { left: -100%; } 100% { left: 100%; } }
+
         /* الأزرار العائمة */
         #back-to-top { position: fixed; bottom: 85px; right: 20px; background: #D4AF37; color: #0f2027; width: 45px; height: 45px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); cursor: pointer; z-index: 1000; border: 2px solid #fff; transition: 0.3s; }
         .floating-btn { position: fixed; bottom: 25px; left: 0; right: 0; max-width: 250px; margin: 0 auto; background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 14px 20px; border-radius: 30px; font-size: 16px; font-weight: 900; box-shadow: 0 8px 20px rgba(231, 76, 60, 0.4); border: 2px solid #fff; cursor: pointer; z-index: 1000; text-align: center; transition: 0.3s; border: none; }
@@ -173,7 +177,7 @@
             .sticky-cat { max-width: 1160px; }
             #ads-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
             .ad-card { flex-direction: column; }
-            .ad-card img { width: 100%; height: 180px; border-left: none; border-bottom: 1px solid #eaeaea; }
+            .ad-card > img { width: 100%; height: 180px; border-left: none; border-bottom: 1px solid #eaeaea; }
         }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
         .ad-card, .vip-card { animation: fadeIn 0.5s ease-out forwards; }
@@ -428,9 +432,14 @@
                         </div>
                     </div>
                     <div class="form-group" style="margin-bottom: 0;">
-                        <!-- حالة التوصيل (العمود U) -->
+                        <!-- حالة التوصيل (العمود U) أصبحت قائمة منسدلة -->
                         <label>حالة الاستلام / التوصيل:</label>
-                        <input type="text" id="form-delivery" placeholder="مثال: متاح توصيل، استلام من الفرع...">
+                        <select id="form-delivery">
+                            <option value="">لا يوجد / غير محدد</option>
+                            <option value="متاح توصيل دليفري">🚚 متاح توصيل دليفري</option>
+                            <option value="شحن لجميع المحافظات">📦 شحن لجميع المحافظات</option>
+                            <option value="استلام من الفرع">🏪 استلام من الفرع</option>
+                        </select>
                     </div>
                 </div>
 
@@ -555,7 +564,6 @@
                     const columns = rows[i];
                     if (!columns[1] || columns[1].trim() === "") continue; 
                     
-                    // حساب مدة الإعلان لمعرفة إذا كان "جديد"
                     let isNew = false;
                     if(columns[0]) {
                         let adDate = new Date(columns[0]);
@@ -594,7 +602,7 @@
                 }
 
                 document.getElementById('loading-msg').style.display = 'none';
-                globalAdsData.sort(() => Math.random() - 0.5); // ترتيب عشوائي لإنعاش الصفحة
+                globalAdsData.sort(() => Math.random() - 0.5); 
                 
                 buildFilterDropdowns();
                 buildSidebarCategories();
@@ -609,7 +617,6 @@
             const catSelect = document.getElementById('filter-category');
             const citySelect = document.getElementById('filter-city');
             
-            // إضافة الأقسام من دون إيموجي لتسهيل البحث
             appCategories.forEach(cat => { 
                 let cleanName = cat.replace(/[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF]/g, "").trim();
                 catSelect.innerHTML += `<option value="${cleanName}">${cat}</option>`; 
@@ -655,7 +662,6 @@
             const selectedCity = document.getElementById('filter-city').value;
             const selectedRegion = document.getElementById('filter-region').value;
 
-            // تحديث شريط الفلتر الثابت
             let filterNames = [];
             if(selectedCat !== 'الكل') filterNames.push(selectedCat);
             if(selectedCity !== 'الكل') filterNames.push(selectedCity);
@@ -691,7 +697,6 @@
                 return matchCat && matchCity && matchRegion && matchSearch && matchType;
             });
 
-            // لو الفلتر "أحدث الإعلانات"، نرتبهم من الأحدث للأقدم
             if(currentMainFilter === 'latest') {
                 filteredAds.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
             }
@@ -726,7 +731,6 @@
                 
                 let priceHtml = ""; let badgeHtml = ""; let deliveryHtml = ""; let placeHtml = ""; let newAdBadge = "";
 
-                // شارة جديد (آخر 3 أيام)
                 if(ad.isNew) { newAdBadge = `<div class="new-badge">🔥 جديد</div>`; }
 
                 if (ad.newPrice && ad.newPrice !== "") {
@@ -741,17 +745,13 @@
                     }
                 }
                 
-                // اسم المكان (العمود T)
                 if (ad.placeName && ad.placeName !== "") { placeHtml = `<div class="place-badge">📍 ${ad.placeName}</div>`; }
-                
-                // حالة التوصيل (العمود U)
                 if (ad.delivery && ad.delivery !== "") { deliveryHtml = `<div class="delivery-badge">${ad.delivery}</div>`; }
 
-                // أزرار التواصل والأيقونات
                 let buttonsHtml = '';
-                if (cleanPhone) buttonsHtml += `<a href="${waUrl}" target="_blank" class="icon-btn" title="واتساب"><img src="1000031449.png" class="icon-img" alt="WhatsApp"></a>`;
-                if (cleanCall) buttonsHtml += `<a href="tel:${cleanCall}" class="icon-btn" title="اتصال"><img src="1000031452.png" class="icon-img" alt="Call"></a>`;
-                if (hasLocation) buttonsHtml += `<a href="${ad.location}" target="_blank" class="icon-btn" title="الموقع"><img src="1000031450.png" class="icon-img" alt="Location"></a>`;
+                if (cleanPhone) buttonsHtml += `<a href="${waUrl}" target="_blank" class="icon-btn" title="واتساب"><img src="1000031449.png" alt="WhatsApp" style="width: 35px; height: 35px; object-fit: contain; border-radius: 50%;"></a>`;
+                if (cleanCall) buttonsHtml += `<a href="tel:${cleanCall}" class="icon-btn" title="اتصال"><img src="1000031452.png" alt="Call" style="width: 35px; height: 35px; object-fit: contain; border-radius: 50%;"></a>`;
+                if (hasLocation) buttonsHtml += `<a href="${ad.location}" target="_blank" class="icon-btn" title="الموقع"><img src="1000031450.png" alt="Location" style="width: 35px; height: 35px; object-fit: contain; border-radius: 50%;"></a>`;
 
                 if (ad.type === 'vip') {
                     vipAdsCount++;
@@ -789,9 +789,9 @@
                                     ${deliveryHtml}
                                     <p>${ad.desc}</p>
                                 </div>
-                                <div class="action-buttons-container" style="justify-content: flex-start; margin-top: 10px; gap: 10px;">
-                                    ${buttonsHtml.replace(/width: 45px; height: 45px;/g, 'width: 35px; height: 35px;')}
-                                    <button onclick="shareAd('${ad.title}')" class="icon-btn btn-share" title="مشاركة" style="width: 35px; height: 35px; font-size: 16px;">🔗</button>
+                                <div class="action-buttons-container" style="justify-content: flex-start; margin-top: 10px; gap: 5px;">
+                                    ${buttonsHtml}
+                                    <button onclick="shareAd('${ad.title}')" class="icon-btn btn-share" title="مشاركة">🔗</button>
                                 </div>
                             </div>
                         </div>
