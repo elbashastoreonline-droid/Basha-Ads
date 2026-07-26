@@ -14,7 +14,25 @@
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap');
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; }
+        
+        /* منع تظليل النصوص لتجنب بحث جوجل */
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Tajawal', sans-serif; 
+            -webkit-user-select: none; /* Safari */
+            -ms-user-select: none; /* IE 10/11 */
+            user-select: none; /* Standard */
+        }
+        
+        /* استثناء المدخلات لكي يتمكن المستخدم من الكتابة */
+        input, textarea, select {
+            -webkit-user-select: auto;
+            -ms-user-select: auto;
+            user-select: auto;
+        }
+
         body { background-color: #2c3e50; display: flex; justify-content: center; }
 
         /* حاوية التطبيق */
@@ -53,7 +71,7 @@
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(3px); z-index: 1500; display: none; }
         .overlay.active { display: block; }
 
-        /* زر الفلترة الرئيسي الموحد (الكل / أماكن / منتجات) */
+        /* زر الفلترة الرئيسي الموحد */
         .main-toggle-container { display: flex; max-width: 1200px; margin: 15px auto 0; padding: 0 15px; gap: 10px; justify-content: center; }
         .main-btn { flex: 1; padding: 10px 5px; border-radius: 12px; font-weight: 900; cursor: pointer; text-align: center; background: #fff; border: 2px solid #D4AF37; color: #0f2027; transition: 0.3s; font-size: 14px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .main-btn span { font-size: 20px; display: block; margin-bottom: 5px; }
@@ -91,7 +109,7 @@
         .ad-details h3 { font-size: 16px; color: #222; font-weight: 900; }
         .ad-details p { font-size: 12px; color: #777; margin-top: 5px; line-height: 1.4; word-wrap: break-word; white-space: pre-wrap; overflow: hidden; }
 
-        /* الشارات */
+        /* الشارات (خصم، جديد، اسم المكان، توصيل) */
         .new-badge { position: absolute; top: 10px; right: 10px; background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 5px 12px; border-radius: 8px; font-weight: 900; font-size: 12px; z-index: 10; border: 1px solid #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.3); animation: pulse 2s infinite; }
         .discount-badge { position: absolute; top: 10px; left: 10px; background: #27ae60; color: white; padding: 5px 10px; border-radius: 8px; font-weight: bold; font-size: 12px; z-index: 10; border: 1px solid #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
         .place-badge { display: inline-block; background: rgba(212, 175, 55, 0.15); color: #0f2027; padding: 3px 10px; border-radius: 5px; font-size: 11px; font-weight: 900; margin-bottom: 5px; border: 1px solid rgba(212, 175, 55, 0.5); }
@@ -115,6 +133,10 @@
 
         /* الأزرار العائمة */
         #back-to-top { position: fixed; bottom: 85px; right: 20px; background: #D4AF37; color: #0f2027; width: 45px; height: 45px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); cursor: pointer; z-index: 1000; border: 2px solid #fff; transition: 0.3s; }
+        
+        /* زر التحديث الذكي */
+        #refresh-btn { position: fixed; bottom: 140px; right: 20px; background: #2c5364; color: #D4AF37; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); cursor: pointer; z-index: 1000; border: 2px solid #fff; transition: transform 0.5s ease; }
+        
         .floating-btn { position: fixed; bottom: 25px; left: 0; right: 0; max-width: 250px; margin: 0 auto; background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 14px 20px; border-radius: 30px; font-size: 16px; font-weight: 900; box-shadow: 0 8px 20px rgba(231, 76, 60, 0.4); border: 2px solid #fff; cursor: pointer; z-index: 1000; text-align: center; transition: 0.3s; border: none; }
 
         /* لوحة التحكم والرسائل */
@@ -215,7 +237,10 @@
             </div>
             
             <button class="cat-btn-side" style="width: 100%; font-size: 15px;" onclick="toggleDarkMode()">☀️ / 🌙 تبديل الوضع الليلي</button>
-            <button class="cat-btn-side" style="width: 100%; background: linear-gradient(90deg, #25D366, #128C7E); color: white; border: none; font-size: 15px; margin-bottom: 20px;" onclick="openAdModal(); toggleMenu();">🚀 أضف إعلانك معنا</button>
+            <button class="cat-btn-side" style="width: 100%; background: linear-gradient(90deg, #25D366, #128C7E); color: white; border: none; font-size: 15px; margin-bottom: 10px;" onclick="openAdModal(); toggleMenu();">🚀 أضف إعلانك معنا</button>
+            
+            <!-- زر تواصل مع إدارة دليلك -->
+            <button class="cat-btn-side" style="width: 100%; background: #0f2027; color: #D4AF37; border: 1px solid #D4AF37; font-size: 15px; margin-bottom: 20px;" onclick="window.open('https://wa.me/201288023436?text=' + encodeURIComponent('السلام عليكم، محتاج أتواصل مع إدارة دليلك'), '_blank');">📞 تواصل مع إدارة دليلك</button>
             
             <details class="sidebar-accordion">
                 <summary>📂 تصفح أقسام الدليل 🔻</summary>
@@ -240,7 +265,7 @@
             </details>
         </div>
 
-        <!-- لوحة تحكم الإدارة المخفية (تم إضافة رابط الشيت الخاص بك هنا) -->
+        <!-- لوحة تحكم الإدارة المخفية -->
         <div id="admin-dashboard">
             <h3 style="color: #0f2027; text-align: center; margin-bottom: 15px;">⚙️ لوحة تحكم الإدارة</h3>
             <a class="admin-btn" style="background: #D4AF37; color: #000;" href="https://docs.google.com/spreadsheets/d/1TA9f759D07O_z3VnIh8krMD0iKpFkwGQCF08_IymtIa08W2XGuhDpjhtgb1Zao-5YKGJ-mHsb3qt70/edit" target="_blank">فتح الشيت لإضافة العروض ↗</a>
@@ -324,6 +349,7 @@
         </div>
 
         <!-- الأزرار العائمة -->
+        <div id="refresh-btn" onclick="refreshData()" title="تحديث البيانات">🔄</div>
         <div id="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">⬆️</div>
         <button class="floating-btn" onclick="openAdModal()">+ أضف إعلانك معنا</button>
 
@@ -337,7 +363,7 @@
             </div>
         </div>
 
-        <!-- 📝 نافذة الفورمة الذكية -->
+        <!-- 📝 نافذة الفورمة الذكية (أماكن + منتجات) -->
         <div class="ad-modal-overlay" id="ad-modal-overlay">
             <div class="ad-modal">
                 <span class="close-modal" onclick="closeAdModal()">×</span>
@@ -387,6 +413,7 @@
                         <option value="مستشفيات وعيادات وأطباء">🏥 مستشفيات وعيادات وأطباء</option>
                         <option value="عقارات وديكور">🏢 عقارات وديكور</option>
                         <option value="سيارات ومواصلات">🚗 سيارات ومواصلات</option>
+                        <option value="دار تحفيظ قرآن">📖 دار تحفيظ قرآن</option> <!-- الإضافة الجديدة -->
                         <option value="أخرى">📌 أخرى</option>
                     </select>
                 </div>
@@ -410,13 +437,15 @@
                     <input type="text" id="form-other-region" placeholder="اكتب المنطقة هنا...">
                 </div>
 
-                <!-- حقول المنتجات -->
+                <!-- 🛍️ حقول المنتجات -->
                 <div id="product-extra-fields" style="display: none; background: rgba(212, 175, 55, 0.05); padding: 15px; border-radius: 12px; border: 1px dashed #D4AF37; margin-bottom: 15px;">
                     <h4 style="margin-top: 0; color: #D4AF37; margin-bottom: 10px; font-size: 14px;">💰 تفاصيل المنتج والأسعار</h4>
+                    
                     <div class="form-group">
                         <label>يُباع في (اسم المكان/المحل):</label>
                         <input type="text" id="form-place-name" placeholder="مثال: صيدلية د. أحمد...">
                     </div>
+
                     <div style="display: flex; gap: 10px;">
                         <div class="form-group" style="flex: 1;">
                             <label>السعر قبل (ج):</label>
@@ -490,13 +519,14 @@
     <script>
         const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTA9f759D07O_z3VnIh8krMD0iKpFkwGQCF08_IymtIa08W2XGuhDpjhtgb1Zao-5YKGJ-mHsb3qt70/pub?gid=1257423716&single=true&output=csv';
         let globalAdsData = []; 
-        let currentMainFilter = 'all';
+        let currentMainFilter = 'all'; 
 
+        // إضافة دار تحفيظ قرآن للمصفوفة
         const appCategories = [
             '🛒 سوبر ماركت وبقالة', '💊 صيدليات ومستلزمات طبية', '💄 إكسسوارات وأدوات تجميل', 
             '🍔 مطاعم وكافيهات', '👗 ملابس وأحذية', '👶 مستلزمات أطفال', '🎮 شحن ألعاب وخدمات', 
             '📱 إلكترونيات وموبايلات', '🛠️ خدمات وصيانة', '🏥 مستشفيات وعيادات وأطباء', 
-            '🏢 عقارات وديكور', '🚗 سيارات ومواصلات', '📌 أخرى'
+            '🏢 عقارات وديكور', '🚗 سيارات ومواصلات', '📖 دار تحفيظ قرآن', '📌 أخرى'
         ];
 
         function toggleDarkMode() { document.body.classList.toggle('dark-mode'); }
@@ -608,29 +638,59 @@
             }
         }
 
+        // دالة التحديث الذكي
+        async function refreshData() {
+            const refreshBtn = document.getElementById('refresh-btn');
+            refreshBtn.style.transform = 'rotate(360deg)';
+            
+            document.getElementById('ads-container').innerHTML = '';
+            document.getElementById('vip-container').innerHTML = '';
+            document.getElementById('vip-section-block').style.display = 'none';
+            document.getElementById('loading-msg').style.display = 'block';
+            
+            await fetchAdsFromGoogleSheet();
+            
+            setTimeout(() => { refreshBtn.style.transform = 'rotate(0deg)'; }, 500);
+        }
+
         function buildFilterDropdowns() {
             const catSelect = document.getElementById('filter-category');
             const citySelect = document.getElementById('filter-city');
             
+            // للحفاظ على الاختيار الحالي عند التحديث
+            const currentCat = catSelect.value;
+            const currentCity = citySelect.value;
+
+            catSelect.innerHTML = '<option value="الكل">جميع الأقسام 🔻</option>';
             appCategories.forEach(cat => { 
                 let cleanName = cat.replace(/[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF]/g, "").trim();
                 catSelect.innerHTML += `<option value="${cleanName}">${cat}</option>`; 
             });
+            
+            citySelect.innerHTML = '<option value="الكل">جميع المحافظات 🔻</option>';
             const uniqueCities = [...new Set(globalAdsData.map(ad => ad.city))].filter(c => c && c !== 'غير محدد' && c !== '-');
             uniqueCities.forEach(city => { citySelect.innerHTML += `<option value="${city}">${city}</option>`; });
             
+            // استرجاع الاختيارات
+            if(Array.from(catSelect.options).some(opt => opt.value === currentCat)) catSelect.value = currentCat;
+            if(Array.from(citySelect.options).some(opt => opt.value === currentCity)) citySelect.value = currentCity;
+
             updateRegionDropdown(); 
         }
 
         function updateRegionDropdown() {
             const selectedCity = document.getElementById('filter-city').value;
             const regionSelect = document.getElementById('filter-region');
+            const currentRegion = regionSelect.value;
+            
             regionSelect.innerHTML = '<option value="الكل">كل المناطق 🔻</option>';
             if (selectedCity === 'الكل') return;
 
             const cityAds = globalAdsData.filter(ad => ad.city === selectedCity);
             const uniqueRegions = [...new Set(cityAds.map(ad => ad.region))].filter(r => r && r !== 'غير محدد' && r !== '-');
             uniqueRegions.forEach(region => { regionSelect.innerHTML += `<option value="${region}">${region}</option>`; });
+
+            if(Array.from(regionSelect.options).some(opt => opt.value === currentRegion)) regionSelect.value = currentRegion;
         }
 
         function setMainFilter(filterType) {
@@ -716,7 +776,10 @@
                 let cleanPhone = waStr.replace(/[^0-9]/g, '');
                 if (cleanPhone.startsWith('01') && cleanPhone.length === 11) { cleanPhone = '2' + cleanPhone; }
                 if (cleanPhone.length < 8) { cleanPhone = ''; } 
-                const waUrl = cleanPhone ? `https://wa.me/${cleanPhone}` : '';
+                
+                // رسالة الواتساب الديناميكية الجاهزة
+                const customWaMsg = encodeURIComponent(`السلام عليكم، شفت إعلانك "${ad.title}" على منصة دليلك وكنت محتاج تفاصيل أكتر.`);
+                const waUrl = cleanPhone ? `https://wa.me/${cleanPhone}?text=${customWaMsg}` : '';
 
                 let callStr = convertArabicToEnglishNumbers(ad.callPhone).trim();
                 let cleanCall = callStr.replace(/[^0-9]/g, '');
@@ -814,7 +877,10 @@
             let waStr = convertArabicToEnglishNumbers(ad.whatsapp).trim();
             let cleanPhone = waStr.replace(/[^0-9]/g, '');
             if (cleanPhone.startsWith('01') && cleanPhone.length === 11) { cleanPhone = '2' + cleanPhone; }
-            const waUrl = cleanPhone ? `https://wa.me/${cleanPhone}` : '';
+            
+            // رسالة الواتساب الديناميكية للنافذة المنبثقة
+            const customWaMsg = encodeURIComponent(`السلام عليكم، شفت إعلانك "${ad.title}" على منصة دليلك وكنت محتاج تفاصيل أكتر.`);
+            const waUrl = cleanPhone ? `https://wa.me/${cleanPhone}?text=${customWaMsg}` : '';
 
             let priceHtml = ""; let badgeHtml = ""; let deliveryHtml = ""; let placeHtml = "";
             if (ad.newPrice && ad.newPrice !== "") {
@@ -856,7 +922,15 @@
 
         window.addEventListener('scroll', () => {
             let btn = document.getElementById('back-to-top');
-            btn.style.display = window.scrollY > 300 ? 'flex' : 'none';
+            let refresh = document.getElementById('refresh-btn');
+            
+            if(window.scrollY > 300) {
+                btn.style.display = 'flex';
+                refresh.style.bottom = '140px'; 
+            } else {
+                btn.style.display = 'none';
+                refresh.style.bottom = '85px'; 
+            }
         });
 
         let headerClicks = 0;
@@ -870,6 +944,7 @@
             }
         });
 
+        // 🚀 أكواد نافذة إضافة الإعلان
         const regionsData = {
             "الإسكندرية": ["أبو قير", "العجمي", "العصافرة", "المكس", "المندرة", "المنتزه", "باكوس", "جليم", "رشدي", "سان ستيفانو", "سبورتنج", "سموحة", "سيدي بشر", "سيدي جابر", "كليوباترا", "لوران", "محطة الرمل", "ميامي"],
             "القاهرة": ["التجمع الخامس", "الدقي", "الرحاب", "الزمالك", "الشروق", "العجوزة", "العبور", "المعادي", "المقطم", "المهندسين", "جسر السويس", "حلوان", "روكسي", "شبرا", "عين شمس", "مدينة نصر", "مدينتي", "مصر الجديدة", "وسط البلد"],
