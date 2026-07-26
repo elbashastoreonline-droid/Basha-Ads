@@ -77,7 +77,7 @@
         .vip-info h3 { color: #0f2027; font-size: 20px; font-weight: 900; margin-bottom: 8px; }
         .vip-info p { font-size: 14px; color: #555; margin: 0 auto 15px; line-height: 1.5; font-weight: bold; white-space: normal; word-wrap: break-word; overflow-wrap: anywhere; width: 100%; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
 
-        /* الأزرار والأيقونات (معدلة للحجم المظبوط 100%) */
+        /* الأزرار والأيقونات */
         .action-buttons-container { display: flex; gap: 15px; justify-content: center; align-items: center; margin-top: 15px; flex-wrap: wrap; }
         .icon-btn { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; transition: 0.3s; cursor: pointer; border: none; background: transparent; outline: none; padding: 0; margin: 0 2px; }
         .icon-btn:active { transform: scale(0.9); }
@@ -91,7 +91,7 @@
         .ad-details h3 { font-size: 16px; color: #222; font-weight: 900; }
         .ad-details p { font-size: 12px; color: #777; margin-top: 5px; line-height: 1.4; word-wrap: break-word; white-space: pre-wrap; overflow: hidden; }
 
-        /* الشارات (خصم، جديد، اسم المكان، توصيل) */
+        /* الشارات */
         .new-badge { position: absolute; top: 10px; right: 10px; background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 5px 12px; border-radius: 8px; font-weight: 900; font-size: 12px; z-index: 10; border: 1px solid #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.3); animation: pulse 2s infinite; }
         .discount-badge { position: absolute; top: 10px; left: 10px; background: #27ae60; color: white; padding: 5px 10px; border-radius: 8px; font-weight: bold; font-size: 12px; z-index: 10; border: 1px solid #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
         .place-badge { display: inline-block; background: rgba(212, 175, 55, 0.15); color: #0f2027; padding: 3px 10px; border-radius: 5px; font-size: 11px; font-weight: 900; margin-bottom: 5px; border: 1px solid rgba(212, 175, 55, 0.5); }
@@ -240,7 +240,7 @@
             </details>
         </div>
 
-        <!-- لوحة تحكم الإدارة المخفية -->
+        <!-- لوحة تحكم الإدارة المخفية (تم إضافة رابط الشيت الخاص بك هنا) -->
         <div id="admin-dashboard">
             <h3 style="color: #0f2027; text-align: center; margin-bottom: 15px;">⚙️ لوحة تحكم الإدارة</h3>
             <a class="admin-btn" style="background: #D4AF37; color: #000;" href="https://docs.google.com/spreadsheets/d/1TA9f759D07O_z3VnIh8krMD0iKpFkwGQCF08_IymtIa08W2XGuhDpjhtgb1Zao-5YKGJ-mHsb3qt70/edit" target="_blank">فتح الشيت لإضافة العروض ↗</a>
@@ -337,7 +337,7 @@
             </div>
         </div>
 
-        <!-- 📝 نافذة الفورمة الذكية (أماكن + منتجات) -->
+        <!-- 📝 نافذة الفورمة الذكية -->
         <div class="ad-modal-overlay" id="ad-modal-overlay">
             <div class="ad-modal">
                 <span class="close-modal" onclick="closeAdModal()">×</span>
@@ -375,7 +375,6 @@
                 <div class="form-group">
                     <label>القسم / الفئة:</label>
                     <select id="form-category">
-                        <!-- تم التحديث للفئات المطلوبة بدقة -->
                         <option value="سوبر ماركت وبقالة">🛒 سوبر ماركت وبقالة</option>
                         <option value="صيدليات ومستلزمات طبية">💊 صيدليات ومستلزمات طبية</option>
                         <option value="إكسسوارات وأدوات تجميل">💄 إكسسوارات وأدوات تجميل</option>
@@ -411,16 +410,13 @@
                     <input type="text" id="form-other-region" placeholder="اكتب المنطقة هنا...">
                 </div>
 
-                <!-- 🛍️ حقول المنتجات -->
+                <!-- حقول المنتجات -->
                 <div id="product-extra-fields" style="display: none; background: rgba(212, 175, 55, 0.05); padding: 15px; border-radius: 12px; border: 1px dashed #D4AF37; margin-bottom: 15px;">
                     <h4 style="margin-top: 0; color: #D4AF37; margin-bottom: 10px; font-size: 14px;">💰 تفاصيل المنتج والأسعار</h4>
-                    
-                    <!-- حقل اسم المكان (العمود T) -->
                     <div class="form-group">
                         <label>يُباع في (اسم المكان/المحل):</label>
                         <input type="text" id="form-place-name" placeholder="مثال: صيدلية د. أحمد...">
                     </div>
-
                     <div style="display: flex; gap: 10px;">
                         <div class="form-group" style="flex: 1;">
                             <label>السعر قبل (ج):</label>
@@ -432,7 +428,6 @@
                         </div>
                     </div>
                     <div class="form-group" style="margin-bottom: 0;">
-                        <!-- حالة التوصيل (العمود U) أصبحت قائمة منسدلة -->
                         <label>حالة الاستلام / التوصيل:</label>
                         <select id="form-delivery">
                             <option value="">لا يوجد / غير محدد</option>
@@ -495,7 +490,7 @@
     <script>
         const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTA9f759D07O_z3VnIh8krMD0iKpFkwGQCF08_IymtIa08W2XGuhDpjhtgb1Zao-5YKGJ-mHsb3qt70/pub?gid=1257423716&single=true&output=csv';
         let globalAdsData = []; 
-        let currentMainFilter = 'all'; // all, places, products, latest
+        let currentMainFilter = 'all';
 
         const appCategories = [
             '🛒 سوبر ماركت وبقالة', '💊 صيدليات ومستلزمات طبية', '💄 إكسسوارات وأدوات تجميل', 
@@ -596,8 +591,8 @@
                         callPhone: columns[15] ? columns[15].trim() : '',
                         oldPrice: columns[17] ? columns[17].trim() : '',
                         newPrice: columns[18] ? columns[18].trim() : '',
-                        placeName: columns[19] ? columns[19].trim() : '', // العمود T
-                        delivery: columns[20] ? columns[20].trim() : ''   // العمود U
+                        placeName: columns[19] ? columns[19].trim() : '',
+                        delivery: columns[20] ? columns[20].trim() : ''
                     });
                 }
 
@@ -805,7 +800,6 @@
             }
         }
 
-        // 🚀 نظام المشاركة الاحترافي (Deep Linking)
         function checkDeepLink() {
             const urlParams = new URLSearchParams(window.location.search);
             const adTitle = urlParams.get('ad');
@@ -876,7 +870,6 @@
             }
         });
 
-        // 🚀 أكواد نافذة إضافة الإعلان
         const regionsData = {
             "الإسكندرية": ["أبو قير", "العجمي", "العصافرة", "المكس", "المندرة", "المنتزه", "باكوس", "جليم", "رشدي", "سان ستيفانو", "سبورتنج", "سموحة", "سيدي بشر", "سيدي جابر", "كليوباترا", "لوران", "محطة الرمل", "ميامي"],
             "القاهرة": ["التجمع الخامس", "الدقي", "الرحاب", "الزمالك", "الشروق", "العجوزة", "العبور", "المعادي", "المقطم", "المهندسين", "جسر السويس", "حلوان", "روكسي", "شبرا", "عين شمس", "مدينة نصر", "مدينتي", "مصر الجديدة", "وسط البلد"],
