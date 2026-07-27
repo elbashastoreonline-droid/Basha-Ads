@@ -93,7 +93,8 @@
 
         /* الشارات الجديدة (Badges) */
         .badges-wrapper { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; width: 100%; }
-        .badge-item { display: inline-flex; align-items: center; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 900; box-shadow: 0 2px 5px rgba(0,0,0,0.05); white-space: nowrap; }
+        .badge-item { display: inline-flex; align-items: center; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 900; box-shadow: 0 2px 5px rgba(0,0,0,0.05); white-space: nowrap; cursor: pointer; transition: 0.2s; }
+        .badge-item:active { transform: scale(0.95); }
         .badge-cat { background: #e0e7ff; color: #3730a3; border: 1px solid #c7d2fe; }
         .badge-loc { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
         .badge-del { background: #ffedd5; color: #9a3412; border: 1px solid #fed7aa; }
@@ -112,7 +113,6 @@
         .single-ad-modal { width: 100%; max-width: 480px; margin: 0 auto; background: transparent; position: relative; min-height: 100vh; padding-bottom: 40px; }
         .single-ad-close { position: fixed; top: 15px; right: 20px; font-size: 28px; color: #fff; background: rgba(0,0,0,0.6); width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 4010; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.3); border: 2px solid #fff; transition: 0.3s; }
         .single-ad-close:active { transform: scale(0.9); }
-        /* ✅ تم التعديل هنا لضمان عدم قص الصورة (object-fit: contain) */
         .single-ad-img { width: 100%; height: 40vh; object-fit: contain; background: #e9ecef; border-bottom: 3px solid #D4AF37; }
         .single-ad-content { padding: 25px 20px; background: #fff; border-top-left-radius: 25px; border-top-right-radius: 25px; margin-top: -20px; position: relative; z-index: 5; box-shadow: 0 -5px 20px rgba(0,0,0,0.1); min-height: 60vh; }
         
@@ -152,7 +152,7 @@
         body.dark-mode .badge-cat { background: rgba(55, 48, 163, 0.2); color: #a5b4fc; border-color: #3730a3; }
         body.dark-mode .badge-loc { background: rgba(22, 101, 52, 0.2); color: #86efac; border-color: #166534; }
         body.dark-mode .badge-del { background: rgba(154, 52, 18, 0.2); color: #fdba74; border-color: #9a3412; }
-        body.dark-mode .single-ad-img { background: #000; } /* تحسين خلفية الصورة في الدارك مود */
+        body.dark-mode .single-ad-img { background: #000; }
 
         /* 📝 نافذة الفورمة (Modal) */
         .ad-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 3000; display: none; align-items: center; justify-content: center; }
@@ -251,7 +251,6 @@
                 </div>
             </details>
 
-            <!-- ✅ تم إضافة زر الدعم الفني الثابت هنا ليكون في نهاية القائمة الجانبية -->
             <div style="margin-top: 30px;">
                 <a href="https://wa.me/201288023436" target="_blank" style="display: block; width: 100%; text-align: center; background: linear-gradient(135deg, #0f2027, #2c5364); color: #D4AF37; padding: 12px; border-radius: 12px; font-weight: 900; text-decoration: none; border: 2px solid #D4AF37; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
                     💬 دعم فني وتواصل مع الإدارة
@@ -276,9 +275,10 @@
             </div>
         </div>
 
-        <!-- شريط البحث -->
-        <div style="padding: 15px 15px 0 15px; max-width: 1200px; margin: 0 auto;">
-            <input type="text" id="search-box" onkeyup="applyFilters()" placeholder="🔍 ابحث عن مطعم، خدمة، منتج..." style="width: 100%; padding: 12px 15px; border-radius: 25px; border: 2px solid #D4AF37; outline: none; font-size: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); text-align: right; color: #333; font-weight: bold;">
+        <!-- شريط البحث مع زر التحديث الذكي -->
+        <div style="display: flex; gap: 10px; padding: 15px 15px 0 15px; max-width: 1200px; margin: 0 auto;">
+            <input type="text" id="search-box" onkeyup="applyFilters()" placeholder="🔍 ابحث عن مطعم، خدمة، منتج..." style="flex: 1; padding: 12px 15px; border-radius: 25px; border: 2px solid #D4AF37; outline: none; font-size: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); text-align: right; color: #333; font-weight: bold;">
+            <button onclick="fetchAdsFromGoogleSheet()" style="background: #0f2027; color: #D4AF37; border: 2px solid #D4AF37; border-radius: 25px; width: 50px; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" title="تحديث العروض">🔄</button>
         </div>
 
         <!-- أزرار الفلترة الذكية الأساسية -->
@@ -428,563 +428,142 @@
                 </div>
 
                 <!-- 🛍️ حقول المنتجات -->
-                <div id="product-extra-fields" style="display: none; background: rgba(212, 175, 55, 0.05); padding: 15px; border-radius: 12px; border: 1px dashed #D4AF37; margin-bottom: 15px;">
-                    <h4 style="margin-top: 0; color: #D4AF37; margin-bottom: 10px; font-size: 14px;">💰 تفاصيل المنتج والأسعار</h4>
-                    <div class="form-group">
-                        <label>يُباع في (اسم المكان/المحل):</label>
-                        <input type="text" id="form-place-name" placeholder="مثال: صيدلية د. أحمد...">
-                    </div>
-                    <div style="display: flex; gap: 10px;">
-                        <div class="form-group" style="flex: 1;">
-                            <label>السعر قبل (ج):</label>
-                            <input type="number" id="form-old-price" placeholder="مثال: 200">
-                        </div>
-                        <div class="form-group" style="flex: 1;">
-                            <label>السعر بعد (ج):</label>
-                            <input type="number" id="form-new-price" placeholder="مثال: 150">
-                        </div>
+                <div id="product-extra-fields" style="display: none; background: rgba(212, 175, 55, 0.1); padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px dashed #D4AF37;">
+                    <div class="form-group" style="margin-bottom: 10px;">
+                        <label>السعر الأساسي (قبل الخصم):</label>
+                        <input type="number" id="form-old-price" placeholder="مثال: 150">
                     </div>
                     <div class="form-group" style="margin-bottom: 0;">
-                        <label>حالة الاستلام / التوصيل:</label>
-                        <select id="form-delivery">
-                            <option value="">لا يوجد / غير محدد</option>
-                            <option value="متاح توصيل دليفري">🚚 متاح توصيل دليفري</option>
-                            <option value="شحن لجميع المحافظات">📦 شحن لجميع المحافظات</option>
-                            <option value="استلام من الفرع">🏪 استلام من الفرع</option>
-                        </select>
+                        <label>السعر النهائي (بعد الخصم):</label>
+                        <input type="number" id="form-new-price" placeholder="مثال: 100 (إجباري لو منتج)">
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label>الوصف:</label>
-                    <input type="text" id="form-desc" placeholder="اكتب تفاصيل العرض أو الخصم...">
-                </div>
-
-                <div class="form-group" id="location-link-group">
-                    <label>رابط اللوكيشن (Google Maps):</label>
-                    <input type="url" id="form-loc" placeholder="https://maps.app.goo.gl/..." dir="ltr">
-                </div>
-
-                <div style="display: flex; gap: 10px;">
-                    <div class="form-group" style="flex: 1;">
-                        <label>رقم الواتساب:</label>
-                        <input type="number" id="form-wa" placeholder="01234567890">
-                    </div>
-                    <div class="form-group" style="flex: 1;">
-                        <label>رقم اتصال آخر:</label>
-                        <input type="number" id="form-call" placeholder="لو مختلف (اختياري)">
-                    </div>
+                    <label>الوصف أو التفاصيل:</label>
+                    <textarea id="form-desc" rows="4" placeholder="اكتب تفاصيل إعلانك هنا بوضوح..." style="width: 100%; padding: 12px; border-radius: 12px; border: 2px solid #ddd; outline: none; font-weight: bold; font-family: inherit; resize: vertical;"></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label>كود خصم (إن وجد):</label>
-                    <input type="text" id="form-promo" placeholder="أدخل الكود هنا..." onkeyup="calcPrice()" style="text-transform: uppercase;">
+                    <label>روابط التواصل:</label>
+                    <input type="text" id="form-phone" placeholder="رقم الموبايل للاتصال..." style="margin-bottom: 10px;">
+                    <input type="text" id="form-whatsapp" placeholder="رقم الواتساب..." style="margin-bottom: 10px;">
+                    <input type="text" id="form-fb" placeholder="رابط الفيسبوك (اختياري)...">
+                </div>
+                
+                <div class="image-instruction">
+                    📸 <b>بالنسبة للصور:</b><br>
+                    سيتم طلب الصور الخاصة بإعلانك عند التواصل معنا عبر الواتساب لإتمام عملية النشر. قم بتجهيز صور واضحة ومناسبة لنجاح إعلانك!
                 </div>
 
                 <div class="price-calculator">
-                    <p style="font-weight: bold; font-size: 15px; color: #ddd;">إجمالي المبلغ المطلوب:</p>
-                    <h3 id="calc-total">0 جنيه</h3>
-                    <div style="font-size: 13px; color: #ddd; margin-top: 15px; line-height: 1.8; font-weight: bold;">
-                        يرجى الدفع بالنسخ والتحويل على:<br>
-                        🟣 <b>إنستاباي أو We Pay:</b> <span class="copy-number" onclick="copyNumber('01550720161')">01550720161</span><br>
-                        🔴 <b>فودافون كاش:</b> <span class="copy-number" onclick="copyNumber('01288023436')">01288023436</span>
+                    <div id="offer-text-calc" style="font-size: 14px; font-weight: bold; margin-bottom: 5px; color: #fff;"></div>
+                    <h3 id="calc-price-txt">0 ج.م</h3>
+                    <p style="font-size: 13px; font-weight: bold; color: #eee; margin-top: 10px;">طرق الدفع المتاحة: إنستاباي - فودافون كاش - أورانج - اتصالات - وي - تحويل بنكي</p>
+                    <div style="margin-top: 10px; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 10px;">
+                        <span style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 5px;">رقم الكاش (لجميع المحافظ):</span>
+                        <span class="copy-number" onclick="copyCashNumber()">01288023436 📋</span>
                     </div>
                 </div>
 
-                <div class="image-instruction">
-                    📸 <b>هام جداً:</b> بعد الضغط على "إرسال"، سيتم فتح الواتساب. يرجى إرفاق: <br>
-                    1- صورة إثبات دفع الباقة (سكرين شوت).<br>
-                    2- صورة الإعلان أو المنتج الخاصة بك ليتم إضافتها.
-                </div>
-
-                <button class="submit-ad-btn" onclick="sendAdToWhatsApp()">إرسال الطلب عبر الواتساب 🚀</button>
+                <button class="submit-ad-btn" onclick="submitAdViaWhatsApp()">إرسال الطلب عبر الواتساب 📤</button>
             </div>
         </div>
 
     </div>
 
-    <!-- أكواد الجافاسكريبت -->
     <script>
-        const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTA9f759D07O_z3VnIh8krMD0iKpFkwGQCF08_IymtIa08W2XGuhDpjhtgb1Zao-5YKGJ-mHsb3qt70/pub?gid=1257423716&single=true&output=csv';
-        let globalAdsData = []; 
-        let currentMainFilter = 'all';
+        // --- متغيرات وقاعدة بيانات المواقع ---
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyi8o3uW_VzO0m_jS6B0Nl0E-L8LhI8B7O6rQ-3oZ9kY7xY2tE_Vz9L5n1mP5Q1p0L4/exec';
+        let globalAdsData = [];
+        let globalCategories = [];
+        let mainFilterState = 'all'; // all, places, products, latest
+        let selectedDays = 7;
+        const prices = { عادي: 5, VIP: 10 };
+        const discounts = { 7: 0, 15: 0, 30: 0 }; 
+        const BATCH_SIZE = 15;
+        let displayedAdsCount = 0;
+        let currentFilteredAds = [];
+        let isLoadingAds = false;
+        
+        const egyptLocations = {
+            "البحيرة": ["دمنهور", "كفر الدوار", "رشيد", "إدكو", "أبو حمص", "أبو المطامير", "المحمودية", "الرحمانية", "شبراخيت", "إيتاي البارود", "كوم حمادة", "بدر", "وادي النطرون", "الدلنجات", "النوبارية الجديدة"],
+            "الإسكندرية": ["المنتزه", "شرق", "وسط", "الجمرك", "غرب", "العامرية", "برج العرب", "العجمي", "سموحة", "سيدي بشر", "السيوف", "ميامي", "لوران", "جليم", "ستانلي", "رشدي", "كليوباترا", "سبورتنج", "الإبراهيمية", "الشاطبي", "محطة الرمل", "المنشية", "بحري", "الورديان", "الدخيلة", "البيطاش", "الهانوفيل"],
+            "القاهرة": ["مدينة نصر", "مصر الجديدة", "المعادي", "التجمع الخامس", "الرحاب", "مدينتي", "الشروق", "العبور", "شبرا", "حلوان", "الزمالك", "المهندسين", "الدقي", "العجوزة", "الهرم", "فيصل", "6 أكتوبر", "الشيخ زايد"],
+            "الجيزة": ["الجيزة", "الدقي", "المهندسين", "العجوزة", "الهرم", "فيصل", "6 أكتوبر", "الشيخ زايد", "الحوامدية", "البدرشين", "الصف", "أطفيح", "العياط", "الواحات البحرية"],
+            "القليوبية": ["بنها", "قليوب", "شبرا الخيمة", "القناطر الخيرية", "الخانكة", "كفر شكر", "طوخ", "العبور", "قها", "الخصوص"],
+            "الشرقية": ["الزقازيق", "العاشر من رمضان", "منيا القمح", "بلبيس", "فاقوس", "أبو حماد", "أبو كبير", "الحسينية", "ديرب نجم", "مشتول السوق", "الإبراهيمية", "ههيا", "أولاد صقر"],
+            "الدقهلية": ["المنصورة", "طلخا", "ميت غمر", "دكرنس", "أجا", "منية النصر", "السنبلاوين", "بلقاس", "شربين", "المطرية", "الجمالية"],
+            "الغربية": ["طنطا", "المحلة الكبرى", "زفتى", "كفر الزيات", "السنطة", "قطور", "بسيون", "سمنود"],
+            "المنوفية": ["شبين الكوم", "منوف", "مدينة السادات", "أشمون", "الباجور", "تلا", "بركة السبع", "شهداء"],
+            "كفر الشيخ": ["كفر الشيخ", "دسوق", "بيلا", "قلين", "سيدي سالم", "الحامول", "البرلس", "فوه", "مطوبس", "الرياض"],
+            "دمياط": ["دمياط", "رأس البر", "عزبة البرج", "فارسكور", "الزرقا", "كفر سعد", "كفر البطيخ", "السرو", "دمياط الجديدة"],
+            "بورسعيد": ["بورسعيد", "بورفؤاد", "الشرق", "العرب", "المناخ", "الضواحي", "الزهور", "الجنوب"],
+            "الإسماعيلية": ["الإسماعيلية", "فايد", "القنطرة شرق", "القنطرة غرب", "التل الكبير", "القصاصين", "أبو صوير"],
+            "السويس": ["السويس", "الأربعين", "عتاقة", "الجناين", "فيصل"],
+            "مطروح": ["مرسى مطروح", "الحمام", "العلمين", "الضبعة", "النجيلة", "براني", "السلوم", "سيوة"],
+            "البحر الأحمر": ["الغردقة", "سفاجا", "القصير", "مرسى علم", "رأس غارب", "حلايب", "شلاتين"],
+            "شمال سيناء": ["العريش", "الشيخ زويد", "رفح", "بئر العبد", "الحسنة", "نخل"],
+            "جنوب سيناء": ["الطور", "شرم الشيخ", "دهب", "نويبع", "طابا", "أبو رديس", "أبو زنيمة", "سانت كاترين"],
+            "الفيوم": ["الفيوم", "سنورس", "إطسا", "طامية", "إبشواي", "يوسف الصديق"],
+            "بني سويف": ["بني سويف", "الواسطى", "ناصر", "إهناسيا", "ببا", "الفشن", "سمسطا"],
+            "المنيا": ["المنيا", "مغاغة", "بني مزار", "مطاي", "سمالوط", "أبو قرقاص", "ملوي", "دير مواس", "العدوة"],
+            "أسيوط": ["أسيوط", "ديروط", "القوصية", "أبنوب", "منفلوط", "أبو تيج", "الغنايم", "ساحل سليم", "البداري", "صدفا"],
+            "سوهاج": ["سوهاج", "أخميم", "البلينا", "المراغة", "المنشأة", "دار السلام", "جرجا", "جهينة", "ساقلتة", "طما", "طهطا"],
+            "قنا": ["قنا", "أبو تشت", "نجع حمادي", "دشنا", "الوقف", "قفط", "قوص", "نقادة", "فرشوط"],
+            "الأقصر": ["الأقصر", "إسنا", "أرمنت", "الطود", "البياضية", "القرنة", "الزينية"],
+            "أسوان": ["أسوان", "إدفو", "كوم أمبو", "دراو", "نصر النوبة"],
+            "الوادي الجديد": ["الخارجة", "الداخلة", "الفرافرة", "باريس", "بلاط"]
+        };
 
-        const appCategories = [
-            '🛒 سوبر ماركت وبقالة', '💊 صيدليات ومستلزمات طبية', '💄 إكسسوارات وأدوات تجميل', 
-            '🍔 مطاعم وكافيهات', '👗 ملابس وأحذية', '👶 مستلزمات أطفال', '🎮 شحن ألعاب وخدمات', 
-            '📱 إلكترونيات وموبايلات', '🛠️ خدمات وصيانة', '🏥 مستشفيات وعيادات وأطباء', 
-            '🏢 عقارات وديكور', '🚗 سيارات ومواصلات', '📌 أخرى'
-        ];
+        const GOV_NAMES = Object.keys(egyptLocations).sort();
 
-        function toggleDarkMode() { document.body.classList.toggle('dark-mode'); }
-
-        function toggleMenu() {
-            document.getElementById('sidebar').classList.toggle('active');
-            document.getElementById('overlay').classList.toggle('active');
-        }
-
-        function buildSidebarCategories() {
-            const box = document.getElementById('sidebar-categories-box');
-            box.innerHTML = '';
-            appCategories.forEach(cat => {
-                let cleanCatName = cat.replace(/[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF]/g, "").trim();
-                box.innerHTML += `<div class="cat-btn-side" style="text-align: right;" onclick="document.getElementById('filter-category').value='${cleanCatName}'; applyFilters(); toggleMenu();">${cat}</div>`;
-            });
-        }
-
-        function parseCSV(rawText) {
-            let rows = []; let fields = []; let field = ''; let inQuotes = false;
-            for (let i = 0; i < rawText.length; i++) {
-                let char = rawText[i]; let nextChar = rawText[i + 1];
-                if (char === '"') {
-                    if (inQuotes && nextChar === '"') { field += '"'; i++; } 
-                    else { inQuotes = !inQuotes; }
-                } else if (char === ',' && !inQuotes) {
-                    fields.push(field); field = '';
-                } else if (char === '\n' && !inQuotes) {
-                    fields.push(field); rows.push(fields); fields = []; field = '';
-                } else if (char === '\r' && !inQuotes) {} 
-                else { field += char; }
-            }
-            if (fields.length > 0 || field !== '') { fields.push(field); rows.push(fields); }
-            return rows;
-        }
-
-        function convertArabicToEnglishNumbers(str) {
-            if (!str) return '';
-            return str.replace(/[\u0660-\u0669]/g, c => c.charCodeAt(0) - 0x0660);
-        }
-
-        function shareAd(title) {
-            let shareUrl = window.location.origin + window.location.pathname + '?ad=' + encodeURIComponent(title);
-            if (navigator.share) {
-                navigator.share({ title: 'دليلك | Daleelak', text: 'شوف العرض ده على دليلك: ' + title, url: shareUrl }).catch(console.error);
-            } else {
-                navigator.clipboard.writeText(shareUrl).then(() => alert('✅ تم نسخ رابط المنتج بنجاح!'));
-            }
-        }
-
-        async function fetchAdsFromGoogleSheet() {
-            try {
-                const cacheBuster = `&t=${new Date().getTime()}`;
-                const response = await fetch(csvUrl + cacheBuster);
-                const rawText = await response.text();
-                const rows = parseCSV(rawText);
-                globalAdsData = [];
-
-                for (let i = 1; i < rows.length; i++) {
-                    const columns = rows[i];
-                    if (!columns[1] || columns[1].trim() === "") continue; 
-                    
-                    let isNew = false;
-                    if(columns[0]) {
-                        let adDate = new Date(columns[0]);
-                        if(!isNaN(adDate)) {
-                            let diff = (new Date() - adDate) / (1000 * 60 * 60 * 24);
-                            if(diff >= 0 && diff <= 3) isNew = true;
-                        } else {
-                            let parts = columns[0].split(/[\s/:]+/);
-                            if(parts.length >= 3) {
-                                let pDate = new Date(parts[2], parts[1]-1, parts[0]);
-                                let diff = (new Date() - pDate) / (1000 * 60 * 60 * 24);
-                                if(diff >= 0 && diff <= 3) isNew = true;
-                            }
-                        }
-                    }
-
-                    globalAdsData.push({
-                        id: i, // معرف فريد للإعلان
-                        timestamp: columns[0] ? columns[0] : '',
-                        isNew: isNew,
-                        title: columns[1] ? columns[1].trim() : '',
-                        desc: columns[2] ? columns[2].trim() : '',
-                        category: columns[3] ? columns[3].trim() : '📌 أخرى',
-                        img: columns[4] ? columns[4].trim() : '',
-                        whatsapp: columns[5] ? columns[5].trim() : '', 
-                        type: columns[6] ? columns[6].trim().toLowerCase() : 'normal',
-                        status: columns[7] ? columns[7].trim() : 'شغال',
-                        city: columns[8] ? columns[8].trim() : 'غير محدد',     
-                        region: columns[9] ? columns[9].trim() : 'غير محدد',   
-                        location: columns[14] ? columns[14].trim() : '', 
-                        callPhone: columns[15] ? columns[15].trim() : '',
-                        oldPrice: columns[17] ? columns[17].trim() : '',
-                        newPrice: columns[18] ? columns[18].trim() : '',
-                        placeName: columns[19] ? columns[19].trim() : '', 
-                        delivery: columns[20] ? columns[20].trim() : '',   
-                        cardType: columns[21] ? columns[21].trim() : 'مكان' // عمود V (نوع الكارت: منتج / مكان)
-                    });
-                }
-
-                document.getElementById('loading-msg').style.display = 'none';
-                globalAdsData.sort(() => Math.random() - 0.5); 
-                
-                buildFilterDropdowns();
-                buildSidebarCategories();
-                applyFilters(); 
-                checkDeepLink(); 
-            } catch (error) {
-                document.getElementById('loading-msg').innerHTML = '<h3 style="color: #e74c3c;">⚠️ حدث خطأ في الاتصال بقاعدة البيانات.</h3>';
-            }
-        }
-
-        function buildFilterDropdowns() {
-            const catSelect = document.getElementById('filter-category');
-            const citySelect = document.getElementById('filter-city');
+        // --- تهيئة الفلاتر وخيارات النماذج ---
+        function initFilters() {
+            let catSelect = document.getElementById('filter-category');
+            let citySelect = document.getElementById('filter-city');
+            let formGov = document.getElementById('form-gov');
             
-            appCategories.forEach(cat => { 
-                let cleanName = cat.replace(/[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF]/g, "").trim();
-                catSelect.innerHTML += `<option value="${cleanName}">${cat}</option>`; 
+            catSelect.innerHTML = '<option value="الكل">جميع الأقسام 🔻</option>';
+            citySelect.innerHTML = '<option value="الكل">جميع المحافظات 🔻</option>';
+            formGov.innerHTML = '<option value="">اختر المحافظة...</option>';
+
+            globalCategories.forEach(cat => {
+                let opt = document.createElement('option'); opt.value = cat; opt.innerText = cat; catSelect.appendChild(opt);
             });
-            const uniqueCities = [...new Set(globalAdsData.map(ad => ad.city))].filter(c => c && c !== 'غير محدد' && c !== '-');
-            uniqueCities.forEach(city => { citySelect.innerHTML += `<option value="${city}">${city}</option>`; });
-            
-            updateRegionDropdown(); 
+            GOV_NAMES.forEach(gov => {
+                let opt1 = document.createElement('option'); opt1.value = gov; opt1.innerText = gov; citySelect.appendChild(opt1);
+                let opt2 = document.createElement('option'); opt2.value = gov; opt2.innerText = gov; formGov.appendChild(opt2);
+            });
+            updateRegionDropdown();
+            updateModalRegions();
         }
 
         function updateRegionDropdown() {
-            const selectedCity = document.getElementById('filter-city').value;
-            const regionSelect = document.getElementById('filter-region');
-            regionSelect.innerHTML = '<option value="الكل">كل المناطق 🔻</option>';
-            if (selectedCity === 'الكل') return;
-
-            const cityAds = globalAdsData.filter(ad => ad.city === selectedCity);
-            const uniqueRegions = [...new Set(cityAds.map(ad => ad.region))].filter(r => r && r !== 'غير محدد' && r !== '-');
-            uniqueRegions.forEach(region => { regionSelect.innerHTML += `<option value="${region}">${region}</option>`; });
-        }
-
-        function setMainFilter(filterType) {
-            currentMainFilter = filterType;
-            document.querySelectorAll('.main-btn').forEach(btn => btn.classList.remove('active'));
-            if(filterType !== 'latest' && document.getElementById('filter-btn-' + filterType)) {
-                document.getElementById('filter-btn-' + filterType).classList.add('active');
-            }
-            applyFilters();
-        }
-
-        function resetCategory() {
-            document.getElementById('search-box').value = '';
-            document.getElementById('filter-category').value = 'الكل';
-            document.getElementById('filter-city').value = 'الكل';
-            updateRegionDropdown();
-            document.getElementById('filter-region').value = 'الكل';
-            setMainFilter('all');
-        }
-
-        function applyFilters() {
-            let input = document.getElementById('search-box').value.toLowerCase();
-            const selectedCat = document.getElementById('filter-category').value;
-            const selectedCity = document.getElementById('filter-city').value;
-            const selectedRegion = document.getElementById('filter-region').value;
-
-            let filterNames = [];
-            if(selectedCat !== 'الكل') filterNames.push(selectedCat);
-            if(selectedCity !== 'الكل') filterNames.push(selectedCity);
-            if(selectedRegion !== 'الكل') filterNames.push(selectedRegion);
+            let city = document.getElementById('filter-city').value;
+            let regSelect = document.getElementById('filter-region');
+            regSelect.innerHTML = '<option value="الكل">جميع المناطق 🔻</option>';
             
-            if(filterNames.length > 0 || currentMainFilter !== 'all' || input !== '') {
-                document.getElementById('sticky-cat').style.display = 'flex';
-                let text = filterNames.join(' - ');
-                if(currentMainFilter === 'products') text = (text ? text + ' | ' : '') + 'المنتجات';
-                if(currentMainFilter === 'places') text = (text ? text + ' | ' : '') + 'الأماكن';
-                if(currentMainFilter === 'latest') text = '🔥 أحدث الإعلانات';
-                if(input) text = (text ? text + ' | ' : '') + 'بحث';
-                if(!text) text = 'تصفية النشاط';
-                document.getElementById('sticky-cat-name').innerText = text;
-            } else {
-                document.getElementById('sticky-cat').style.display = 'none';
+            if (city !== 'الكل' && egyptLocations[city]) {
+                egyptLocations[city].sort().forEach(reg => {
+                    let opt = document.createElement('option'); opt.value = reg; opt.innerText = reg; regSelect.appendChild(opt);
+                });
             }
-
-            const filteredAds = globalAdsData.filter(ad => {
-                let cleanAdCat = ad.category.replace(/[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF]/g, "").trim();
-                let cleanSelectedCat = selectedCat.replace(/[\uE000-\uF8FF]/g, "").trim();
-                
-                const matchCat = (selectedCat === 'الكل') || cleanAdCat.includes(cleanSelectedCat);
-                const matchCity = (selectedCity === 'الكل') || (ad.city === selectedCity);
-                const matchRegion = (selectedRegion === 'الكل') || (ad.region === selectedRegion);
-                const matchSearch = (ad.title.toLowerCase().includes(input) || ad.desc.toLowerCase().includes(input));
-                
-                let matchType = true;
-                // الفلترة بناءً على نوع الكارت من عمود V (منتج / مكان)
-                if (currentMainFilter === 'products') matchType = (ad.cardType === 'منتج');
-                if (currentMainFilter === 'places') matchType = (ad.cardType === 'مكان');
-                if (currentMainFilter === 'latest') matchType = (ad.isNew === true);
-
-                return matchCat && matchCity && matchRegion && matchSearch && matchType;
-            });
-
-            if(currentMainFilter === 'latest') {
-                filteredAds.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-            }
-
-            renderAds(filteredAds);
-        }
-
-        function renderAds(adsArray) {
-            const vipContainer = document.getElementById('vip-container');
-            const adsContainer = document.getElementById('ads-container');
-            const vipSectionBlock = document.getElementById('vip-section-block');
-
-            vipContainer.innerHTML = ''; adsContainer.innerHTML = '';
-            let normalAdsCount = 0, vipAdsCount = 0;
-
-            adsArray.forEach(ad => {
-                if (ad.status === 'موقوف') return; 
-
-                const displayImg = ad.img ? ad.img : 'https://i.ibb.co/pjxDzJxM/file-00000000335471f48a03a0acb621d53c.png';
-                
-                let waStr = convertArabicToEnglishNumbers(ad.whatsapp).trim();
-                let cleanPhone = waStr.replace(/[^0-9]/g, '');
-                if (cleanPhone.startsWith('01') && cleanPhone.length === 11) { cleanPhone = '2' + cleanPhone; }
-                if (cleanPhone.length < 8) { cleanPhone = ''; } 
-                const waUrl = cleanPhone ? `https://wa.me/${cleanPhone}` : '';
-
-                let callStr = convertArabicToEnglishNumbers(ad.callPhone).trim();
-                let cleanCall = callStr.replace(/[^0-9]/g, '');
-                if (cleanCall.length < 8) { cleanCall = ''; } 
-                
-                let hasLocation = ad.location && ad.location.trim() !== '' && ad.location.trim() !== '-' && ad.location.trim().length > 5;
-                
-                let priceHtml = ""; let badgeHtml = ""; let newAdBadge = "";
-
-                if(ad.isNew) { newAdBadge = `<div class="new-badge">🔥 جديد</div>`; }
-
-                if (ad.newPrice && ad.newPrice !== "") {
-                    if (ad.oldPrice && ad.oldPrice !== "") {
-                        let oldP = parseFloat(ad.oldPrice);
-                        let newP = parseFloat(ad.newPrice);
-                        let discount = Math.round(((oldP - newP) / oldP) * 100);
-                        badgeHtml = `<div class="discount-badge">خصم ${discount}%</div>`;
-                        priceHtml = `<div class="price-container"><span class="old-price-card">${ad.oldPrice} ج</span> <span class="new-price-card">${ad.newPrice} ج</span></div>`;
-                    } else {
-                        priceHtml = `<div class="price-container"><span class="new-price-card">${ad.newPrice} ج</span></div>`;
-                    }
-                }
-                
-                // الشارات الذكية المدمجة برمجياً
-                let badgesWrapperHtml = `<div class="badges-wrapper">
-                    <span class="badge-item badge-cat">🏷️ ${ad.category.replace(/[\uE000-\uF8FF]/g, '').trim()}</span>
-                    <span class="badge-item badge-loc">📍 ${ad.city} - ${ad.region}</span>`;
-                if (ad.delivery && ad.delivery !== "") { 
-                    badgesWrapperHtml += `<span class="badge-item badge-del">🛵 ${ad.delivery}</span>`; 
-                }
-                badgesWrapperHtml += `</div>`;
-                
-                let placeNameHtml = "";
-                if (ad.placeName && ad.placeName !== "") { placeNameHtml = `<div style="color: #D4AF37; font-weight: 900; font-size: 13px; margin-bottom: 5px;">🏪 ${ad.placeName}</div>`; }
-
-                let buttonsHtml = '';
-                if (cleanPhone) buttonsHtml += `<a href="${waUrl}" target="_blank" onclick="event.stopPropagation()" class="icon-btn" title="واتساب"><img src="1000031449.png" alt="WhatsApp" style="width: 35px; height: 35px; object-fit: contain; border-radius: 50%;"></a>`;
-                if (cleanCall) buttonsHtml += `<a href="tel:${cleanCall}" onclick="event.stopPropagation()" class="icon-btn" title="اتصال"><img src="1000031452.png" alt="Call" style="width: 35px; height: 35px; object-fit: contain; border-radius: 50%;"></a>`;
-                if (hasLocation) buttonsHtml += `<a href="${ad.location}" target="_blank" onclick="event.stopPropagation()" class="icon-btn" title="الموقع"><img src="1000031450.png" alt="Location" style="width: 35px; height: 35px; object-fit: contain; border-radius: 50%;"></a>`;
-
-                if (ad.type === 'vip') {
-                    vipAdsCount++;
-                    vipContainer.innerHTML += `
-                        <div class="vip-card shimmer-effect" onclick="openFullAd(${ad.id})">
-                            <div class="vip-badge">👑 VIP</div>
-                            ${newAdBadge}
-                            ${badgeHtml}
-                            <img src="${displayImg}" alt="VIP Ad">
-                            <div class="vip-info">
-                                ${badgesWrapperHtml}
-                                ${placeNameHtml}
-                                <h3>${ad.title}</h3>
-                                ${priceHtml}
-                                <p>${ad.desc}</p>
-                                <div class="action-buttons-container">
-                                    ${buttonsHtml}
-                                    <button onclick="event.stopPropagation(); shareAd('${ad.title}')" class="icon-btn btn-share" title="مشاركة">🔗</button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    normalAdsCount++;
-                    adsContainer.innerHTML += `
-                        <div class="ad-card" onclick="openFullAd(${ad.id})">
-                            ${newAdBadge}
-                            ${badgeHtml}
-                            <img src="${displayImg}" alt="Ad Image">
-                            <div class="ad-details">
-                                <div>
-                                    ${badgesWrapperHtml}
-                                    ${placeNameHtml}
-                                    <h3 style="margin-top: 3px;">${ad.title}</h3>
-                                    ${priceHtml}
-                                    <p>${ad.desc}</p>
-                                </div>
-                                <div class="action-buttons-container" style="justify-content: flex-start; margin-top: 10px; gap: 5px;">
-                                    ${buttonsHtml}
-                                    <button onclick="event.stopPropagation(); shareAd('${ad.title}')" class="icon-btn btn-share" title="مشاركة">🔗</button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                }
-            });
-
-            vipSectionBlock.style.display = vipAdsCount > 0 ? 'block' : 'none';
-            if (normalAdsCount === 0 && vipAdsCount === 0) {
-                adsContainer.innerHTML = `<div class="status-msg">📭 لا توجد عروض مطابقة لبحثك.</div>`;
-            }
-        }
-
-        function checkDeepLink() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const adTitle = urlParams.get('ad');
-            if (adTitle) {
-                const ad = globalAdsData.find(a => a.title === adTitle);
-                if (ad) { showSingleAd(ad); }
-            }
-        }
-
-        // دالة الفتح بكامل الشاشة
-        function openFullAd(adId) {
-            const ad = globalAdsData.find(a => a.id === adId);
-            if (ad) showSingleAd(ad);
-        }
-
-        function showSingleAd(ad) {
-            const displayImg = ad.img ? ad.img : 'https://i.ibb.co/pjxDzJxM/file-00000000335471f48a03a0acb621d53c.png';
-            let waStr = convertArabicToEnglishNumbers(ad.whatsapp).trim();
-            let cleanPhone = waStr.replace(/[^0-9]/g, '');
-            if (cleanPhone.startsWith('01') && cleanPhone.length === 11) { cleanPhone = '2' + cleanPhone; }
-            const waUrl = cleanPhone ? `https://wa.me/${cleanPhone}` : '';
-
-            let priceHtml = ""; let badgeHtml = ""; 
-            if (ad.newPrice && ad.newPrice !== "") {
-                if (ad.oldPrice && ad.oldPrice !== "") {
-                    let oldP = parseFloat(ad.oldPrice);
-                    let newP = parseFloat(ad.newPrice);
-                    let discount = Math.round(((oldP - newP) / oldP) * 100);
-                    badgeHtml = `<div class="discount-badge" style="font-size: 15px; padding: 8px 15px;">خصم ${discount}% 🔥</div>`;
-                    priceHtml = `<div class="price-container" style="margin: 15px 0;"><span class="old-price-card" style="font-size: 18px;">${ad.oldPrice} ج</span> <span class="new-price-card" style="font-size: 26px;">${ad.newPrice} ج</span></div>`;
-                } else {
-                    priceHtml = `<div class="price-container" style="margin: 15px 0;"><span class="new-price-card" style="font-size: 26px;">${ad.newPrice} ج</span></div>`;
-                }
-            }
-
-            let badgesWrapperHtml = `<div class="badges-wrapper" style="margin-bottom: 15px; gap: 8px;">
-                <span class="badge-item badge-cat" style="font-size: 13px;">🏷️ ${ad.category.replace(/[\uE000-\uF8FF]/g, '').trim()}</span>
-                <span class="badge-item badge-loc" style="font-size: 13px;">📍 ${ad.city} - ${ad.region}</span>`;
-            if (ad.delivery && ad.delivery !== "") { 
-                badgesWrapperHtml += `<span class="badge-item badge-del" style="font-size: 13px;">🛵 ${ad.delivery}</span>`; 
-            }
-            badgesWrapperHtml += `</div>`;
-
-            let placeNameHtml = "";
-            if (ad.placeName && ad.placeName !== "") { placeNameHtml = `<div style="color: #D4AF37; font-weight: 900; font-size: 16px; margin-bottom: 10px;">🏪 ${ad.placeName}</div>`; }
-
-            let contentBox = document.getElementById('single-ad-content-box');
-            contentBox.innerHTML = `
-                <div style="position: relative;">
-                    ${badgeHtml}
-                    <img src="${displayImg}" class="single-ad-img" alt="Ad">
-                </div>
-                <div class="single-ad-content">
-                    ${badgesWrapperHtml}
-                    ${placeNameHtml}
-                    <h3 style="font-size: 24px; font-weight: 900; color: #0f2027; margin-bottom: 10px;">${ad.title}</h3>
-                    ${priceHtml}
-                    <p style="font-size: 16px; color: #555; line-height: 1.8; margin-bottom: 25px; font-weight: bold;">${ad.desc.replace(/\n/g, '<br>')}</p>
-                    
-                    <div style="display: flex; gap: 10px;">
-                        <a href="${waUrl}" target="_blank" style="flex: 1; text-align: center; background: linear-gradient(90deg, #25D366, #128C7E); color: white; padding: 15px; border-radius: 12px; font-size: 18px; font-weight: 900; text-decoration: none; box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);">طلب عبر الواتساب 💬</a>
-                        <button onclick="shareAd('${ad.title}')" style="background: #f4f7f6; color: #333; border: 2px solid #ddd; padding: 15px; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer;">🔗 مشاركة</button>
-                    </div>
-                </div>
-            `;
-            document.getElementById('single-ad-overlay').style.display = 'flex';
-            document.body.style.overflow = 'hidden'; // لمنع تصفح الخلفية
-        }
-
-        function closeSingleAd() {
-            document.getElementById('single-ad-overlay').style.display = 'none';
-            document.body.style.overflow = 'auto';
-            window.history.pushState({}, document.title, window.location.pathname); 
-        }
-
-        window.addEventListener('scroll', () => {
-            let btn = document.getElementById('back-to-top');
-            btn.style.display = window.scrollY > 300 ? 'flex' : 'none';
-        });
-
-        let headerClicks = 0;
-        document.getElementById('admin-trigger').addEventListener('click', () => {
-            headerClicks++;
-            if (headerClicks === 10) {
-                let password = prompt("أدخل الرقم السري للإدارة:");
-                if (password === "1234") { document.getElementById('admin-dashboard').style.display = 'block'; }
-                else { alert("❌ الرقم السري غير صحيح!"); }
-                headerClicks = 0;
-            }
-        });
-
-        // 🚀 أكواد نافذة إضافة الإعلان
-        const regionsData = {
-            "الإسكندرية": ["أبو قير", "العجمي", "العصافرة", "المكس", "المندرة", "المنتزه", "باكوس", "جليم", "رشدي", "سان ستيفانو", "سبورتنج", "سموحة", "سيدي بشر", "سيدي جابر", "كليوباترا", "لوران", "محطة الرمل", "ميامي"],
-            "القاهرة": ["التجمع الخامس", "الدقي", "الرحاب", "الزمالك", "الشروق", "العجوزة", "العبور", "المعادي", "المقطم", "المهندسين", "جسر السويس", "حلوان", "روكسي", "شبرا", "عين شمس", "مدينة نصر", "مدينتي", "مصر الجديدة", "وسط البلد"],
-            "الجيزة": ["6 أكتوبر", "أبو النمرس", "البدرشين", "الشيخ زايد", "الهرم", "فيصل"],
-            "القليوبية": ["القناطر الخيرية", "بنها", "شبرا الخيمة", "قليوب", "قها"],
-            "الدقهلية": ["المنصورة", "بلقاس", "دكرنس", "سنبلاوين", "ميت غمر"],
-            "الشرقية": ["العاشر من رمضان", "بلبيس", "زقازيق", "فاقوس", "منيا القمح"],
-            "الغربية": ["المحلة الكبرى", "زفتى", "سمنود", "طنطا", "كفر الزيات"],
-            "المنوفية": ["السادات", "تلا", "شبين الكوم", "قويسنا", "منوف"],
-            "البحيرة": ["أبو حمص", "إيتاي البارود", "دمنهور", "رشيد", "كفر الدوار"],
-            "الإسماعيلية": ["القصاصين", "حي أول", "حي ثان", "حي ثالث", "فايد"],
-            "بورسعيد": ["حي الإفرنج", "حي الشرق", "حي العرب", "حي المناخ", "حي الزهور"],
-            "السويس": ["الأربعين", "الجناين", "السويس", "فيصل"],
-            "دمياط": ["الزرقا", "دمياط", "رأس البر", "فارسكور", "كفر سعد"],
-            "كفر الشيخ": ["بيلا", "دسوق", "سيدي سالم", "فوه", "كفر الشيخ"],
-            "الفيوم": ["إطسا", "الفيوم", "سنورس", "طامية", "يوسف الصديق"],
-            "بني سويف": ["إهناسيا", "الواسطى", "ببا", "بني سويف", "ناصر"],
-            "المنيا": ["المنيا", "بني مزار", "ديرمواس", "سمالوط", "مغاغة", "ملوي"],
-            "أسيوط": ["أبو تيج", "أسيوط", "أبنوب", "ديروط", "منفلوط"],
-            "سوهاج": ["إخميم", "المراغة", "جرجا", "سوهاج", "طهطا"],
-            "قنا": ["دشنا", "فرشوط", "قنا", "قوص", "نجع حمادي"],
-            "الأقصر": ["أرمنت", "إسنا", "الأقصر", "القرنة"],
-            "أسوان": ["أسوان", "إدفو", "دراو", "كوم أمبو"],
-            "البحر الأحمر": ["الغردقة", "القصير", "رأس غارب", "سفاجا", "مرسى علم"],
-            "مطروح": ["الحمام", "الضبعة", "العلمين", "سيدي براني", "مرسى مطروح"]
-        };
-
-        let selectedDays = 7; 
-
-        function toggleFormType(type) {
-            document.getElementById('form-ad-type-hidden').value = type;
-            if (type === 'منتج') {
-                document.getElementById('btn-type-product').classList.add('active');
-                document.getElementById('btn-type-place').classList.remove('active');
-                document.getElementById('product-extra-fields').style.display = 'block';
-                document.getElementById('form-name').placeholder = "مثال: شامبو كابيكسي، حذاء رياضي...";
-                document.getElementById('location-link-group').style.display = 'none';
-            } else {
-                document.getElementById('btn-type-place').classList.add('active');
-                document.getElementById('btn-type-product').classList.remove('active');
-                document.getElementById('product-extra-fields').style.display = 'none';
-                document.getElementById('form-name').placeholder = "مثال: مطعم الباشا، صيدلية د.أحمد...";
-                document.getElementById('location-link-group').style.display = 'block';
-            }
-        }
-
-        function initGovDropdown() {
-            let govSelect = document.getElementById('form-gov');
-            govSelect.innerHTML = '<option value="">اختر المحافظة...</option>';
-            let sortedGovs = Object.keys(regionsData).sort((a, b) => a.localeCompare(b, 'ar'));
-            sortedGovs.forEach(gov => { govSelect.innerHTML += `<option value="${gov}">${gov}</option>`; });
         }
 
         function updateModalRegions() {
             let gov = document.getElementById('form-gov').value;
-            let regionSelect = document.getElementById('form-region');
-            regionSelect.innerHTML = '<option value="">اختر المنطقة...</option>';
+            let regSelect = document.getElementById('form-region');
+            regSelect.innerHTML = '<option value="">اختر المنطقة...</option>';
             document.getElementById('other-region-div').style.display = 'none';
+            document.getElementById('form-other-region').value = '';
 
-            if (regionsData[gov]) {
-                let sortedRegions = regionsData[gov].sort((a, b) => a.localeCompare(b, 'ar'));
-                sortedRegions.forEach(reg => { regionSelect.innerHTML += `<option value="${reg}">${reg}</option>`; });
+            if (gov && egyptLocations[gov]) {
+                egyptLocations[gov].sort().forEach(reg => {
+                    let opt = document.createElement('option'); opt.value = reg; opt.innerText = reg; regSelect.appendChild(opt);
+                });
+                let optOther = document.createElement('option'); optOther.value = 'أخرى'; optOther.innerText = 'أخرى (اكتب منطقتك)'; regSelect.appendChild(optOther);
             }
-            regionSelect.innerHTML += `<option value="أخرى">📌 أخرى (سأكتبها بنفسي)</option>`;
         }
 
         function checkOtherRegion() {
@@ -992,126 +571,514 @@
             document.getElementById('other-region-div').style.display = (val === 'أخرى') ? 'block' : 'none';
         }
 
+        function populateSidebarCategories() {
+            let box = document.getElementById('sidebar-categories-box');
+            box.innerHTML = '';
+            globalCategories.forEach(cat => {
+                let a = document.createElement('a');
+                a.href = '#';
+                a.className = 'gb-link';
+                a.style.display = 'block';
+                a.style.marginBottom = '5px';
+                a.style.textAlign = 'right';
+                a.innerText = '📂 ' + cat;
+                a.onclick = function(e) {
+                    e.preventDefault();
+                    document.getElementById('filter-category').value = cat;
+                    applyFilters();
+                    toggleMenu();
+                };
+                box.appendChild(a);
+            });
+        }
+
+        // --- التبديل في الفلتر الأساسي الموحد ---
+        function setMainFilter(type) {
+            mainFilterState = type;
+            document.querySelectorAll('.main-btn').forEach(btn => btn.classList.remove('active'));
+            if(type === 'all') document.getElementById('filter-btn-all').classList.add('active');
+            else if(type === 'places') document.getElementById('filter-btn-places').classList.add('active');
+            else if(type === 'products') document.getElementById('filter-btn-products').classList.add('active');
+            
+            document.getElementById('filter-category').value = "الكل";
+            document.getElementById('filter-city').value = "الكل";
+            document.getElementById('filter-region').value = "الكل";
+            document.getElementById('search-box').value = "";
+            applyFilters();
+        }
+        
+        // --- الفلترة السريعة من البادجات (الشارات) ---
+        window.filterFromBadge = function(cat, city, event) {
+            event.stopPropagation(); // عشان ما يفتحش الإعلان لو احنا بره، ولو جوه ما يعملش مشاكل
+            
+            if (cat) {
+                let cleanCat = cat.replace(/[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF]/g, "").trim();
+                let catSelect = document.getElementById('filter-category');
+                for(let i=0; i<catSelect.options.length; i++) {
+                    if(catSelect.options[i].value.includes(cleanCat)) {
+                        catSelect.selectedIndex = i; break;
+                    }
+                }
+            }
+            if (city) {
+                document.getElementById('filter-city').value = city;
+                updateRegionDropdown();
+            }
+            
+            applyFilters();
+            closeSingleAd(); // نقفل الإعلان المفتوح لو موجود
+        };
+
+        // --- جلب البيانات وعرضها ---
+        async function fetchAdsFromGoogleSheet() {
+            document.getElementById('loading-msg').style.display = 'block';
+            document.getElementById('ads-container').innerHTML = '';
+            document.getElementById('vip-container').innerHTML = '';
+            document.getElementById('vip-section-block').style.display = 'none';
+
+            try {
+                const response = await fetch(WEB_APP_URL);
+                if (!response.ok) throw new Error("Network error");
+                const data = await response.json();
+                
+                let validAds = [];
+                let catsSet = new Set();
+                
+                for (let i = 1; i < data.length; i++) {
+                    let row = data[i];
+                    if (!row || row.length < 13) continue;
+                    let ad = {
+                        id: i, timestamp: row[0], title: row[1]||"", type: row[2]||"عادي", adType: row[3]||"مكان", category: row[4]||"أخرى", city: row[5]||"", region: row[6]||"", desc: row[7]||"", phone: row[8]||"", whatsapp: row[9]||"", fb: row[10]||"", imgUrl: row[11]||"", status: row[12]||"مرفوض", delivery: row[13]||"", oldPrice: row[14]||"", newPrice: row[15]||""
+                    };
+                    if (ad.status === "نشط") {
+                        validAds.push(ad);
+                        let cleanCat = ad.category.replace(/[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF]/g, "").trim();
+                        if (cleanCat !== "" && cleanCat !== "أخرى") catsSet.add(ad.category);
+                    }
+                }
+                
+                catsSet.add("أخرى");
+                globalCategories = Array.from(catsSet);
+                globalAdsData = validAds.reverse();
+                
+                initFilters();
+                populateSidebarCategories();
+                document.getElementById('loading-msg').style.display = 'none';
+                applyFilters();
+
+            } catch (error) {
+                console.error("Fetch error:", error);
+                document.getElementById('loading-msg').innerHTML = '<h3 style="color:#e74c3c;">⚠️ عذراً، حدث خطأ في تحميل البيانات. يرجى المحاولة لاحقاً.</h3>';
+            }
+        }
+
+        // --- تطبيق الفلاتر وعرض النتائج ---
+        function applyFilters() {
+            let catFilter = document.getElementById('filter-category').value;
+            let cityFilter = document.getElementById('filter-city').value;
+            let regionFilter = document.getElementById('filter-region').value;
+            let searchQ = document.getElementById('search-box').value.toLowerCase().trim();
+
+            let sticky = document.getElementById('sticky-cat');
+            if (catFilter !== "الكل") {
+                sticky.style.display = 'flex';
+                document.getElementById('sticky-cat-name').innerText = catFilter;
+            } else {
+                sticky.style.display = 'none';
+            }
+
+            let filtered = globalAdsData.filter(ad => {
+                let matchType = true;
+                if (mainFilterState === 'places') matchType = (ad.adType === 'مكان');
+                else if (mainFilterState === 'products') matchType = (ad.adType === 'منتج');
+                
+                let matchCat = (catFilter === "الكل" || ad.category.includes(catFilter.replace(/[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF]/g, "").trim()));
+                let matchCity = (cityFilter === "الكل" || ad.city === cityFilter);
+                let matchReg = (regionFilter === "الكل" || ad.region === regionFilter);
+                let matchSearch = (searchQ === "" || (ad.title && ad.title.toLowerCase().includes(searchQ)) || (ad.desc && ad.desc.toLowerCase().includes(searchQ)));
+                
+                return matchType && matchCat && matchCity && matchReg && matchSearch;
+            });
+
+            currentFilteredAds = filtered;
+            
+            let vips = filtered.filter(ad => ad.type === "VIP");
+            renderVIPAds(vips);
+
+            document.getElementById('ads-container').innerHTML = '';
+            displayedAdsCount = 0;
+            loadMoreAds();
+        }
+
+        function renderVIPAds(ads) {
+            let vipSec = document.getElementById('vip-section-block');
+            let vipCont = document.getElementById('vip-container');
+            vipCont.innerHTML = '';
+            
+            if (ads.length > 0) {
+                vipSec.style.display = 'block';
+                ads.forEach(ad => {
+                    let defaultImg = "https://i.ibb.co/M5StFDSQ/file-00000000335471f48a03a0acb621d53c.png";
+                    let img = ad.imgUrl && ad.imgUrl.startsWith('http') ? ad.imgUrl : defaultImg;
+                    
+                    let div = document.createElement('div');
+                    div.className = 'vip-card';
+                    div.onclick = () => showSingleAd(ad);
+                    
+                    let titleIcon = ad.adType === 'منتج' ? '🛍️ ' : '🏢 ';
+                    
+                    let priceHtml = '';
+                    if (ad.adType === 'منتج' && ad.newPrice) {
+                        priceHtml = `<div class="price-container">
+                                        ${ad.oldPrice ? `<span class="old-price-card">${ad.oldPrice} ج</span>` : ''}
+                                        <span class="new-price-card">${ad.newPrice} ج.م</span>
+                                     </div>`;
+                    }
+                    
+                    div.innerHTML = `
+                        <div class="vip-badge">👑 إعلان مميز</div>
+                        ${ad.adType === 'منتج' && ad.oldPrice && ad.newPrice ? `<div class="discount-badge">تخفيض 🔥</div>` : ''}
+                        <img src="${img}" alt="${ad.title}" loading="lazy">
+                        <div class="vip-info">
+                            <h3>${titleIcon}${ad.title}</h3>
+                            <p>${ad.desc}</p>
+                            ${priceHtml}
+                        </div>
+                    `;
+                    vipCont.appendChild(div);
+                });
+            } else {
+                vipSec.style.display = 'none';
+            }
+        }
+
+        function loadMoreAds() {
+            if (isLoadingAds) return;
+            isLoadingAds = true;
+            
+            let container = document.getElementById('ads-container');
+            let endIndex = Math.min(displayedAdsCount + BATCH_SIZE, currentFilteredAds.length);
+            
+            let htmlStr = '';
+            for (let i = displayedAdsCount; i < endIndex; i++) {
+                let ad = currentFilteredAds[i];
+                let defaultImg = "https://i.ibb.co/M5StFDSQ/file-00000000335471f48a03a0acb621d53c.png";
+                let img = ad.imgUrl && ad.imgUrl.startsWith('http') ? ad.imgUrl : defaultImg;
+                
+                // معالجة المنطقة لعدم ظهور "غير محدد"
+                let regionText = (ad.region && ad.region !== 'غير محدد' && ad.region !== '-') ? ` - ${ad.region}` : '';
+                let locText = `${ad.city}${regionText}`;
+
+                let badgesWrapperHtml = `<div class="badges-wrapper">
+                    <span class="badge-item badge-cat" onclick="filterFromBadge('${ad.category}', null, event)">🏷️ ${ad.category.replace(/[\uE000-\uF8FF]/g, '').trim()}</span>
+                    <span class="badge-item badge-loc" onclick="filterFromBadge(null, '${ad.city}', event)">📍 ${locText}</span>`;
+                if (ad.delivery && ad.delivery !== "") {
+                    badgesWrapperHtml += `<span class="badge-item badge-del">🛵 ${ad.delivery}</span>`;
+                }
+                badgesWrapperHtml += `</div>`;
+
+                let buttonsHtml = '';
+                if (ad.phone) buttonsHtml += `<a href="tel:${ad.phone}" class="icon-btn" title="اتصال مباشر" onclick="event.stopPropagation()"><img src="https://i.ibb.co/68fDkGz0/phone-call-483864.png" width="40" height="40" alt="Call"></a>`;
+                if (ad.whatsapp) buttonsHtml += `<a href="https://wa.me/20${ad.whatsapp.replace(/^0+/, '')}" target="_blank" class="icon-btn" title="واتساب" onclick="event.stopPropagation()"><img src="https://i.ibb.co/9kx6vPzP/whatsapp-3536445.png" width="40" height="40" alt="WA"></a>`;
+                if (ad.fb) buttonsHtml += `<a href="${ad.fb}" target="_blank" class="icon-btn" title="فيسبوك" onclick="event.stopPropagation()"><img src="https://i.ibb.co/Tqr4vD51/facebook-3536394.png" width="40" height="40" alt="FB"></a>`;
+                
+                let titleIcon = ad.adType === 'منتج' ? '🛍️ ' : '🏢 ';
+                let placeNameHtml = (ad.adType === 'منتج' && mainFilterState === 'products') ? `<div style="font-size:12px; font-weight:bold; color:#0f2027; margin-bottom:2px; display:flex; align-items:center; gap:4px;"><span style="background:#f0f0f0; padding:2px 6px; border-radius:4px; border:1px solid #ddd;">🏢 ${ad.title.split(' ')[0] || 'المتجر'}</span></div>` : '';
+
+                let priceHtml = '';
+                if (ad.adType === 'منتج' && ad.newPrice) {
+                    priceHtml = `<div class="price-container">
+                                    ${ad.oldPrice ? `<span class="old-price-card">${ad.oldPrice} ج</span>` : ''}
+                                    <span class="new-price-card">${ad.newPrice} ج.م</span>
+                                 </div>`;
+                }
+
+                // حساب إذا كان الإعلان جديد (آخر 24 ساعة)
+                let isNew = false;
+                if (ad.timestamp) {
+                    let adDate = new Date(ad.timestamp);
+                    let now = new Date();
+                    if ((now - adDate) < 24 * 60 * 60 * 1000) isNew = true;
+                }
+                let newBadgeHtml = isNew ? `<div class="new-badge">جديد 🚀</div>` : '';
+                let discountBadgeHtml = (ad.adType === 'منتج' && ad.oldPrice && ad.newPrice) ? `<div class="discount-badge">تخفيض 🔥</div>` : '';
+
+                htmlStr += `
+                    <div class="ad-card" onclick="showSingleAd(${JSON.stringify(ad).replace(/"/g, '&quot;')})">
+                        ${newBadgeHtml}
+                        ${discountBadgeHtml}
+                        <img src="${img}" alt="${ad.title}" loading="lazy">
+                        <div class="ad-details">
+                            <div>
+                                ${placeNameHtml}
+                                <h3 style="margin-top: 3px;">${titleIcon}${ad.title}</h3>
+                                ${badgesWrapperHtml}
+                                <p>${ad.desc}</p>
+                                ${priceHtml}
+                            </div>
+                            <div class="action-buttons-container">
+                                ${buttonsHtml}
+                                <button onclick="shareAd('${ad.title}', event)" class="icon-btn btn-share" title="مشاركة">🔗</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            container.innerHTML += htmlStr;
+            displayedAdsCount = endIndex;
+            
+            if (displayedAdsCount === 0) {
+                container.innerHTML = '<div style="text-align:center; padding:30px; font-weight:bold; color:#777; font-size:16px;">لم يتم العثور على نتائج تطابق بحثك. 🔍</div>';
+            }
+            isLoadingAds = false;
+        }
+
+        // --- عرض الإعلان في شاشة كاملة (Single Ad) ---
+        window.showSingleAd = function(ad) {
+            let overlay = document.getElementById('single-ad-overlay');
+            let contentBox = document.getElementById('single-ad-content-box');
+            let defaultImg = "https://i.ibb.co/M5StFDSQ/file-00000000335471f48a03a0acb621d53c.png";
+            let img = ad.imgUrl && ad.imgUrl.startsWith('http') ? ad.imgUrl : defaultImg;
+            
+            let regionText = (ad.region && ad.region !== 'غير محدد' && ad.region !== '-') ? ` - ${ad.region}` : '';
+            let locText = `${ad.city}${regionText}`;
+
+            let badgesHtml = `<div class="badges-wrapper" style="margin-bottom: 15px; justify-content: center; gap: 8px;">
+                <span class="badge-item badge-cat" style="font-size: 14px; padding: 6px 12px;" onclick="filterFromBadge('${ad.category}', null, event)">🏷️ ${ad.category.replace(/[\uE000-\uF8FF]/g, '').trim()}</span>
+                <span class="badge-item badge-loc" style="font-size: 14px; padding: 6px 12px;" onclick="filterFromBadge(null, '${ad.city}', event)">📍 ${locText}</span>`;
+            if (ad.delivery && ad.delivery !== "") {
+                badgesHtml += `<span class="badge-item badge-del" style="font-size: 14px; padding: 6px 12px;">🛵 ${ad.delivery}</span>`;
+            }
+            badgesHtml += `</div>`;
+
+            // تجهيز الأيقونات نفس اللي بره
+            let buttonsHtml = '';
+            if (ad.phone) buttonsHtml += `<a href="tel:${ad.phone}" class="icon-btn" title="اتصال مباشر"><img src="https://i.ibb.co/68fDkGz0/phone-call-483864.png" width="45" height="45" alt="Call"></a>`;
+            if (ad.whatsapp) buttonsHtml += `<a href="https://wa.me/20${ad.whatsapp.replace(/^0+/, '')}" target="_blank" class="icon-btn" title="واتساب"><img src="https://i.ibb.co/9kx6vPzP/whatsapp-3536445.png" width="45" height="45" alt="WA"></a>`;
+            if (ad.fb) buttonsHtml += `<a href="${ad.fb}" target="_blank" class="icon-btn" title="فيسبوك"><img src="https://i.ibb.co/Tqr4vD51/facebook-3536394.png" width="45" height="45" alt="FB"></a>`;
+
+            let priceHtml = '';
+            if (ad.adType === 'منتج' && ad.newPrice) {
+                priceHtml = `<div class="price-container" style="margin-top:20px;">
+                                ${ad.oldPrice ? `<span class="old-price-card" style="font-size: 18px;">${ad.oldPrice} ج</span>` : ''}
+                                <span class="new-price-card" style="font-size: 24px;">${ad.newPrice} ج.م</span>
+                             </div>`;
+            }
+
+            let titleIcon = ad.adType === 'منتج' ? '🛍️ ' : '🏢 ';
+
+            contentBox.innerHTML = `
+                <img src="${img}" alt="${ad.title}" class="single-ad-img">
+                <div class="single-ad-content">
+                    <h3 style="font-size: 24px; font-weight: 900; color: #0f2027; text-align: center; margin-bottom: 10px;">${titleIcon}${ad.title}</h3>
+                    
+                    <!-- الشارات مكانها تحت العنوان مباشرة -->
+                    ${badgesHtml}
+                    
+                    <p style="font-size: 16px; color: #444; line-height: 1.8; margin-bottom: 20px; font-weight: bold; white-space: pre-wrap; word-wrap: break-word;">${ad.desc}</p>
+                    
+                    ${priceHtml}
+                    
+                    <!-- أزرار التواصل بالأيقونات الموحدة -->
+                    <div class="action-buttons-container" style="justify-content: center; margin-top: 25px; gap: 20px;">
+                        ${buttonsHtml}
+                        <button onclick="shareAd('${ad.title}', event)" class="icon-btn btn-share" title="مشاركة" style="width: 45px; height: 45px; font-size: 20px; box-shadow:0 2px 5px rgba(0,0,0,0.1);">🔗</button>
+                    </div>
+                </div>
+            `;
+            document.body.style.overflow = 'hidden';
+            overlay.style.display = 'flex';
+        };
+
+        window.closeSingleAd = function() {
+            document.getElementById('single-ad-overlay').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        };
+
+        window.shareAd = function(title, event) {
+            if(event) event.stopPropagation();
+            if (navigator.share) {
+                navigator.share({
+                    title: 'عرض من دليلك: ' + title,
+                    text: 'شوف العرض ده على منصة دليلك 🚀',
+                    url: window.location.href
+                }).catch(console.error);
+            } else {
+                alert("ميزة المشاركة غير مدعومة في متصفحك الحالي.");
+            }
+        };
+
+        function resetCategory() {
+            document.getElementById('filter-category').value = "الكل";
+            applyFilters();
+        }
+
+        // --- التمرير اللانهائي (Infinite Scroll) ---
+        window.addEventListener('scroll', () => {
+            let backBtn = document.getElementById('back-to-top');
+            if (window.scrollY > 300) backBtn.style.display = 'flex';
+            else backBtn.style.display = 'none';
+
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 200) {
+                if (displayedAdsCount < currentFilteredAds.length) {
+                    loadMoreAds();
+                }
+            }
+        });
+
+        // --- القائمة الجانبية (Sidebar) ---
+        function toggleMenu() {
+            let sidebar = document.getElementById('sidebar');
+            let overlay = document.getElementById('overlay');
+            if (sidebar.classList.contains('active')) {
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+            } else {
+                sidebar.classList.add('active');
+                overlay.classList.add('active');
+            }
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            let isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', isDark ? 'yes' : 'no');
+            toggleMenu();
+        }
+        if(localStorage.getItem('darkMode') === 'yes') {
+            document.body.classList.add('dark-mode');
+        }
+
+        let adminClickCount = 0;
+        let adminTimer = null;
+        document.getElementById('admin-trigger').addEventListener('click', function() {
+            adminClickCount++;
+            if (adminClickCount === 1) { adminTimer = setTimeout(() => { adminClickCount = 0; }, 2000); }
+            if (adminClickCount >= 5) {
+                clearTimeout(adminTimer); adminClickCount = 0;
+                document.getElementById('admin-dashboard').style.display = 'block';
+                toggleMenu();
+            }
+        });
+
+        // --- الفورمة الذكية للإعلان ---
+        window.openAdModal = function() { 
+            document.getElementById('ad-modal-overlay').style.display = 'flex';
+            toggleFormType('مكان'); // الافتراضي
+        };
+        window.closeAdModal = function() { document.getElementById('ad-modal-overlay').style.display = 'none'; };
+
+        function toggleFormType(type) {
+            document.getElementById('form-ad-type-hidden').value = type;
+            document.getElementById('btn-type-place').classList.remove('active');
+            document.getElementById('btn-type-product').classList.remove('active');
+            
+            if(type === 'مكان') {
+                document.getElementById('btn-type-place').classList.add('active');
+                document.getElementById('product-extra-fields').style.display = 'none';
+                document.getElementById('form-name').placeholder = "مثال: مطعم الباشا، كافيه فلان...";
+            } else {
+                document.getElementById('btn-type-product').classList.add('active');
+                document.getElementById('product-extra-fields').style.display = 'block';
+                document.getElementById('form-name').placeholder = "مثال: عرض شامبو، تيشرت بولو...";
+            }
+        }
+
         function selectOffer(days) {
+            document.querySelectorAll('.offer-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('btn-' + days).classList.add('active');
             selectedDays = days;
             document.getElementById('form-custom-days').value = '';
-            document.querySelectorAll('.offer-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById(`btn-${days}`).classList.add('active');
             calcPrice();
         }
-
         function customDaysInput() {
             let val = document.getElementById('form-custom-days').value;
-            if (val && parseInt(val) > 0) {
-                selectedDays = parseInt(val);
+            if(val && val > 0) {
                 document.querySelectorAll('.offer-btn').forEach(btn => btn.classList.remove('active'));
+                selectedDays = parseInt(val);
+                calcPrice();
             } else {
-                selectedDays = 7;
-                document.getElementById('btn-7').classList.add('active');
+                selectOffer(7);
             }
-            calcPrice();
         }
-
         function calcPrice() {
             let type = document.getElementById('form-type').value;
-            let promo = document.getElementById('form-promo').value.trim().toUpperCase();
-            let total = 0, oldTotal = 0;
-
-            if (type === 'عادي') {
-                oldTotal = selectedDays * 5;
-                if (selectedDays === 7) total = 30;
-                else if (selectedDays === 15) total = 60;
-                else if (selectedDays === 30) total = 120;
-                else total = oldTotal;
-            } else {
-                oldTotal = selectedDays * 10;
-                if (selectedDays === 7) total = 60;
-                else if (selectedDays === 15) total = 120;
-                else if (selectedDays === 30) total = 220;
-                else total = oldTotal;
-            }
-
-            if (promo === 'FREEWEEK' && selectedDays === 7) { total = 0; }
-
-            let displayHtml = '';
-            if (total < oldTotal) { displayHtml = `<span class="old-price">${oldTotal} ج</span> ${total} جنيه`; } 
-            else if (total === 0 && promo === 'FREEWEEK') { displayHtml = `🎉 مجاناً بالبروموكود`; }
-            else { displayHtml = `${total} جنيه`; }
-
-            document.getElementById('calc-total').innerHTML = displayHtml;
-        }
-
-        function copyNumber(num) {
-            navigator.clipboard.writeText(num).then(() => { alert('✅ تم نسخ الرقم: ' + num); });
-        }
-
-        function openAdModal() {
-            document.getElementById('ad-modal-overlay').style.display = 'flex';
-            if (document.getElementById('form-gov').options.length <= 1) { initGovDropdown(); }
-            selectOffer(7); 
-        }
-
-        function closeAdModal() { document.getElementById('ad-modal-overlay').style.display = 'none'; }
-
-        function sendAdToWhatsApp() {
-            let adType = document.getElementById('form-ad-type-hidden').value;
-            let name = document.getElementById('form-name').value.trim();
-            let type = document.getElementById('form-type').value;
-            let category = document.getElementById('form-category').value;
-            let gov = document.getElementById('form-gov').value;
-            let region = document.getElementById('form-region').value;
-            if (region === 'أخرى') region = document.getElementById('form-other-region').value.trim();
-            let desc = document.getElementById('form-desc').value.trim();
-            let wa = document.getElementById('form-wa').value.trim();
-            let call = document.getElementById('form-call').value.trim();
-            let loc = document.getElementById('form-loc').value.trim();
-            let promo = document.getElementById('form-promo').value.trim().toUpperCase();
+            let dayPrice = prices[type];
+            let rawTotal = dayPrice * selectedDays;
             
-            let placeName = document.getElementById('form-place-name').value.trim();
-            let oldPrice = document.getElementById('form-old-price').value.trim();
-            let newPrice = document.getElementById('form-new-price').value.trim();
-            let delivery = document.getElementById('form-delivery').value.trim();
-            let total = document.getElementById('calc-total').innerText;
+            let discPer = 0;
+            if(selectedDays >= 30) discPer = discounts[30];
+            else if(selectedDays >= 15) discPer = discounts[15];
+            else if(selectedDays >= 7) discPer = discounts[7];
 
-            if(!name || !gov || !region || !wa) {
-                alert("⚠️ يرجى ملء الحقول الأساسية (الاسم، المحافظة، المنطقة، ورقم الواتساب)!");
+            let finalTotal = rawTotal - (rawTotal * discPer);
+            
+            let html = ``;
+            if (discPer > 0) {
+                html += `🎉 مبروك! ليك خصم ${discPer * 100}%<br>`;
+                html += `السعر قبل الخصم: <span class="old-price">${rawTotal} ج</span><br>`;
+            }
+            document.getElementById('offer-text-calc').innerHTML = html;
+            document.getElementById('calc-price-txt').innerText = finalTotal + " ج.م";
+        }
+        
+        window.copyCashNumber = function() {
+            navigator.clipboard.writeText("01288023436").then(() => { alert("تم نسخ رقم الكاش: 01288023436"); });
+        };
+
+        function submitAdViaWhatsApp() {
+            let type = document.getElementById('form-type').value;
+            let adType = document.getElementById('form-ad-type-hidden').value;
+            let name = document.getElementById('form-name').value;
+            let cat = document.getElementById('form-category').value;
+            let gov = document.getElementById('form-gov').value;
+            let reg = document.getElementById('form-region').value;
+            if(reg === 'أخرى') reg = document.getElementById('form-other-region').value;
+            
+            let desc = document.getElementById('form-desc').value;
+            let phone = document.getElementById('form-phone').value;
+            let wa = document.getElementById('form-whatsapp').value;
+            
+            let oldPrice = document.getElementById('form-old-price').value;
+            let newPrice = document.getElementById('form-new-price').value;
+
+            if(!name || !gov || !reg || !desc || (!phone && !wa)) {
+                alert("يرجى إكمال البيانات الأساسية (الاسم، المحافظة، المنطقة، الوصف، ورقم تواصل على الأقل).");
+                return;
+            }
+            
+            if(adType === 'منتج' && !newPrice) {
+                alert("يرجى إدخال السعر النهائي (بعد الخصم) للمنتج.");
                 return;
             }
 
-            let message = `📌 *طلب إعلان جديد - دليلك*\n`;
-            message += `-----------------------------------\n`;
-            message += `🏷️ *الاسم:* ${name}\n`;
-            message += `🎯 *النوع:* ${adType}\n`;
-            message += `👑 *الباقة:* ${type}\n`;
-            message += `⏱️ *المدة المطلوبة:* ${selectedDays} أيام\n`;
-            message += `💵 *المبلغ المطلوب:* ${total}\n`;
-            if (promo) message += `🎁 *بروموكود:* ${promo}\n`;
-            message += `-----------------------------------\n`;
-            message += `📂 *القسم:* ${category}\n`;
-            message += `📍 *المكان:* ${gov} - ${region}\n`;
-            
-            if (adType === 'منتج') {
-                message += `-----------------------------------\n`;
-                message += `🛍️ *تفاصيل المنتج:*\n`;
-                if (placeName) message += `🏪 *اسم المكان:* ${placeName}\n`;
-                if (oldPrice) message += `❌ *السعر قبل:* ${oldPrice} جنيه\n`;
-                if (newPrice) message += `✅ *السعر بعد:* ${newPrice} جنيه\n`;
-                if (delivery) message += `🚚 *التوصيل:* ${delivery}\n`;
+            let msg = `*طلب إضافة إعلان جديد (${adType})* 🚀\n`;
+            msg += `----------------------\n`;
+            msg += `*الاسم:* ${name}\n`;
+            msg += `*الباقة:* ${type}\n`;
+            msg += `*المدة:* ${selectedDays} أيام\n`;
+            msg += `*القسم:* ${cat}\n`;
+            msg += `*الموقع:* ${gov} - ${reg}\n`;
+            if(adType === 'منتج') {
+                if(oldPrice) msg += `*السعر قبل الخصم:* ${oldPrice} ج\n`;
+                msg += `*السعر الحالي:* ${newPrice} ج\n`;
             }
+            msg += `*التفاصيل:* ${desc}\n`;
+            msg += `*للاتصال:* ${phone}\n`;
+            msg += `*للواتساب:* ${wa}\n`;
+            msg += `----------------------\n`;
+            msg += `إجمالي التكلفة المتوقعة: ${document.getElementById('calc-price-txt').innerText}\n`;
+            msg += `أنا جاهز لإرسال الصور الخاصة بالإعلان وإتمام الدفع.`;
 
-            if (adType === 'مكان' && loc) message += `🗺️ *رابط اللوكيشن:* ${loc}\n`;
-            if (desc) message += `📝 *الوصف:* ${desc}\n`;
-            message += `💬 *واتساب التواصل:* ${wa}\n`;
-            if (call) message += `📞 *رقم اتصال آخر:* ${call}\n`;
-            message += `-----------------------------------\n`;
-            message += `*(يرجى إرفاق سكرين الدفع + صورة الإعلان/المنتج مع هذه الرسالة)*`;
-
-            let encodedMessage = encodeURIComponent(message);
-            window.open(`https://wa.me/201288023436?text=${encodedMessage}`, '_blank');
-            closeAdModal();
+            let waUrl = `https://wa.me/201288023436?text=${encodeURIComponent(msg)}`;
+            window.open(waUrl, '_blank');
         }
 
-        fetchAdsFromGoogleSheet();
+        window.onload = function() {
+            fetchAdsFromGoogleSheet();
+            calcPrice();
+        };
+
     </script>
 </body>
 </html>
