@@ -168,14 +168,18 @@ header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 8
 .icob.faved{background:color-mix(in srgb,var(--red) 15%,transparent);border-color:var(--red)}
 .vipcard{border:2px solid transparent;background:linear-gradient(var(--card),var(--card)) padding-box, linear-gradient(135deg,var(--gold2),var(--gold)) border-box}
 
-/* ===== سكيلتون ===== */
-.sk{border-radius:15px;background:var(--card);border:1.5px solid var(--line);overflow:hidden}
-.sk .a{height:175px}.sk .b{padding:14px}
-.sk .a,.sk .l{background:linear-gradient(90deg,var(--bg2) 25%,var(--line) 50%,var(--bg2) 75%);background-size:200% 100%;animation:shim 1.3s infinite}
-.sk .l{height:13px;border-radius:6px;margin-bottom:9px}
-@keyframes shim{to{background-position:-200% 0}}
+/* ===== شاشة التحميل باللوجو ===== */
+.loader{grid-column:1/-1;display:flex;flex-direction:column;align-items:center;gap:10px;padding:54px 16px;text-align:center}
+.loader img{width:78px;height:78px;border-radius:20px;border:3px solid var(--gold);box-shadow:0 10px 28px color-mix(in srgb,var(--brand) 30%,transparent);animation:lp 1.5s ease-in-out infinite}
+@keyframes lp{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(1.09) rotate(7deg)}}
+.loader b{font-family:'Lalezar';font-size:1.35rem;color:var(--brand)}
+.loader span{color:var(--mut);font-weight:700;font-size:.85rem}
+.loader .dots::after{content:"";animation:dots 1.4s steps(4,end) infinite}
+@keyframes dots{0%{content:""}25%{content:"."}50%{content:".."}75%{content:"..."}100%{content:""}}
+
 .empty{text-align:center;padding:50px 16px;color:var(--mut);font-weight:800}
 .empty span{font-size:3rem;display:block;margin-bottom:8px}
+.empty img{width:64px;height:64px;border-radius:16px;margin:0 auto 8px;display:block;opacity:.85;border:2px solid var(--line)}
 
 /* ===== الشحن (GAME BASHA) ===== */
 .charge{background:linear-gradient(140deg,#0a2e21,#0c4632 55%,#0a2e21);border-radius:20px;padding:30px 22px;color:#fff;margin:44px 0;position:relative;overflow:hidden;border:2px solid var(--gold)}
@@ -355,8 +359,7 @@ footer p{font-size:.82rem;font-weight:700;opacity:.85}
     <a class="dlink" href="#">👥 جروب تليجرام</a>
     <a class="dlink" href="tel:01288023436">📞 اتصال مباشر</a>
     <a class="dlink" href="https://wa.me/201288023436" target="_blank">📱 واتساب مباشر</a>
-    <div class="dsec">⚙️ الإدارة</div>
-    <a class="dlink" href="https://docs.google.com/spreadsheets/d/1TA9f759D07O_z3VnIh8krMD0iKpFkwGQCF08_IymtIa08W2XGuhDpjhtgb1Zao-5YKGJ-mHsb3qt70/edit" target="_blank">📊 فتح شيت الإدارة ↗</a>
+    <div class="dsec">ℹ️ معلومات وروابط</div>
     <a class="dlink" href="#plans" data-close>💎 الباقات والأسعار</a>
     <a class="dlink" href="#faq" data-close>❓ الأسئلة الشائعة</a>
     <a class="dlink" href="#" id="termsLink">📄 الشروط والخصوصية</a>
@@ -458,7 +461,7 @@ footer p{font-size:.82rem;font-weight:700;opacity:.85}
     <div class="coupon">
       <span>🎁 زائر دليلك؟ استخدم الكود:</span>
       <code id="couponCode">DALEELAK</code>
-      <button onclick="copyTxt('DALEELAK','تم نسخ الكود 🎁')">📋 نسخ</button>
+      <button onclick="copyTxt('DALEELAK','تم نسخ الكود 🎁')"> نسخ</button>
       <span>وخد خصم على أول شحنة!</span>
     </div>
   </section>
@@ -552,7 +555,6 @@ footer p{font-size:.82rem;font-weight:700;opacity:.85}
         <h4>تواصل معنا</h4>
         <a href="tel:01288023436">📞 01288023436</a>
         <a href="https://wa.me/201288023436" target="_blank">📱 واتساب مباشر</a>
-        <a href="https://docs.google.com/spreadsheets/d/1TA9f759D07O_z3VnIh8krMD0iKpFkwGQCF08_IymtIa08W2XGuhDpjhtgb1Zao-5YKGJ-mHsb3qt70/edit" target="_blank">⚙️ لوحة تحكم الإدارة</a>
       </div>
     </div>
     <div class="fbot">
@@ -647,13 +649,15 @@ footer p{font-size:.82rem;font-weight:700;opacity:.85}
 
 <script>
 /* ================= الإعدادات ================= */
-const SHEET_ID = '1TA9f759D07O_z3VnIh8krMD0iKpFkwGQCF08_IymtIa08W2XGuhDpjhtgb1Zao-5YKGJ-mHsb3qt70';
+const SHEET_ID = '1wgNuXx8KAYFjiRekzks3M4lgpOuBz6i3MHXsai2NIuY';
 const ADMIN_WA = '201288023436';
+const LOGO     = 'https://i.ibb.co/xt28Xnds/file-00000000917c71f482c8eff889977cd8.png';
 const DEF_IMG  = 'https://i.ibb.co/M5StFDSQ/file-00000000335471f48a03a0acb621d53c.png';
 const RATES = {'عادي':5,'VIP':10,'بلاتيني':20};
 const CATS = ['🛒 سوبر ماركت وبقالة','💊 صيدليات ومستلزمات طبية','💄 إكسسوارات وأدوات تجميل','🍔 مطاعم وكافيهات','👗 ملابس وأحذية','👶 مستلزمات أطفال','🎮 شحن ألعاب وخدمات','📱 إلكترونيات وموبايلات','🛠️ خدمات وصيانة','🏥 مستشفيات وعيادات وأطباء','🏢 عقارات وديكور','🚗 سيارات ومواصلات','🕌 دار تحفيظ قرآن','📌 أخرى'];
 const GOVS = ['القاهرة','الجيزة','القليوبية','الإسكندرية','البحيرة','مطروح','الغربية','المنوفية','الدقهلية','الشرقية','كفر الشيخ','دمياط','بورسعيد','الإسماعيلية','السويس','الفيوم','بني سويف','المنيا','أسيوط','سوهاج','قنا','الأقصر','أسوان','البحر الأحمر','الوادي الجديد','شمال سيناء','جنوب سيناء'];
-const AREAS = ['العجمي','السيوف','العوايد','ميامي','سموحة','سيدي جابر','المنتزه','الرمل','العصافرة','برج العرب','العامرية','أبو قير','الناصرية','محطة الرمل','مدينة نصر','عين شمس','المطرية','شبرا','بنها','6 أكتوبر','الهرم','المعادي','حلوان'];
+const AREAS = ['العجمي','السيوف','العوايد','ميامي','سموحة','سيدي جابر','المنتزه','الرمل','العصافرة','برج العرب','العامرية','أبو قير','الناصرية','محطة الرمل','مدينة نصر','عين شمس','المطرية','شبرا','بنها','6 أكتوبر','الهرم','المعادي','حلوان','العصافرة'];
+const LOADER_HTML = `<div class="loader"><img src="${LOGO}" alt="دليلك"><b>جاري تحميل الإعلانات<span class="dots"></span></b><span>دليلك بيجهّزلك أفضل العروض 🔥</span></div>`;
 
 /* ================= أدوات ================= */
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
@@ -682,19 +686,43 @@ async function loadAds(){
     const t=await r.text();
     const j=JSON.parse(t.substring(t.indexOf('(')+1,t.lastIndexOf(')')));
     const cols=j.table.cols.map(c=>(c.label||'').trim());
-    const find=(...k)=>cols.findIndex(l=>k.some(x=>l.includes(x)));
-    const I={name:find('اسم النشاط'),desc:find('الوصف'),cat:find('الفئة'),img:find('الصورة'),wa:find('واتساب'),
-      plan:find('الباقة'),status:find('حالة الإعلان','الحالة'),city:find('المدينة','المحافظة'),area:find('المنطقة'),
-      owner:find('صاحب الإعلان'),start:find('البداية'),end:find('النهاية'),loc:find('اللوكيشن','خريطة'),
-      phone:find('الاتصال'),pb:find('قبل الخصم'),pa:find('بعد الخصم'),type:find('مكان/منتج','مكان او منتج','النوع'),
-      del:find('التوصيل'),code:find('كود خصم'),ver:find('موثق'),deal:find('مميز اليوم','عرض اليوم'),
-      rate:find('تقييم'),fb:find('فيسبوك')};
+    /* نظام mapping ذكي: مطابقة الاسم الدقيق أولًا، ثم البحث الجزئي كـ fallback */
+    const norm=s=>(s||'').trim();
+    const colE=(arr)=>cols.findIndex(l=>(arr||[]).some(x=>norm(l)===x));
+    const colI=(arr)=>cols.findIndex(l=>(arr||[]).some(x=>norm(l).includes(x)));
+    const col=(exact,inc)=>{const e=colE(exact);if(e>=0)return e;return inc?colI(inc):-1;};
+    const I={
+      name:col(['اسم النشاط او المنتج','اسم النشاط أو المنتج'],['اسم النشاط']),
+      desc:col(['الوصف'],['الوصف']),
+      cat:col(['الفئة'],['الفئة','القسم']),
+      img:col(['رابط الصورة'],['الصورة']),
+      wa:col(['رقم واتساب'],['واتساب']),
+      plan:col(['نوع الباقة'],['الباقة']),
+      status:col(['حالة الإعلان'],['حالة الإعلان','الحالة']),
+      city:col(['المدينة'],['المدينة','المحافظة']),
+      area:col(['المنطقه','المنطقة'],['المنطق']),
+      owner:col(['اسم صاحب الإعلان'],['صاحب الإعلان']),
+      start:col(['تاريخ البداية'],['البداية']),
+      end:col(['تاريخ النهاية'],['النهاية']),
+      loc:col(['رابط اللوكشن','رابط اللوكيشن'],['لوكش','خريطة']),
+      phone:col(['رقم الاتصال'],['الاتصال']),
+      pb:col(['السعر قبل الخصم'],['قبل الخصم']),
+      pa:col(['السعر بعد الخصم'],['بعد الخصم']),
+      sold:col(['مكان المنتج صيدليه او محل'],['مكان المنتج','يُباع']),
+      del:col(['التوصيل'],['التوصيل']),
+      type:col(['النشاط او منتج','النشاط أو منتج','مكان/منتج','مكان او منتج','النوع'],[]),
+      code:col(['كود خصم'],['كود خصم']),
+      ver:col(['موثق'],['موثق']),
+      deal:col(['مميز اليوم','عرض اليوم'],['مميز اليوم','عرض اليوم']),
+      rate:col(['تقييم'],['تقييم']),
+      fb:col(['رابط فيسبوك','فيسبوك'],['فيسبوك'])
+    };
     const today=new Date();today.setHours(0,0,0,0);
     ADS=j.table.rows.map((row,i)=>{
       const g=k=>{if(I[k]<0)return '';const c=row.c[I[k]];return c?String(c.f??c.v??'').trim():''};
       const a={id:i,name:g('name'),desc:g('desc'),cat:g('cat'),img:g('img'),wa:g('wa'),plan:g('plan'),status:g('status'),
         city:g('city'),area:g('area'),owner:g('owner'),start:g('start'),end:g('end'),loc:g('loc'),phone:g('phone'),
-        pb:g('pb'),pa:g('pa'),type:g('type'),del:g('del'),code:g('code'),ver:g('ver'),deal:g('deal'),rate:g('rate'),fb:g('fb')};
+        pb:g('pb'),pa:g('pa'),type:g('type'),del:g('del'),sold:g('sold'),code:g('code'),ver:g('ver'),deal:g('deal'),rate:g('rate'),fb:g('fb')};
       a.startDate=parseDate(a.start);a.endDate=parseDate(a.end);
       a.daysLeft=a.endDate?Math.ceil((a.endDate-today)/864e5):null;
       a.totalDays=(a.endDate&&a.startDate)?Math.max(1,Math.round((a.endDate-a.startDate)/864e5)):null;
@@ -709,14 +737,14 @@ async function loadAds(){
     afterLoad();
   }catch(e){
     $('#adsGrid').innerHTML='';
+    $('#vipGrid').innerHTML='';
     $('#emptyBox').style.display='block';
-    $('#emptyBox').innerHTML='<span>⚠️</span>تعذر تحميل الإعلانات من الشيت<br><small style="font-weight:700">تأكد إن الشيت مشارك بصيغة "أي شخص لديه الرابط → مشاهد"</small><br><button class="hbtn" style="margin-top:12px" onclick="location.reload()">🔄 إعادة المحاولة</button>';
+    $('#emptyBox').innerHTML=`<img src="${LOGO}" alt=""><span>⚠️</span>تعذر تحميل الإعلانات من الشيت<br><small style="font-weight:700">تأكد إن الشيت مشارك بصيغة "أي شخص لديه الرابط → مشاهد"</small><br><button class="hbtn" style="margin-top:12px" onclick="location.reload()">🔄 إعادة المحاولة</button>`;
   }
 }
 
 function afterLoad(){
   buildTicker();buildDeal();buildStats();applyFilters();
-  document.querySelectorAll('.sk').forEach(s=>s.remove());
 }
 
 /* ================= شريط الأخبار ================= */
@@ -870,6 +898,7 @@ function openDetail(id){
     ${a.desc?`<p style="font-weight:700;font-size:.9rem;color:var(--mut);margin-bottom:10px">${esc(a.desc)}</p>`:''}
     ${a.pa?`<div class="price"><span class="now">${esc(a.pa)} ج</span>${a.pb?`<span class="old">${esc(a.pb)} ج</span>`:''}</div>`:''}
     <div class="drow"><b>📍 الموقع</b><span>${esc(a.city||'مصر')}${a.area?' — '+esc(a.area):''}</span></div>
+    ${a.sold?`<div class="drow"><b>🏪 يُباع في</b><span>${esc(a.sold)}</span></div>`:''}
     ${a.isProduct&&a.type?`<div class="drow"><b>🏷️ النوع</b><span>${esc(a.type)}</span></div>`:''}
     ${a.del?`<div class="drow"><b>🚚 التوصيل</b><span>${esc(a.del)}</span></div>`:''}
     ${a.owner?`<div class="drow"><b>👤 المعلن</b><span>${esc(a.owner)}</span></div>`:''}
@@ -981,9 +1010,9 @@ $('#topBtn').onclick=()=>scrollTo({top:0,behavior:'smooth'});
 const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}}),{threshold:.12});
 $$('.rv').forEach(el=>io.observe(el));
 
-/* ================= سكيلتون + تشغيل ================= */
-$('#adsGrid').innerHTML=Array(8).fill('<div class="sk"><div class="a"></div><div class="b"><div class="l" style="width:80%"></div><div class="l" style="width:50%"></div><div class="l" style="width:65%"></div></div></div>').join('');
-$('#vipGrid').innerHTML=Array(4).fill('<div class="sk"><div class="a"></div><div class="b"><div class="l" style="width:80%"></div><div class="l" style="width:55%"></div></div></div>').join('');
+/* ================= تشغيل ================= */
+$('#adsGrid').innerHTML=LOADER_HTML;
+$('#vipGrid').innerHTML=LOADER_HTML;
 $('#yr').textContent=new Date().getFullYear();
 buildLists();
 loadAds();
