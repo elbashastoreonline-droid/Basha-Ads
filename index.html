@@ -21,11 +21,14 @@
   --bg:#f2f5f0; --bg2:#e8efe6; --card:#ffffff; --ink:#13241b; --mut:#5c7264;
   --brand:#0c6b4f; --brand2:#08523c; --gold:#e8a80c; --gold2:#f7c948;
   --wa:#1faa59; --red:#d64545; --line:#d7e2d6; --sh:0 10px 30px rgba(12,60,40,.10);
+  /* ألوان البلاتيني (دياموند) */
+  --dia1:#e8f4ff; --dia2:#7ec8e3; --dia3:#b9f2ff; --dia4:#4a90d9; --diaink:#06324f;
 }
 [data-theme="dark"]{
   --bg:#0c1512; --bg2:#0f1b16; --card:#15221c; --ink:#edf5ef; --mut:#8fa798;
   --brand:#2fbf8f; --brand2:#27a67c; --gold:#f2b93c; --gold2:#ffd76a;
   --wa:#25c06a; --red:#ff6b6b; --line:#22362d; --sh:0 10px 30px rgba(0,0,0,.45);
+  --dia1:#dff3ff; --dia2:#5fb6dd; --dia3:#9fe6ff; --dia4:#3d83c9; --diaink:#04223a;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -42,6 +45,19 @@ input,select,textarea{font-family:inherit;font-size:1rem;color:var(--ink);backgr
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px color-mix(in srgb,var(--brand) 18%,transparent)}
 .wrap{max-width:1180px;margin:0 auto;padding:0 16px}
 .hl{background:linear-gradient(transparent 62%, color-mix(in srgb,var(--gold) 55%,transparent) 62%);padding:0 4px}
+
+/* ===== منع التحديد/تعريف جوجل على العناصر الديكورية ===== */
+h1,h2,h3,h4,.disp,.kick,.chip,.ribbon,.verif,.tag,.stick,.qp,.cat,.dlink,.dsec,
+.cmeta,.delch,.stat span,.sec-h h2,.sec-h .cnt,.sponsor b,.sponsor small,.plan h3,.plan li,
+.qa button,.subbar,.subbar span,.hbtn,.bwa,.icob,.pbtn,.chtile b,.chtile small,.cbox span,
+.dmeta,.dbadges span,.drow b,.mhead h3,.fld label,.ticker span,.logo b,.logo small,.fab,
+.deal h3,.charge h2,.charge .cs,.stbox span,.rstar,.catlink,.empty{
+  -webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+/* السماح بالنسخ الفعلي على عناصر المحتوى */
+.price,.codebox code,.coupon code,input,textarea,.ans,.drow span,p.sub,.note,.paybox,
+.total,.mp p,.story p,.story b,.fbot .disc{ -webkit-user-select:text;user-select:text}
+/* إخفاء وميض الضغط الرمادي على الموبايل */
+button,a,.card,.chip,.cat,.qp,[data-act],.fab,.qa button,.plan,.chtile{-webkit-tap-highlight-color:transparent}
 
 /* ===== شريط الأخبار المتحرك ===== */
 .ticker{background:linear-gradient(90deg,var(--brand2),var(--brand));color:#fff;overflow:hidden;direction:ltr;border-bottom:3px solid var(--gold)}
@@ -91,9 +107,6 @@ header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 8
 .qp:hover{border-color:var(--brand);transform:translateY(-2px)}
 .qp.on{background:var(--brand);color:#fff;border-color:var(--brand)}
 .qp.fav.on{background:var(--red);border-color:var(--red)}
-.stats{display:flex;gap:26px;margin-top:24px;flex-wrap:wrap}
-.stat b{font-family:'Lalezar';font-size:1.9rem;color:var(--brand);display:block;line-height:1}
-.stat span{font-size:.75rem;font-weight:800;color:var(--mut)}
 
 /* ===== عرض اليوم ===== */
 .deal{position:relative;background:var(--card);border:2.5px solid transparent;border-radius:18px;padding:20px;box-shadow:var(--sh);transform:rotate(-1.2deg);
@@ -132,7 +145,7 @@ header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 8
 .cat.on{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#3a2a00;border-color:transparent;box-shadow:0 5px 14px color-mix(in srgb,var(--gold) 40%,transparent)}
 
 /* ===== الفلاتر ===== */
-.frow{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;margin-bottom:20px}
+.frow{display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;gap:10px;margin-bottom:20px}
 .frow select{appearance:none}
 
 /* ===== الكروت ===== */
@@ -142,18 +155,19 @@ header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 8
 .card .im{position:relative;height:175px;overflow:hidden}
 .card .im img{width:100%;height:100%;object-fit:cover;transition:.4s}
 .card:hover .im img{transform:scale(1.07)}
-.chip{position:absolute;top:9px;inset-inline-start:9px;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(4px);font-size:.7rem;font-weight:800;padding:.2rem .65rem;border-radius:99px;border:1px solid var(--line)}
+.chip{position:absolute;top:9px;inset-inline-start:9px;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(4px);font-size:.7rem;font-weight:800;padding:.2rem .65rem;border-radius:99px;border:1px solid var(--line);cursor:pointer;transition:.2s}
+.chip:hover{border-color:var(--brand);color:var(--brand);transform:scale(1.05)}
 .verif{position:absolute;top:9px;inset-inline-end:9px;background:var(--brand);color:#fff;font-size:.68rem;font-weight:800;padding:.2rem .6rem;border-radius:99px}
-.ribbon{position:absolute;bottom:34px;inset-inline-start:-6px;background:linear-gradient(135deg,var(--gold2),var(--gold));color:#3a2a00;font-family:'Lalezar';font-size:.85rem;padding:.1rem .9rem;border-radius:0 8px 8px 0;box-shadow:0 4px 10px rgba(0,0,0,.2)}
-.ribbon.plat{background:linear-gradient(135deg,#3a2a00,#6b4d00);color:var(--gold2);border:1px solid var(--gold)}
+.ribbon{position:absolute;bottom:34px;inset-inline-start:-6px;background:linear-gradient(135deg,var(--gold2),var(--gold));color:#3a2a00;font-family:'Lalezar';font-size:.85rem;padding:.1rem .9rem;border-radius:0 8px 8px 0;box-shadow:0 4px 10px rgba(0,0,0,.2);display:inline-flex;align-items:center;gap:5px}
 .leftbar{position:absolute;bottom:0;left:0;right:0;height:26px;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(4px);display:flex;align-items:center;gap:8px;padding:0 10px;font-size:.68rem;font-weight:800}
 .leftbar .bar{flex:1;height:5px;background:var(--line);border-radius:99px;overflow:hidden}
 .leftbar .bar i{display:block;height:100%;border-radius:99px;background:var(--brand)}
 .leftbar .bar i.warn{background:var(--gold)}
 .leftbar .bar i.danger{background:var(--red)}
 .card .bd{padding:12px 14px 14px}
-.card h3{font-size:1.15rem;line-height:1.35;display:flex;align-items:center;gap:6px}
+.card h3{font-size:1.15rem;line-height:1.35;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .stars{color:var(--gold);font-size:.78rem;letter-spacing:1px}
+.rcnt{font-size:.66rem;color:var(--mut);font-weight:800}
 .cmeta{color:var(--mut);font-size:.76rem;font-weight:700;margin:2px 0 8px}
 .price{display:flex;align-items:baseline;gap:9px;margin-bottom:9px}
 .price .now{font-family:'Lalezar';font-size:1.45rem;color:var(--brand)}
@@ -166,7 +180,19 @@ header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 8
 .icob{width:40px;height:40px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);font-size:1rem;display:flex;align-items:center;justify-content:center;transition:.2s}
 .icob:hover{border-color:var(--brand);transform:translateY(-2px)}
 .icob.faved{background:color-mix(in srgb,var(--red) 15%,transparent);border-color:var(--red)}
-.vipcard{border:2px solid transparent;background:linear-gradient(var(--card),var(--card)) padding-box, linear-gradient(135deg,var(--gold2),var(--gold)) border-box}
+
+/* ===== ستايل VIP الذهبي الأفخم ===== */
+.vipcard{border:2px solid transparent;background:linear-gradient(var(--card),var(--card)) padding-box, linear-gradient(135deg,var(--gold2),var(--gold),#b8860b) border-box;box-shadow:0 8px 24px color-mix(in srgb,var(--gold) 28%,transparent)}
+.vipcard:hover{box-shadow:0 14px 34px color-mix(in srgb,var(--gold) 42%,transparent)}
+
+/* ===== ستايل البلاتيني الدياموند ===== */
+.dia{display:inline-block;width:13px;height:13px;background:linear-gradient(135deg,var(--dia1),var(--dia2) 55%,var(--dia3));clip-path:polygon(50% 0,100% 38%,82% 100%,18% 100%,0 38%);box-shadow:0 0 7px color-mix(in srgb,var(--dia2) 80%,transparent);flex:0 0 auto}
+.platcard{border:2.5px solid transparent;background:linear-gradient(var(--card),var(--card)) padding-box, linear-gradient(135deg,var(--dia1),var(--dia2),var(--dia3),var(--dia4),var(--dia1)) border-box;box-shadow:0 10px 30px color-mix(in srgb,var(--dia2) 38%,transparent);position:relative;overflow:hidden}
+.platcard::before{content:"";position:absolute;top:0;inset-inline-start:-60%;width:40%;height:100%;background:linear-gradient(110deg,transparent,color-mix(in srgb,var(--dia1) 55%,transparent),transparent);transform:skewX(-18deg);animation:platshine 4.5s ease-in-out infinite;pointer-events:none}
+@keyframes platshine{0%,55%{inset-inline-start:-60%}100%{inset-inline-start:130%}}
+.platcard:hover{box-shadow:0 16px 40px color-mix(in srgb,var(--dia2) 52%,transparent)}
+.ribbon.plat{background:linear-gradient(110deg,var(--dia4) 18%,var(--dia1) 42%,var(--dia3) 52%,var(--dia1) 62%,var(--dia4) 82%);background-size:220% 100%;animation:diamondsh 3.2s linear infinite;color:var(--diaink);text-shadow:0 1px 0 color-mix(in srgb,var(--dia1) 60%,transparent)}
+@keyframes diamondsh{to{background-position:220% 0}}
 
 /* ===== شاشة التحميل باللوجو ===== */
 .loader{grid-column:1/-1;display:flex;flex-direction:column;align-items:center;gap:10px;padding:54px 16px;text-align:center}
@@ -175,18 +201,24 @@ header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 8
 .loader b{font-family:'Lalezar';font-size:1.35rem;color:var(--brand)}
 .loader span{color:var(--mut);font-weight:700;font-size:.85rem}
 .loader .dots::after{content:"";animation:dots 1.4s steps(4,end) infinite}
-@keyframes dots{0%{content:""}25%{content:"."}50%{content:".."}75%{content:"..."}100%{content:""}}
+@keyframes dots{0%{content:""}25%{content:"."}50%{content:".."}75%{content:"..."}}
 
 .empty{text-align:center;padding:50px 16px;color:var(--mut);font-weight:800}
 .empty span{font-size:3rem;display:block;margin-bottom:8px}
 .empty img{width:64px;height:64px;border-radius:16px;margin:0 auto 8px;display:block;opacity:.85;border:2px solid var(--line)}
 
-/* ===== الشحن (GAME BASHA) ===== */
-.charge{background:linear-gradient(140deg,#0a2e21,#0c4632 55%,#0a2e21);border-radius:20px;padding:30px 22px;color:#fff;margin:44px 0;position:relative;overflow:hidden;border:2px solid var(--gold)}
+/* ===== الشحن (GAME BASHA) — أكورديون ===== */
+.charge{background:linear-gradient(140deg,#0a2e21,#0c4632 55%,#0a2e21);border-radius:20px;padding:24px 22px;color:#fff;margin:44px 0;position:relative;overflow:hidden;border:2px solid var(--gold)}
 .charge::before{content:"🎮";position:absolute;font-size:9rem;opacity:.07;inset-inline-end:-15px;bottom:-30px;transform:rotate(-12deg)}
-.charge h2{font-size:1.9rem;color:var(--gold2)}
-.charge .cs{opacity:.85;font-weight:700;margin-bottom:18px}
-.chgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:18px}
+.charge h2{font-size:1.7rem;color:var(--gold2)}
+.charge .cs{opacity:.85;font-weight:700}
+.charge-head{display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;position:relative;z-index:1}
+.charge-head .htxt{flex:1}
+.charge-head .tog{font-size:1.5rem;transition:.35s;color:var(--gold2);flex:0 0 auto}
+.charge.open .charge-head .tog{transform:rotate(180deg)}
+.charge-body{max-height:0;overflow:hidden;transition:max-height .5s ease;position:relative;z-index:1}
+.charge.open .charge-body{max-height:1400px}
+.chgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:18px 0}
 .chtile{background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.18);border-radius:13px;padding:14px;text-align:center;transition:.25s}
 .chtile:hover{background:rgba(255,255,255,.15);transform:translateY(-4px)}
 .chtile span{font-size:1.9rem;display:block}
@@ -212,9 +244,9 @@ header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 8
 .plan .pbtn:hover{filter:brightness(1.12)}
 .plan.hot{border:2.5px solid var(--brand);transform:scale(1.04)}
 .plan.hot .pbtn{background:linear-gradient(135deg,var(--brand),var(--brand2))}
-.plan.royal{border:2px solid transparent;background:linear-gradient(var(--card),var(--card)) padding-box,linear-gradient(135deg,var(--gold2),var(--gold)) border-box}
+.plan.royal{border:2.5px solid transparent;background:linear-gradient(var(--card),var(--card)) padding-box,linear-gradient(135deg,var(--dia1),var(--dia2),var(--dia3),var(--dia4)) border-box;box-shadow:0 10px 28px color-mix(in srgb,var(--dia2) 32%,transparent)}
 .plan .btag{position:absolute;top:-13px;inset-inline-start:50%;transform:translateX(50%);background:var(--brand);color:#fff;font-size:.72rem;font-weight:800;padding:.2rem .9rem;border-radius:99px;white-space:nowrap}
-.plan.royal .btag{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#3a2a00}
+.plan.royal .btag{background:linear-gradient(110deg,var(--dia4),var(--dia1),var(--dia3),var(--dia4));background-size:220% 100%;animation:diamondsh 3.2s linear infinite;color:var(--diaink)}
 
 /* ===== قصص النجاح ===== */
 .story{display:flex;gap:14px;overflow-x:auto;padding:6px 2px 14px;scroll-snap-type:x mandatory;scrollbar-width:thin}
@@ -223,6 +255,15 @@ header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 8
 .sc p{font-size:.88rem;font-weight:700;color:var(--mut);margin-bottom:12px}
 .sc b{color:var(--brand);font-size:.85rem}
 .sc .stars{display:block;margin-top:3px}
+.story-empty{grid-column:1/-1;text-align:center;color:var(--mut);font-weight:800;padding:18px;background:var(--card);border:1.5px dashed var(--line);border-radius:14px}
+
+/* ===== بانر الإحصائيات تحت ===== */
+.statbar{background:linear-gradient(135deg,var(--brand2),var(--brand));border-radius:20px;padding:24px 18px;color:#fff;margin:44px 0 0;border:2px solid var(--gold);box-shadow:var(--sh)}
+.statbar h2{color:var(--gold2);text-align:center;font-size:1.6rem;margin-bottom:16px}
+.stgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.stbox{background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.2);border-radius:14px;padding:16px 8px;text-align:center}
+.stbox b{font-family:'Lalezar';font-size:2rem;color:var(--gold2);display:block;line-height:1}
+.stbox span{font-size:.78rem;font-weight:800;opacity:.92;display:block;margin-top:4px}
 
 /* ===== FAQ ===== */
 .faq{max-width:760px}
@@ -253,6 +294,10 @@ footer p{font-size:.82rem;font-weight:700;opacity:.85}
 .fab{width:54px;height:54px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;box-shadow:0 8px 22px rgba(0,0,0,.28);transition:.2s}
 .fab:hover{transform:scale(1.1)}
 .fab.add{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#3a2a00}
+.fab.refresh{background:var(--brand);color:#fff}
+.fab.refresh .ic{display:inline-block}
+.fab.refresh.spin .ic{animation:spin .7s linear}
+@keyframes spin{to{transform:rotate(360deg)}}
 .fab.top{background:var(--brand);color:#fff;opacity:0;pointer-events:none}
 .fab.top.show{opacity:1;pointer-events:auto}
 
@@ -285,10 +330,20 @@ footer p{font-size:.82rem;font-weight:700;opacity:.85}
 .dbadges span{font-size:.72rem;font-weight:800;padding:.2rem .7rem;border-radius:99px;background:var(--bg2);border:1px solid var(--line)}
 .dbadges .g{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#3a2a00;border:none}
 .dbadges .v{background:var(--brand);color:#fff;border:none}
+.dbadges .p{background:linear-gradient(135deg,var(--dia2),var(--dia3));color:var(--diaink);border:none;display:inline-flex;align-items:center;gap:4px}
+.catlink{cursor:pointer;transition:.2s}
+.catlink:hover{border-color:var(--brand)!important;color:var(--brand)}
 .drow{display:flex;justify-content:space-between;gap:10px;padding:.45rem 0;border-bottom:1px dashed var(--line);font-size:.86rem;font-weight:700}
 .drow b{color:var(--mut);font-weight:800}
 .codebox{display:flex;align-items:center;justify-content:space-between;gap:10px;background:color-mix(in srgb,var(--brand) 10%,transparent);border:2px dashed var(--brand);border-radius:11px;padding:9px 13px;margin:10px 0}
 .codebox code{font-family:'Lalezar';font-size:1.2rem;color:var(--brand);letter-spacing:1px}
+/* نجوم التقييم التفاعلية */
+.ratebox{display:flex;align-items:center;gap:10px;background:var(--bg2);border:1.5px solid var(--line);border-radius:11px;padding:9px 13px;margin:10px 0;flex-wrap:wrap}
+.ratebox .lbl{font-weight:800;font-size:.82rem;color:var(--mut)}
+.rstar{font-size:1.5rem;color:var(--line);transition:.15s;line-height:1;padding:0 1px}
+.rstar:hover,.rstar.hover{color:var(--gold);transform:scale(1.15)}
+.ratebox.done .rstar{pointer-events:none}
+.ratebox.done .lbl{color:var(--brand)}
 .dacts{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}
 .dacts a{display:flex;align-items:center;justify-content:center;gap:7px;padding:.7rem;border-radius:11px;font-weight:800;text-decoration:none;font-size:.9rem;transition:.2s}
 .dacts a:hover{transform:translateY(-2px)}
@@ -318,6 +373,7 @@ footer p{font-size:.82rem;font-weight:700;opacity:.85}
   .f2{grid-template-columns:1fr}
   .dacts{grid-template-columns:1fr}
   .fgrid{grid-template-columns:1fr}
+  .stgrid{grid-template-columns:1fr 1fr}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
@@ -385,12 +441,6 @@ footer p{font-size:.82rem;font-weight:700;opacity:.85}
         <button class="qp" data-quick="product">🛍️ المنتجات فقط</button>
         <button class="qp fav" data-quick="fav">❤️ المفضلة</button>
       </div>
-      <div class="stats">
-        <div class="stat"><b id="stAds">0</b><span>إعلان نشط</span></div>
-        <div class="stat"><b id="stPlaces">0</b><span>مكان ومحل</span></div>
-        <div class="stat"><b id="stCities">0</b><span>محافظة</span></div>
-        <div class="stat"><b id="stVip">0</b><span>إعلان مميز</span></div>
-      </div>
     </div>
 
     <!-- عرض اليوم -->
@@ -427,8 +477,7 @@ footer p{font-size:.82rem;font-weight:700;opacity:.85}
   <!-- الفلاتر -->
   <div class="frow">
     <select id="fCity"><option value="">🌍 جميع المحافظات</option></select>
-    <input type="text" id="fArea" list="areasList" placeholder="📍 المنطقة (اختياري)">
-    <datalist id="areasList"></datalist>
+    <select id="fArea"><option value="">📍 جميع المناطق</option></select>
     <select id="fSort">
       <option value="newest">🕐 الأحدث أولًا</option>
       <option value="ending">⏳ الأقرب للانتهاء</option>
@@ -436,7 +485,7 @@ footer p{font-size:.82rem;font-weight:700;opacity:.85}
       <option value="priceDesc">💰 السعر: من الأعلى</option>
       <option value="rating">⭐ الأعلى تقييمًا</option>
     </select>
-    <button class="hbtn" onclick="resetFilters()">↺ مسح الفلاتر</button>
+    <button class="hbtn" onclick="resetFilters()">↺ مسح</button>
   </div>
 
   <!-- إعلانات VIP -->
@@ -448,21 +497,28 @@ footer p{font-size:.82rem;font-weight:700;opacity:.85}
   <div class="grid" id="adsGrid"></div>
   <div class="empty" id="emptyBox" style="display:none"><span>🔍</span>مفيش إعلانات مطابقة لبحثك<br><button class="hbtn" style="margin-top:12px" onclick="resetFilters()">↺ امسح الفلاتر وجرب تاني</button></div>
 
-  <!-- قسم الشحن -->
+  <!-- قسم الشحن (أكورديون) -->
   <section class="charge rv" id="charge">
-    <h2>🎮 اشحن مع GAME BASHA</h2>
-    <p class="cs">بضغطة زرار واحدة.. طلبك بيوصلك في دقائق ⚡</p>
-    <div class="chgrid">
-      <div class="chtile"><span>🔫</span><b>شحن ببجي UC</b><small>جميع الباقات متاحة</small><button onclick="orderCharge('شحن ببجي UC')">اطلب دلوقتي</button></div>
-      <div class="chtile"><span>💎</span><b>جواهر فري فاير</b><small>أفضل سعر في مصر</small><button onclick="orderCharge('شحن جواهر فري فاير')">اطلب دلوقتي</button></div>
-      <div class="chtile"><span>🎴</span><b>كروت فكة</b><small>جوجل بلاي وآيتونز</small><button onclick="orderCharge('كروت فكة')">اطلب دلوقتي</button></div>
-      <div class="chtile"><span>🧾</span><b>دفع فواتير</b><small>كهربا ومياه ونت</small><button onclick="orderCharge('دفع فواتير')">اطلب دلوقتي</button></div>
+    <div class="charge-head" id="chargeHead">
+      <div class="htxt">
+        <h2>🎮 خدمات شحن GAME BASHA</h2>
+        <p class="cs">بضغطة زرار واحدة.. طلبك بيوصلك في دقائق ⚡ — اضغط للعرض</p>
+      </div>
+      <span class="tog">▾</span>
     </div>
-    <div class="coupon">
-      <span>🎁 زائر دليلك؟ استخدم الكود:</span>
-      <code id="couponCode">DALEELAK</code>
-      <button onclick="copyTxt('DALEELAK','تم نسخ الكود 🎁')"> نسخ</button>
-      <span>وخد خصم على أول شحنة!</span>
+    <div class="charge-body">
+      <div class="chgrid">
+        <div class="chtile"><span>🔫</span><b>شحن ببجي UC</b><small>جميع الباقات متاحة</small><button onclick="orderCharge('شحن ببجي UC')">اطلب دلوقتي</button></div>
+        <div class="chtile"><span>💎</span><b>جواهر فري فاير</b><small>أفضل سعر في مصر</small><button onclick="orderCharge('شحن جواهر فري فاير')">اطلب دلوقتي</button></div>
+        <div class="chtile"><span>🎴</span><b>كروت فكة</b><small>جوجل بلاي وآيتونز</small><button onclick="orderCharge('كروت فكة')">اطلب دلوقتي</button></div>
+        <div class="chtile"><span>🧾</span><b>دفع فواتير</b><small>كهربا ومياه ونت</small><button onclick="orderCharge('دفع فواتير')">اطلب دلوقتي</button></div>
+      </div>
+      <div class="coupon">
+        <span>🎁 زائر دليلك؟ استخدم الكود:</span>
+        <code id="couponCode">DALEELAK</code>
+        <button onclick="copyTxt('DALEELAK','تم نسخ الكود 🎁')">📋 نسخ</button>
+        <span>وخد خصم على أول شحنة!</span>
+      </div>
     </div>
   </section>
 
@@ -495,12 +551,12 @@ footer p{font-size:.82rem;font-weight:700;opacity:.85}
       <button class="pbtn" onclick="openAdd('VIP')">اطلب VIP دلوقتي</button>
     </div>
     <div class="plan royal">
-      <span class="btag">👑 للنشاط الكبير</span>
-      <h3>💠 باقة بلاتيني</h3>
+      <span class="btag"><span class="dia"></span> للنشاط الكبير</span>
+      <h3><span class="dia"></span> باقة بلاتيني</h3>
       <div class="pp">20 ج <small>/ يوميًا</small></div>
       <ul>
         <li>كل مميزات VIP</li>
-        <li>شارة 💠 بلاتينية فاخرة</li>
+        <li>شارة دياموند فاخرة لامعة</li>
         <li>ترشيح "عرض اليوم" بالعداد</li>
         <li>أولوية قصوى في البحث</li>
         <li>دعم وتصميم إعلان مجاني</li>
@@ -509,13 +565,20 @@ footer p{font-size:.82rem;font-weight:700;opacity:.85}
     </div>
   </div>
 
-  <!-- قصص نجاح -->
-  <div class="sec-h"><h2>🗣️ قصص نجاح من عندنا</h2></div>
-  <div class="story rv">
-    <div class="sc"><p>"نزلت إعلان VIP أسبوعين لصيدليتي، والمكالمات زادت بشكل ملحوظ.. والرد على الواتساب بقى أسهل بكتير."</p><b>د. مصطفى سمر — صيدلية، الإسكندرية</b><span class="stars">★★★★★</span></div>
-    <div class="sc"><p>"أرخص دعاية جربتها بصراحة.. 5 جنيه في اليوم وجابتلي زبائن من مناطق مكنتش أوصلها."</p><b>صاحب سوبر ماركت — السويس</b><span class="stars">★★★★★</span></div>
-    <div class="sc"><p>"عرض الكافيه بتاعي اتحط في عرض اليوم.. اليوم ده كان أعلى يوم مبيعات في الشهر كله 🔥"</p><b>كافيه — الأقصر</b><span class="stars">★★★★☆</span></div>
-  </div>
+  <!-- قصص النجاح -->
+  <div class="sec-h" id="storyHead"><h2>🗣️ قصص نجاح من عندنا</h2></div>
+  <div class="story rv" id="storyRow"></div>
+
+  <!-- بانر الإحصائيات (حقيقي 100%) -->
+  <section class="statbar rv" id="statBar">
+    <h2>📊 إحصائيات دليلك</h2>
+    <div class="stgrid">
+      <div class="stbox"><b id="sbOrd">0</b><span>📦 إعلان عادي</span></div>
+      <div class="stbox"><b id="sbVip">0</b><span>👑 إعلان VIP</span></div>
+      <div class="stbox"><b id="sbPlat">0</b><span><span class="dia"></span> إعلان بلاتيني</span></div>
+      <div class="stbox"><b id="sbCov">0</b><span>📍 محافظة مغطّاة</span></div>
+    </div>
+  </section>
 
   <!-- الأسئلة الشائعة -->
   <div class="sec-h" id="faq"><h2>❓ الأسئلة الشائعة</h2></div>
@@ -567,6 +630,7 @@ footer p{font-size:.82rem;font-weight:700;opacity:.85}
 <!-- الزراير العايمة -->
 <div class="fabs">
   <button class="fab top" id="topBtn" title="فوق">⬆️</button>
+  <button class="fab refresh" id="refreshBtn" title="تحديث الإعلانات"><span class="ic">🔄</span></button>
   <button class="fab add" id="addBtnFab" title="أضف إعلانك">＋</button>
 </div>
 
@@ -588,7 +652,7 @@ footer p{font-size:.82rem;font-weight:700;opacity:.85}
       <div class="fld"><label>القسم / الفئة *</label><select id="adCat"></select></div>
       <div class="fld"><label>المحافظة *</label><select id="adCity"></select></div>
     </div>
-    <div class="fld"><label>المنطقة</label><input id="adArea" placeholder="مثال: سموحة، مدينة نصر…"></div>
+    <div class="fld"><label>المنطقة</label><select id="adArea"><option value="">— اختر المحافظة أولاً —</option></select></div>
 
     <div id="prodSec">
       <div class="fld" style="margin-top:6px"><label style="color:var(--gold)">💰 تفاصيل المنتج والأسعار</label></div>
@@ -654,9 +718,10 @@ const ADMIN_WA = '201288023436';
 const LOGO     = 'https://i.ibb.co/xt28Xnds/file-00000000917c71f482c8eff889977cd8.png';
 const DEF_IMG  = 'https://i.ibb.co/M5StFDSQ/file-00000000335471f48a03a0acb621d53c.png';
 const RATES = {'عادي':5,'VIP':10,'بلاتيني':20};
+/* نقطة مرجعية عالمية ثابتة لطابور "عرض اليوم" (تخلي الدوران متزامن لكل الزوار) */
+const EPOCH = new Date('2026-07-01T00:00:00Z').getTime();
 const CATS = ['🛒 سوبر ماركت وبقالة','💊 صيدليات ومستلزمات طبية','💄 إكسسوارات وأدوات تجميل','🍔 مطاعم وكافيهات','👗 ملابس وأحذية','👶 مستلزمات أطفال','🎮 شحن ألعاب وخدمات','📱 إلكترونيات وموبايلات','🛠️ خدمات وصيانة','🏥 مستشفيات وعيادات وأطباء','🏢 عقارات وديكور','🚗 سيارات ومواصلات','🕌 دار تحفيظ قرآن','📌 أخرى'];
 const GOVS = ['القاهرة','الجيزة','القليوبية','الإسكندرية','البحيرة','مطروح','الغربية','المنوفية','الدقهلية','الشرقية','كفر الشيخ','دمياط','بورسعيد','الإسماعيلية','السويس','الفيوم','بني سويف','المنيا','أسيوط','سوهاج','قنا','الأقصر','أسوان','البحر الأحمر','الوادي الجديد','شمال سيناء','جنوب سيناء'];
-const AREAS = ['العجمي','السيوف','العوايد','ميامي','سموحة','سيدي جابر','المنتزه','الرمل','العصافرة','برج العرب','العامرية','أبو قير','الناصرية','محطة الرمل','مدينة نصر','عين شمس','المطرية','شبرا','بنها','6 أكتوبر','الهرم','المعادي','حلوان','العصافرة'];
 const LOADER_HTML = `<div class="loader"><img src="${LOGO}" alt="دليلك"><b>جاري تحميل الإعلانات<span class="dots"></span></b><span>دليلك بيجهّزلك أفضل العروض 🔥</span></div>`;
 
 /* ================= أدوات ================= */
@@ -671,26 +736,39 @@ function parseDate(s){if(!s)return null;s=String(s).trim();
   m=s.match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})$/);if(m)return new Date(+m[1],+m[2]-1,+m[3]);
   const d=new Date(s);return isNaN(d)?null:d;}
 function stars(r){r=parseFloat(r)||0;let s='';for(let i=1;i<=5;i++)s+=i<=Math.round(r)?'★':'☆';return s;}
+/* تقييم تراكمي: الخلية فيها أرقام بمسافة "5 4 5" → متوسط + عدد */
+function parseRatings(s){const nums=String(s||'').trim().split(/[\s,]+/).map(Number).filter(n=>!isNaN(n)&&n>=0&&n<=5);if(!nums.length)return{avg:0,count:0};const avg=nums.reduce((a,b)=>a+b,0)/nums.length;return{avg,count:nums.length};}
 function getViews(id){try{return JSON.parse(localStorage.getItem('dlk_views')||'{}')[id]||0}catch(e){return 0}}
 function addView(id){try{const v=JSON.parse(localStorage.getItem('dlk_views')||'{}');v[id]=(v[id]||0)+1;localStorage.setItem('dlk_views',JSON.stringify(v))}catch(e){}}
+function hasRated(id){try{return !!JSON.parse(localStorage.getItem('dlk_rated')||'{}')[id]}catch(e){return false}}
+function setRated(id,n){try{const r=JSON.parse(localStorage.getItem('dlk_rated')||'{}');r[id]=n;localStorage.setItem('dlk_rated',JSON.stringify(r))}catch(e){}}
 
 /* ================= الحالة ================= */
-let ADS=[];
+let ADS=[], STORIES=[], AREAS_MAP={};
 let FAVS=new Set();try{FAVS=new Set(JSON.parse(localStorage.getItem('dlk_favs')||'[]'))}catch(e){}
 const state={q:'',quick:'all',cat:'',city:'',area:'',sort:'newest'};
 
-/* ================= جلب البيانات من الشيت ================= */
+/* ================= جلب أي تبويب من الشيت بالاسم ================= */
+async function fetchSheet(name){
+  const url='https://docs.google.com/spreadsheets/d/'+SHEET_ID+'/gviz/tq?tqx=out:json'+(name?'&sheet='+encodeURIComponent(name):'');
+  const r=await fetch(url);const t=await r.text();
+  return JSON.parse(t.substring(t.indexOf('(')+1,t.lastIndexOf(')')));
+}
+function mapCols(j){
+  const cols=j.table.cols.map(c=>(c.label||'').trim());
+  const norm=s=>(s||'').trim();
+  const colE=arr=>cols.findIndex(l=>(arr||[]).some(x=>norm(l)===x));
+  const colI=arr=>cols.findIndex(l=>(arr||[]).some(x=>norm(l).includes(x)));
+  const col=(exact,inc)=>{const e=colE(exact);if(e>=0)return e;return inc?colI(inc):-1;};
+  return {cols,col};
+}
+
+/* ================= جلب الإعلانات ================= */
 async function loadAds(){
   try{
-    const r=await fetch('https://docs.google.com/spreadsheets/d/'+SHEET_ID+'/gviz/tq?tqx=out:json');
-    const t=await r.text();
-    const j=JSON.parse(t.substring(t.indexOf('(')+1,t.lastIndexOf(')')));
-    const cols=j.table.cols.map(c=>(c.label||'').trim());
-    /* نظام mapping ذكي: مطابقة الاسم الدقيق أولًا، ثم البحث الجزئي كـ fallback */
-    const norm=s=>(s||'').trim();
-    const colE=(arr)=>cols.findIndex(l=>(arr||[]).some(x=>norm(l)===x));
-    const colI=(arr)=>cols.findIndex(l=>(arr||[]).some(x=>norm(l).includes(x)));
-    const col=(exact,inc)=>{const e=colE(exact);if(e>=0)return e;return inc?colI(inc):-1;};
+    let j;
+    try{j=await fetchSheet('الإعلانات');}catch(e){j=await fetchSheet();} /* fallback لأول تبويب */
+    const {col}=mapCols(j);
     const I={
       name:col(['اسم النشاط او المنتج','اسم النشاط أو المنتج'],['اسم النشاط']),
       desc:col(['الوصف'],['الوصف']),
@@ -713,16 +791,18 @@ async function loadAds(){
       type:col(['النشاط او منتج','النشاط أو منتج','مكان/منتج','مكان او منتج','النوع'],[]),
       code:col(['كود خصم'],['كود خصم']),
       ver:col(['موثق'],['موثق']),
-      deal:col(['مميز اليوم','عرض اليوم'],['مميز اليوم','عرض اليوم']),
       rate:col(['تقييم'],['تقييم']),
-      fb:col(['رابط فيسبوك','فيسبوك'],['فيسبوك'])
+      fb:col(['رابط فيسبوك','فيسبوك'],['فيسبوك']),
+      rank:col(['ترتيب الدوران'],['ترتيب الدوران','الترتيب']),
+      hours:col(['مدة عرض اليوم (ساعات)','مدة عرض اليوم'],['مدة عرض اليوم','ساعات العرض'])
     };
     const today=new Date();today.setHours(0,0,0,0);
     ADS=j.table.rows.map((row,i)=>{
       const g=k=>{if(I[k]<0)return '';const c=row.c[I[k]];return c?String(c.f??c.v??'').trim():''};
       const a={id:i,name:g('name'),desc:g('desc'),cat:g('cat'),img:g('img'),wa:g('wa'),plan:g('plan'),status:g('status'),
         city:g('city'),area:g('area'),owner:g('owner'),start:g('start'),end:g('end'),loc:g('loc'),phone:g('phone'),
-        pb:g('pb'),pa:g('pa'),type:g('type'),del:g('del'),sold:g('sold'),code:g('code'),ver:g('ver'),deal:g('deal'),rate:g('rate'),fb:g('fb')};
+        pb:g('pb'),pa:g('pa'),type:g('type'),del:g('del'),sold:g('sold'),code:g('code'),ver:g('ver'),rate:g('rate'),fb:g('fb'),
+        rank:parseInt(g('rank'))||0,hours:parseFloat(g('hours'))||0};
       a.startDate=parseDate(a.start);a.endDate=parseDate(a.end);
       a.daysLeft=a.endDate?Math.ceil((a.endDate-today)/864e5):null;
       a.totalDays=(a.endDate&&a.startDate)?Math.max(1,Math.round((a.endDate-a.startDate)/864e5)):null;
@@ -731,20 +811,57 @@ async function loadAds(){
       a.isProduct=/منتج|عرض|product/i.test(a.type);
       a.isPlace=!a.isProduct;
       a.priceNum=parseFloat(a.pa)||0;
-      a.rateNum=parseFloat(a.rate)||0;
+      const rt=parseRatings(a.rate);a.rateAvg=rt.avg;a.rateCount=rt.count;
       return a;
     }).filter(a=>a.name && /شغال|نشط|فعال/i.test(a.status) && (a.daysLeft===null||a.daysLeft>=0));
     afterLoad();
   }catch(e){
-    $('#adsGrid').innerHTML='';
-    $('#vipGrid').innerHTML='';
+    $('#adsGrid').innerHTML='';$('#vipGrid').innerHTML='';
     $('#emptyBox').style.display='block';
     $('#emptyBox').innerHTML=`<img src="${LOGO}" alt=""><span>⚠️</span>تعذر تحميل الإعلانات من الشيت<br><small style="font-weight:700">تأكد إن الشيت مشارك بصيغة "أي شخص لديه الرابط → مشاهد"</small><br><button class="hbtn" style="margin-top:12px" onclick="location.reload()">🔄 إعادة المحاولة</button>`;
   }
 }
+function afterLoad(){buildTicker();buildDeal();buildStatBar();applyFilters();}
 
-function afterLoad(){
-  buildTicker();buildDeal();buildStats();applyFilters();
+/* ================= جلب قصص النجاح من تبويب منفصل ================= */
+async function loadStories(){
+  try{
+    const j=await fetchSheet('قصص النجاح');
+    const {col}=mapCols(j);
+    const I={name:col(['اسم المعلن'],['اسم المعلن','الاسم']),gov:col(['المحافظة'],['المحافظة','المدينة']),
+      text:col(['نص القصة'],['نص القصة','القصة','النص']),rate:col(['النجوم'],['النجوم','تقييم']),
+      img:col(['صورة'],['صورة']),status:col(['الحالة'],['الحالة'])};
+    STORIES=j.table.rows.map(row=>{
+      const g=k=>{if(I[k]<0)return '';const c=row.c[I[k]];return c?String(c.f??c.v??'').trim():''};
+      return{name:g('name'),gov:g('gov'),text:g('text'),rate:parseFloat(g('rate'))||0,img:g('img'),status:g('status')};
+    }).filter(s=>s.text && /شغال|نشط|فعال|yes/i.test(s.status||'شغال'));
+    renderStories();
+  }catch(e){renderStories();}
+}
+function renderStories(){
+  const row=$('#storyRow');
+  if(!STORIES.length){row.innerHTML='<div class="story-empty">🗣️ كن أول من يشارك قصته مع دليلك — تواصل معنا بعد تجربتك!</div>';return;}
+  row.innerHTML=STORIES.map(s=>`<div class="sc"><p>${esc(s.text)}</p><b>${esc(s.name)}${s.gov?' — '+esc(s.gov):''}</b><span class="stars">${stars(s.rate||5)}</span></div>`).join('');
+}
+
+/* ================= جلب المناطق (شكل عمودي: صف1=محافظات، تحتها مناطقها) ================= */
+async function loadAreas(){
+  try{
+    const j=await fetchSheet('المناطق');
+    const cols=j.table.cols.map(c=>(c.label||'').trim());
+    AREAS_MAP={};
+    cols.forEach((gov,ci)=>{
+      if(!gov)return;
+      const list=j.table.rows.map(r=>{const c=r.c[ci];return c?String(c.f??c.v??'').trim():''}).filter(Boolean);
+      if(list.length)AREAS_MAP[gov]=list;
+    });
+  }catch(e){AREAS_MAP={};}
+}
+function fillAreasFor(sel,gov,keep){
+  const list=gov&&AREAS_MAP[gov]?AREAS_MAP[gov]:[];
+  const ph=sel.id==='fArea'?'📍 جميع المناطق':'— اختر المنطقة —';
+  sel.innerHTML=`<option value="">${ph}</option>`+list.map(a=>`<option>${esc(a)}</option>`).join('');
+  if(keep&&list.includes(keep))sel.value=keep;
 }
 
 /* ================= شريط الأخبار ================= */
@@ -755,32 +872,50 @@ function buildTicker(){
   $('#tickerTrack').innerHTML=html+html;
 }
 
-/* ================= عرض اليوم ================= */
-let dealAd=null;
+/* ================= عرض اليوم = طابور دوران بساعة عالمية ================= */
+let dealAd=null, dealTimer=null;
+function dealQueue(){return ADS.filter(a=>a.rank>0).sort((a,b)=>a.rank-b.rank);}
+function currentDeal(){
+  const q=dealQueue();
+  if(!q.length)return{ad:[...ADS].filter(a=>a.isVip).sort((a,b)=>(a.daysLeft??99)-(b.daysLeft??99))[0]||ADS[0],remain:0,static:true};
+  const cycle=q.reduce((s,a)=>s+(a.hours||1),0)||1;
+  const elapsed=(Date.now()-EPOCH)/3600000;
+  let pos=((elapsed%cycle)+cycle)%cycle, acc=0;
+  for(const a of q){const h=a.hours||1;if(pos<acc+h)return{ad:a,remain:(acc+h)-pos,static:false};acc+=h;}
+  return{ad:q[0],remain:q[0].hours||1,static:false};
+}
+function paintDeal(a){
+  $('#dealImg').src=a.img||DEF_IMG;
+  $('#dealName').textContent=a.name;
+  $('#dealMeta').textContent=[a.cat,a.city,a.area].filter(Boolean).join(' • ');
+  $('#dealBtn').onclick=()=>window.open(waLink(a.wa,'السلام عليكم، شفت عرض اليوم في دليلك 👀 وعايز أعرف تفاصيل أكتر عن: '+a.name),'_blank');
+}
 function buildDeal(){
-  dealAd=ADS.find(a=>/نعم|yes/i.test(a.deal))||[...ADS].filter(a=>a.isVip).sort((a,b)=>(a.daysLeft??99)-(b.daysLeft??99))[0]||ADS[0];
-  if(!dealAd)return;
-  $('#dealImg').src=dealAd.img||DEF_IMG;
-  $('#dealName').textContent=dealAd.name;
-  $('#dealMeta').textContent=[dealAd.cat,dealAd.city,dealAd.area].filter(Boolean).join(' • ');
-  $('#dealBtn').onclick=()=>window.open(waLink(dealAd.wa,'السلام عليكم، شفت عرض اليوم في دليلك 👀 وعايز أعرف تفاصيل أكتر عن: '+dealAd.name),'_blank');
-  $('#dealBox').onclick=e=>{if(e.target.id!=='dealBtn')openDetail(dealAd.id)};
-  setInterval(()=>{
-    const end=dealAd.endDate?new Date(dealAd.endDate.getTime()+86399000):new Date(Date.now()+86399000);
-    let d=Math.max(0,end-Date.now());
-    $('#cdH').textContent=String(Math.floor(d/36e5)).padStart(2,'0');
-    $('#cdM').textContent=String(Math.floor(d%36e5/6e4)).padStart(2,'0');
-    $('#cdS').textContent=String(Math.floor(d%6e4/1e3)).padStart(2,'0');
-  },1000);
+  if(dealTimer)clearInterval(dealTimer);
+  let lastId=null;
+  const tick=()=>{
+    const {ad,remain}=currentDeal();
+    if(!ad)return;
+    if(ad.id!==lastId){paintDeal(ad);lastId=ad.id;
+      $('#dealBox').onclick=e=>{if(e.target.id!=='dealBtn')openDetail(ad.id)};}
+    dealAd=ad;
+    let sec=Math.max(0,Math.floor(remain*3600));
+    $('#cdH').textContent=String(Math.floor(sec/3600)).padStart(2,'0');
+    $('#cdM').textContent=String(Math.floor(sec%3600/60)).padStart(2,'0');
+    $('#cdS').textContent=String(sec%60).padStart(2,'0');
+  };
+  tick();dealTimer=setInterval(tick,1000);
 }
 
-/* ================= الإحصائيات ================= */
-function countUp(el,to){let n=0;const st=Math.max(1,Math.ceil(to/40));const iv=setInterval(()=>{n+=st;if(n>=to){n=to;clearInterval(iv)}el.textContent=n},30);}
-function buildStats(){
-  countUp($('#stAds'),ADS.length);
-  countUp($('#stPlaces'),ADS.filter(a=>a.isPlace).length);
-  countUp($('#stCities'),new Set(ADS.map(a=>a.city).filter(Boolean)).size);
-  countUp($('#stVip'),ADS.filter(a=>a.isVip).length);
+/* ================= بانر الإحصائيات (حقيقي 100%) ================= */
+function countUp(el,to){if(!el)return;let n=0;const st=Math.max(1,Math.ceil(to/40));const iv=setInterval(()=>{n+=st;if(n>=to){n=to;clearInterval(iv)}el.textContent=n},30);}
+function buildStatBar(){
+  const ordinary=ADS.filter(a=>!a.isVip).length;
+  const vip=ADS.filter(a=>a.isVip&&!a.isPlat).length;
+  const plat=ADS.filter(a=>a.isPlat).length;
+  const cnt={};ADS.forEach(a=>{if(a.city)cnt[a.city]=(cnt[a.city]||0)+1});
+  const covered=Object.values(cnt).filter(n=>n>=10).length; /* محافظة مغطّاة = ≥10 إعلانات */
+  countUp($('#sbOrd'),ordinary);countUp($('#sbVip'),vip);countUp($('#sbPlat'),plat);countUp($('#sbCov'),covered);
 }
 
 /* ================= الفلترة والعرض ================= */
@@ -797,7 +932,7 @@ function filtered(){
     case 'ending':list.sort((a,b)=>(a.daysLeft??999)-(b.daysLeft??999));break;
     case 'priceAsc':list.sort((a,b)=>a.priceNum-b.priceNum);break;
     case 'priceDesc':list.sort((a,b)=>b.priceNum-a.priceNum);break;
-    case 'rating':list.sort((a,b)=>b.rateNum-a.rateNum);break;
+    case 'rating':list.sort((a,b)=>b.rateAvg-a.rateAvg);break;
     default:list.sort((a,b)=>(b.startDate?.getTime()||b.id)-(a.startDate?.getTime()||a.id));
   }
   return list;
@@ -810,16 +945,19 @@ function leftBadge(a){
 }
 function cardHTML(a,vip){
   const off=(a.pb&&a.pa&&parseFloat(a.pb)>parseFloat(a.pa))?Math.round((1-parseFloat(a.pa)/parseFloat(a.pb))*100):0;
-  return `<article class="card ${vip?'vipcard':''} rv in" data-id="${a.id}">
-    ${a.isVip?`<span class="ribbon ${a.isPlat?'plat':''}">${a.isPlat?'💠 بلاتيني':'👑 VIP'}</span>`:''}
+  const platCls=a.isPlat?'platcard':(vip?'vipcard':'');
+  const ribbon=a.isPlat?`<span class="ribbon plat"><span class="dia"></span> بلاتيني</span>`:(a.isVip?`<span class="ribbon">👑 VIP</span>`:'');
+  const rateHtml=a.rateCount?`<span class="stars">${stars(a.rateAvg)}</span>${a.rateCount>1?`<span class="rcnt">(${a.rateCount})</span>`:''}`:'';
+  return `<article class="card ${platCls}" data-id="${a.id}">
+    ${ribbon}
     <div class="im">
       <img loading="lazy" src="${esc(a.img)||DEF_IMG}" alt="${esc(a.name)}" onerror="this.src='${DEF_IMG}'">
-      <span class="chip">${esc(a.cat)||'📌 عام'}</span>
+      <span class="chip" data-act="cat" data-cat="${esc(a.cat)}">${esc(a.cat)||'📌 عام'}</span>
       ${/نعم|yes/i.test(a.ver)?'<span class="verif">✔️ موثوق</span>':''}
       ${leftBadge(a)}
     </div>
     <div class="bd">
-      <h3>${esc(a.name)} ${a.rateNum?`<span class="stars">${stars(a.rateNum)}</span>`:''}</h3>
+      <h3>${esc(a.name)} ${rateHtml}</h3>
       <div class="cmeta">📍 ${esc(a.city||'مصر')}${a.area?' — '+esc(a.area):''}</div>
       ${a.pa?`<div class="price"><span class="now">${esc(a.pa)} ج</span>${a.pb?`<span class="old">${esc(a.pb)} ج</span>`:''}${off?`<span class="off">-${off}%</span>`:''}</div>`:''}
       ${a.del?`<span class="delch">${esc(a.del)}</span>`:''}
@@ -849,9 +987,18 @@ function resetFilters(){
   $$('.cat').forEach(c=>c.classList.remove('on'));
   applyFilters();toast('تم مسح الفلاتر ↺');
 }
+function filterByCat(cat){
+  state.cat=cat||'';
+  $$('.cat').forEach(x=>x.classList.toggle('on',x.dataset.cat===state.cat));
+  applyFilters();
+  if(cat){toast('📂 عرض قسم: '+cat);$('#catsRow')?.scrollIntoView({behavior:'smooth',block:'center'});}
+}
 
-/* ================= تفاعلات الكروت ================= */
+/* ================= تفاعلات الكروت + شارة الفئة ================= */
 document.addEventListener('click',e=>{
+  /* شارة الفئة تشتغل في الكارت وفي مودال التفاصيل */
+  const catAct=e.target.closest('[data-act="cat"]');
+  if(catAct){e.preventDefault();e.stopPropagation();filterByCat(catAct.dataset.cat);closeModals();return;}
   const act=e.target.closest('[data-act]');
   const card=e.target.closest('.card');
   if(act&&card){
@@ -874,7 +1021,7 @@ function toggleFav(a,btn){
   if(state.quick==='fav')applyFilters();
 }
 function shareAd(a){
-  const txt='شوف الإعلان ده في دليلك 👀🔥\n'+a.name+(a.pa?'\n💰 السعر: '+a.pa+' ج':'')+'\n'+location.href;
+  const txt='شوف الإعلان ده في دليلك 👀\n'+a.name+(a.pa?'\n💰 السعر: '+a.pa+' ج':'')+'\n'+location.href;
   if(navigator.share){navigator.share({title:a.name,text:txt}).catch(()=>{});}
   else window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank');
 }
@@ -884,17 +1031,19 @@ function openDetail(id){
   const a=ADS.find(x=>x.id===id);if(!a)return;
   addView(id);
   const code='DLK-'+(1000+id);
+  const rated=hasRated(id);
+  const rateStars=[1,2,3,4,5].map(n=>`<button class="rstar" data-n="${n}" title="${n} نجوم">★</button>`).join('');
   $('#detBody').innerHTML=`
     <div class="mhead"><h3>${esc(a.name)}</h3><button class="mx" data-close>✕</button></div>
     <img class="dimg" src="${esc(a.img)||DEF_IMG}" onerror="this.src='${DEF_IMG}'">
     <div class="dbadges">
-      <span>${esc(a.cat)||'📌 عام'}</span>
-      ${a.isVip?`<span class="g">${a.isPlat?'💠 بلاتيني':'👑 VIP'}</span>`:''}
+      <span class="catlink" data-act="cat" data-cat="${esc(a.cat)}">${esc(a.cat)||'📌 عام'}</span>
+      ${a.isPlat?`<span class="p"><span class="dia"></span> بلاتيني</span>`:(a.isVip?'<span class="g">👑 VIP</span>':'')}
       ${/نعم|yes/i.test(a.ver)?'<span class="v">✔️ موثوق</span>':''}
       ${a.daysLeft!==null?`<span>⏳ باقي ${a.daysLeft} يوم</span>`:''}
       <span>👁️ ${getViews(id)} مشاهدة</span>
     </div>
-    ${a.rateNum?`<div class="stars" style="font-size:1rem;margin-bottom:6px">${stars(a.rateNum)} <small style="color:var(--mut)">(${a.rateNum})</small></div>`:''}
+    ${a.rateCount?`<div class="stars" style="font-size:1rem;margin-bottom:6px">${stars(a.rateAvg)} <small style="color:var(--mut)">(${a.rateAvg.toFixed(1)} • ${a.rateCount} تقييم)</small></div>`:''}
     ${a.desc?`<p style="font-weight:700;font-size:.9rem;color:var(--mut);margin-bottom:10px">${esc(a.desc)}</p>`:''}
     ${a.pa?`<div class="price"><span class="now">${esc(a.pa)} ج</span>${a.pb?`<span class="old">${esc(a.pb)} ج</span>`:''}</div>`:''}
     <div class="drow"><b>📍 الموقع</b><span>${esc(a.city||'مصر')}${a.area?' — '+esc(a.area):''}</span></div>
@@ -903,7 +1052,11 @@ function openDetail(id){
     ${a.del?`<div class="drow"><b>🚚 التوصيل</b><span>${esc(a.del)}</span></div>`:''}
     ${a.owner?`<div class="drow"><b>👤 المعلن</b><span>${esc(a.owner)}</span></div>`:''}
     ${a.start?`<div class="drow"><b>📅 مدة العرض</b><span>${esc(a.start)} ← ${esc(a.end)}</span></div>`:''}
-    ${a.code?`<div class="codebox"><span style="font-weight:800;font-size:.8rem">🎟️ كود الخصم:</span><code>${esc(a.code)}</code><button class="hbtn" onclick="copyTxt('${esc(a.code)}','تم نسخ الكود 🎟️')">📋 نسخ</button></div>`:''}
+    ${a.code?`<div class="codebox"><span style="font-weight:800;font-size:.8rem">🎟️ كود الخصم:</span><code>${esc(a.code)}</code><button class="hbtn" onclick="copyTxt('${esc(a.code)}','تم نسخ الكود 🎟️')"> نسخ</button></div>`:''}
+    <div class="ratebox ${rated?'done':''}" id="rateBox" data-id="${id}" data-name="${esc(a.name)}">
+      <span class="lbl">${rated?'✅ شكرًا.. تم تسجيل تقييمك':'⭐ قيّم المكان:'}</span>
+      ${rated?'':rateStars}
+    </div>
     <div class="dacts">
       <a class="da-wa" href="${waLink(a.wa,'السلام عليكم، شفت إعلانكم في دليلك 👀\n📌 '+a.name)}" target="_blank">📱 واتساب</a>
       ${a.phone?`<a class="da-tel" href="tel:${esc(a.phone)}">📞 اتصال</a>`:`<a class="da-tel" href="${waLink(a.wa,'السلام عليكم')}" target="_blank">💬 تواصل</a>`}
@@ -913,12 +1066,28 @@ function openDetail(id){
     <div class="dfoot">
       <button onclick="shareAd(ADS.find(x=>x.id===${id}))">📤 مشاركة</button>
       <button onclick="reportAd('${esc(a.name)}','${code}')">🚩 إبلاغ</button>
-      <button onclick="rateAd('${esc(a.name)}')">⭐ قيّم المكان</button>
     </div>`;
+  /* تفاعل نجوم التقييم (hover + click) */
+  const rb=$('#rateBox');
+  if(rb&&!rated){
+    const starsEls=[...rb.querySelectorAll('.rstar')];
+    starsEls.forEach(s=>{
+      s.onmouseenter=()=>starsEls.forEach(x=>x.classList.toggle('hover',+x.dataset.n<=+s.dataset.n));
+      s.onmouseleave=()=>starsEls.forEach(x=>x.classList.remove('hover'));
+      s.onclick=()=>submitRating(+s.dataset.n,rb.dataset.id,rb.dataset.name);
+    });
+  }
   openModal('#detModal');
 }
+function submitRating(n,id,name){
+  if(hasRated(id)){toast('تم تقييمك من قبل ✅');return;}
+  setRated(id,n);
+  window.open(waLink(ADMIN_WA,'⭐ تقييم جديد في دليلك:\n📌 '+name+'\n⭐ التقييم: '+n+' نجوم\n(من زائر الموقع)'),'_blank');
+  toast('شكرًا لتقييمك ⭐ تم إرساله للإدارة');
+  /* تحديث شكل الصندوق فورًا */
+  const rb=$('#rateBox');if(rb){rb.classList.add('done');rb.querySelector('.lbl').textContent='✅ شكرًا.. تم تسجيل تقييمك';rb.querySelectorAll('.rstar').forEach(x=>x.remove());}
+}
 function reportAd(name,code){window.open(waLink(ADMIN_WA,'🚩 بلاغ عن إعلان في دليلك:\n📌 '+name+'\n🔖 الكود: '+code+'\nالسبب: '),'_blank');}
-function rateAd(name){window.open(waLink(ADMIN_WA,'⭐ عايز أقيّم إعلان: '+name+'\nتقييمي: '),'_blank');}
 function renewAd(){window.open(waLink(ADMIN_WA,'السلام عليكم، عايز أجدد إعلاني في دليلك 🔄\nاسم النشاط / كود الإعلان: '),'_blank');}
 
 /* ================= مودالات عامة ================= */
@@ -928,6 +1097,9 @@ document.addEventListener('click',e=>{if(e.target.closest('[data-close]'))closeM
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModals();});
 $('#termsLink').onclick=e=>{e.preventDefault();closeModals();openModal('#termsModal');};
 $('#termsLink2').onclick=e=>{e.preventDefault();openModal('#termsModal');};
+
+/* ================= أكورديون الشحن ================= */
+$('#chargeHead').onclick=()=>$('#charge').classList.toggle('open');
 
 /* ================= فورم أضف إعلانك ================= */
 let capAns=0;
@@ -969,13 +1141,12 @@ function buildLists(){
   $('#adCat').innerHTML='<option value="">— اختر القسم —</option>'+CATS.map(c=>`<option>${c}</option>`).join('');
   $('#adCity').innerHTML='<option value="">— اختر المحافظة —</option>'+GOVS.map(g=>`<option>${g}</option>`).join('');
   $('#fCity').innerHTML='<option value="">🌍 جميع المحافظات</option>'+GOVS.map(g=>`<option>${g}</option>`).join('');
-  $('#areasList').innerHTML=AREAS.map(a=>`<option value="${a}">`).join('');
   $('#catsRow').innerHTML=`<button class="cat" data-cat="">🌍 الكل</button>`+CATS.map(c=>`<button class="cat" data-cat="${esc(c)}">${esc(c)}</button>`).join('');
   $('#drawerCats').innerHTML=CATS.map(c=>`<a class="dlink" href="#adsGrid" data-cat="${esc(c)}" data-close>${esc(c)}</a>`).join('');
 }
 document.addEventListener('click',e=>{
   const c=e.target.closest('.cat,[data-cat].dlink');
-  if(c){state.cat=c.dataset.cat;$$('.cat').forEach(x=>x.classList.toggle('on',x.dataset.cat===state.cat));applyFilters();}
+  if(c&&!c.classList.contains('chip')){filterByCat(c.dataset.cat);}
 });
 $$('.qp').forEach(p=>p.onclick=()=>{
   state.quick=p.dataset.quick;
@@ -984,17 +1155,26 @@ $$('.qp').forEach(p=>p.onclick=()=>{
   if(state.quick==='fav'&&!FAVS.size)toast('لسه مفيش حاجة في المفضلة.. دوس 🤍 على أي إعلان ❤️');
 });
 $('#q').addEventListener('input',e=>{state.q=e.target.value;applyFilters();});
-$('#fCity').onchange=e=>{state.city=e.target.value;applyFilters();};
-$('#fArea').addEventListener('input',e=>{state.area=e.target.value;applyFilters();});
+$('#fCity').onchange=e=>{state.city=e.target.value;fillAreasFor($('#fArea'),e.target.value);state.area='';applyFilters();};
+$('#fArea').onchange=e=>{state.area=e.target.value;applyFilters();};
 $('#fSort').onchange=e=>{state.sort=e.target.value;applyFilters();};
+/* cascading في الفورم */
+$('#adCity').onchange=e=>{fillAreasFor($('#adArea'),e.target.value);};
 
 /* ================= القائمة الجانبية ================= */
 $('#menuBtn').onclick=()=>$('#drawer').classList.add('open');
 
+/* ================= زرار التحديث العائم ================= */
+$('#refreshBtn').onclick=async function(){
+  this.classList.add('spin');toast('🔄 جاري تحديث الإعلانات…');
+  try{await loadAds();toast('تم التحديث ✅');}catch(e){toast('تعذر التحديث ⚠️');}
+  setTimeout(()=>this.classList.remove('spin'),700);
+};
+
 /* ================= الوضع الليلي ================= */
 const savedTheme=localStorage.getItem('dlk_theme');
 if(savedTheme==='dark'||(!savedTheme&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.dataset.theme='dark';
-function syncThemeBtn(){$('#themeBtn').textContent=document.documentElement.dataset.theme==='dark'?'☀️':'🌙';}
+function syncThemeBtn(){$('#themeBtn').textContent=document.documentElement.dataset.theme==='dark'?'☀️':'';}
 $('#themeBtn').onclick=()=>{
   const dark=document.documentElement.dataset.theme==='dark';
   document.documentElement.dataset.theme=dark?'':'dark';
@@ -1013,9 +1193,12 @@ $$('.rv').forEach(el=>io.observe(el));
 /* ================= تشغيل ================= */
 $('#adsGrid').innerHTML=LOADER_HTML;
 $('#vipGrid').innerHTML=LOADER_HTML;
+$('#storyRow').innerHTML=LOADER_HTML;
 $('#yr').textContent=new Date().getFullYear();
 buildLists();
-loadAds();
+loadAreas();      /* المناطق (cascading) */
+loadStories();    /* قصص النجاح من تبويبها */
+loadAds();        /* الإعلانات + بعد ما تخلص تبني الباقي */
 </script>
 </body>
 </html>
