@@ -52,16 +52,15 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand);b
 .wrap{max-width:1180px;margin:0 auto;padding:0 16px}
 .hl{background:linear-gradient(transparent 62%, color-mix(in srgb,var(--gold) 55%,transparent) 62%);padding:0 4px}
 
-/* ===== شريط الأخبار ===== */
+/* ===== الشريط + الهيدر (ثابتين مع بعض فوق) ===== */
+.topbar{position:sticky;top:0;z-index:50}
 .ticker{background:linear-gradient(90deg,var(--brand2),var(--brand));color:#fff;overflow:hidden;direction:rtl;border-bottom:3px solid var(--gold);cursor:pointer}
 .ticker-track{display:inline-flex;width:max-content;animation:tick 22s linear infinite;padding:7px 0}
 .ticker.paused .ticker-track{animation-play-state:paused}
 .ticker span{white-space:nowrap;padding:0 24px;font-weight:700;font-size:.9rem;border-inline-start:1px solid rgba(255,255,255,.28);unicode-bidi:isolate;direction:rtl}
 .ticker b{color:var(--gold2)}
 @keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-
-/* ===== الهيدر ===== */
-header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1.5px solid var(--line)}
+header{background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1.5px solid var(--line)}
 .hbar{display:flex;align-items:center;gap:12px;padding:10px 0}
 .logo{display:flex;align-items:center;gap:9px;text-decoration:none;color:var(--ink)}
 .logo img{width:42px;height:42px;border-radius:12px;border:2px solid var(--gold)}
@@ -153,7 +152,8 @@ header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 8
 .chip{position:absolute;top:9px;inset-inline-start:9px;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(4px);font-size:.7rem;font-weight:800;padding:.2rem .65rem;border-radius:99px;border:1px solid var(--line);cursor:pointer;transition:.2s}
 .chip:hover{border-color:var(--brand);color:var(--brand);transform:scale(1.05)}
 .verif{position:absolute;top:9px;inset-inline-end:9px;background:var(--brand);color:#fff;font-size:.68rem;font-weight:800;padding:.2rem .6rem;border-radius:99px}
-.ribbon{position:absolute;bottom:34px;inset-inline-start:-6px;font-family:'Lalezar';font-size:.82rem;padding:.1rem .9rem;border-radius:0 8px 8px 0;box-shadow:0 4px 10px rgba(0,0,0,.2);display:inline-flex;align-items:center;gap:5px}
+/* شارة الباقة: على الشمال في الجزء الفاضي (badge مدور) */
+.ribbon{position:absolute;top:184px;inset-inline-end:14px;inset-inline-start:auto;bottom:auto;font-family:'Lalezar';font-size:.76rem;padding:.2rem .8rem;border-radius:99px;box-shadow:0 4px 12px rgba(0,0,0,.22);display:inline-flex;align-items:center;gap:5px;z-index:3;letter-spacing:.3px}
 .ribbon.bronze{background:linear-gradient(135deg,var(--bronze),var(--bronze2));color:#fff}
 .ribbon.gold{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#3a2a00}
 .leftbar{position:absolute;bottom:0;left:0;right:0;height:26px;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(4px);display:flex;align-items:center;gap:8px;padding:0 10px;font-size:.68rem;font-weight:800}
@@ -256,8 +256,10 @@ header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 8
 .plan.hot{border:2.5px solid transparent;background:linear-gradient(160deg,var(--vipbg1),var(--vipbg2)) padding-box,linear-gradient(135deg,var(--gold2),var(--gold)) border-box;transform:scale(1.04);box-shadow:0 10px 28px color-mix(in srgb,var(--gold) 32%,transparent)}
 .plan.hot .pbtn{background:linear-gradient(135deg,#b8860b,var(--gold))}
 .plan.hot .pp{color:#b8860b}
-.plan.royal{border:2.5px solid transparent;background:linear-gradient(160deg,var(--platbg1),var(--platbg2)) padding-box,linear-gradient(135deg,var(--dia1),var(--dia2),var(--dia3),var(--dia4)) border-box;box-shadow:0 10px 28px color-mix(in srgb,var(--dia2) 36%,transparent);position:relative;overflow:hidden}
-.plan.royal::before{content:"";position:absolute;top:0;inset-inline-start:-60%;width:45%;height:100%;background:linear-gradient(110deg,transparent,color-mix(in srgb,var(--dia1) 55%,transparent),transparent);transform:skewX(-18deg);animation:platshine 5s ease-in-out infinite;pointer-events:none}
+.plan.royal{border:2.5px solid transparent;background:linear-gradient(160deg,var(--platbg1),var(--platbg2)) padding-box,linear-gradient(135deg,var(--dia1),var(--dia2),var(--dia3),var(--dia4)) border-box;box-shadow:0 10px 28px color-mix(in srgb,var(--dia2) 36%,transparent);overflow:visible}
+.plan.royal .glow{position:absolute;inset:0;overflow:hidden;border-radius:16px;pointer-events:none;z-index:0}
+.plan.royal .glow::before{content:"";position:absolute;top:0;inset-inline-start:-60%;width:45%;height:100%;background:linear-gradient(110deg,transparent,color-mix(in srgb,var(--dia1) 55%,transparent),transparent);transform:skewX(-18deg);animation:platshine 5s ease-in-out infinite}
+.plan.royal h3,.plan.royal .pp,.plan.royal ul,.plan.royal .pbtn,.plan.royal .btag{position:relative;z-index:1}
 .plan.royal .pp{color:var(--dia4)}
 .plan .btag{position:absolute;top:-13px;inset-inline-start:50%;transform:translateX(50%);background:var(--brand);color:#fff;font-size:.72rem;font-weight:800;padding:.2rem .9rem;border-radius:99px;white-space:nowrap}
 .plan.bronze .btag{background:linear-gradient(135deg,var(--bronze),var(--bronze2))}
@@ -280,12 +282,19 @@ table.cmp tbody tr:last-child td{border-bottom:none}
 
 /* ===== قصص النجاح ===== */
 .story{display:flex;gap:14px;overflow-x:auto;padding:6px 2px 14px;scroll-snap-type:x mandatory;scrollbar-width:thin}
-.story .sc{flex:0 0 min(330px,85vw);scroll-snap-align:start;background:var(--card);border:1.5px solid var(--line);border-radius:15px;padding:20px;position:relative}
+.story .sc{flex:0 0 min(330px,85vw);scroll-snap-align:start;background:var(--card);border:1.5px solid var(--line);border-radius:15px;padding:20px;position:relative;cursor:default}
 .sc::before{content:"”";font-family:'Lalezar';font-size:4rem;color:var(--gold);position:absolute;top:-6px;inset-inline-end:14px;opacity:.55}
 .sc p{font-size:.88rem;font-weight:700;color:var(--mut);margin-bottom:12px}
 .sc b{color:var(--brand);font-size:.85rem}
 .sc .stars{display:block;margin-top:3px}
-.story-empty{grid-column:1/-1;text-align:center;color:var(--mut);font-weight:800;padding:18px;background:var(--card);border:1.5px dashed var(--line);border-radius:14px}
+/* كارت "أضف قصتك" في الآخر */
+.sc-add{cursor:pointer;background:linear-gradient(160deg,color-mix(in srgb,var(--brand) 9%,var(--card)),color-mix(in srgb,var(--gold) 14%,var(--card)));border:2px dashed var(--gold);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:7px;transition:.25s;min-height:190px}
+.sc-add::before{display:none}
+.sc-add:hover{transform:translateY(-4px);border-style:solid;box-shadow:0 12px 28px color-mix(in srgb,var(--gold) 32%,transparent)}
+.sc-add .add-ic{font-size:2.5rem;line-height:1}
+.sc-add b{font-family:'Lalezar';font-size:1.35rem;color:var(--brand)}
+.sc-add p{font-size:.82rem;color:var(--mut);margin:0;font-weight:700}
+.sc-add .add-btn{margin-top:6px;background:linear-gradient(135deg,var(--gold2),var(--gold));color:#3a2a00;font-weight:800;font-size:.8rem;padding:.45rem 1.2rem;border-radius:99px;box-shadow:0 4px 12px color-mix(in srgb,var(--gold) 40%,transparent)}
 
 /* ===== الإحصائيات ===== */
 .statbar{background:linear-gradient(135deg,var(--brand2),var(--brand));border-radius:20px;padding:24px 18px;color:#fff;margin:44px 0 0;border:2px solid var(--gold);box-shadow:var(--sh)}
@@ -412,24 +421,24 @@ footer p{font-size:.82rem;font-weight:700;opacity:.85}
 </head>
 <body>
 
-<!-- شريط الأخبار (من تبويب "شريط الأخبار") -->
-<div class="ticker" id="ticker" aria-hidden="true"><div class="ticker-track" id="tickerTrack"><span>🔥 جاري تحميل أحدث العروض…</span></div></div>
-
-<!-- الهيدر -->
-<header>
-  <div class="wrap hbar">
-    <a class="logo" href="#top">
-      <img src="https://i.ibb.co/xt28Xnds/file-00000000917c71f482c8eff889977cd8.png" alt="دليلك">
-      <span><b>دليلك <small>DALEELAK</small></b></span>
-    </a>
-    <nav class="hnav">
-      <button class="hbtn" id="themeBtn" title="الوضع الليلي">🌙</button>
-      <a class="hbtn" href="#plans"><span>💎</span><span class="txt">الباقات</span></a>
-      <button class="hbtn gold" id="addBtnTop">🚀 <span class="txt">أضف إعلانك</span></button>
-      <button class="hbtn" id="menuBtn" title="القائمة">☰</button>
-    </nav>
-  </div>
-</header>
+<!-- الشريط + الهيدر (ثابتين مع بعض) -->
+<div class="topbar">
+  <div class="ticker" id="ticker" aria-hidden="true"><div class="ticker-track" id="tickerTrack"><span>🔥 جاري تحميل أحدث العروض…</span></div></div>
+  <header>
+    <div class="wrap hbar">
+      <a class="logo" href="#top">
+        <img src="https://i.ibb.co/xt28Xnds/file-00000000917c71f482c8eff889977cd8.png" alt="دليلك">
+        <span><b>دليلك <small>DALEELAK</small></b></span>
+      </a>
+      <nav class="hnav">
+        <button class="hbtn" id="themeBtn" title="الوضع الليلي">🌙</button>
+        <a class="hbtn" href="#plans"><span>💎</span><span class="txt">الباقات</span></a>
+        <button class="hbtn gold" id="addBtnTop">🚀 <span class="txt">أضف إعلانك</span></button>
+        <button class="hbtn" id="menuBtn" title="القائمة">☰</button>
+      </nav>
+    </div>
+  </header>
+</div>
 
 <!-- قائمة جانبية -->
 <div class="drawer" id="drawer">
@@ -535,14 +544,14 @@ footer p{font-size:.82rem;font-weight:700;opacity:.85}
   <div class="grid" id="bronzeGrid"></div>
   <div id="bronzeMore" style="text-align:center"></div>
 
-  <!-- قسم الفلترة بالباقة (يظهر عند "اعرض الكل") -->
+  <!-- قسم الفلترة بالباقة -->
   <div class="sec-h" id="planHead" style="display:none"><h2 id="planTitle"></h2><span class="cnt" id="planCnt"></span><button class="allbtn" data-plan="">↺ كل الأقسام</button></div>
   <div class="grid" id="planGrid" style="display:none"></div>
   <div id="planMore" style="text-align:center;display:none"></div>
 
   <div class="empty" id="emptyBox" style="display:none"><span>🔍</span>مفيش إعلانات مطابقة لبحثك<br><button class="hbtn" style="margin-top:12px" onclick="resetFilters()">↺ امسح الفلاتر وجرب تاني</button></div>
 
-  <!-- قسم الشحن (أكورديون) -->
+  <!-- قسم الشحن -->
   <section class="charge rv" id="charge">
     <div class="charge-head" id="chargeHead">
       <div class="htxt">
@@ -599,6 +608,7 @@ footer p{font-size:.82rem;font-weight:700;opacity:.85}
       <button class="pbtn" onclick="openAdd('VIP')">اطلب الذهبي دلوقتي</button>
     </div>
     <div class="plan royal">
+      <div class="glow"></div>
       <span class="btag"><span class="dia"></span> الأفخم على الإطلاق</span>
       <h3><span class="dia"></span> ماسي DIAMOND</h3>
       <div class="pp">20 ج <small>/ يوميًا</small></div>
@@ -809,11 +819,10 @@ const CATS = ['🛒 سوبر ماركت وبقالة','💊 صيدليات وم�
 const GOVS = ['القاهرة','الجيزة','القليوبية','الإسكندرية','البحيرة','مطروح','الغربية','المنوفية','الدقهلية','الشرقية','كفر الشيخ','دمياط','بورسعيد','الإسماعيلية','السويس','الفيوم','بني سويف','المنيا','أسيوط','سوهاج','قنا','الأقصر','أسوان','البحر الأحمر','الوادي الجديد','شمال سيناء','جنوب سيناء'];
 const LOADER_HTML = `<div class="loader"><img src="${LOGO}" alt="دليلك"><b>جاري تحميل الإعلانات<span class="dots"></span></b><span>دليلك بيجهّزلك أفضل العروض 🔥</span></div>`;
 const TICKER_FALLBACK = ['🔥 أهلاً بيك في دليلك — كل العروض والأماكن في مكان واحد','📞 للتواصل والشحن الفوري: 01288023436','🎮 GAME BASHA الراعي الرسمي — اشحن دلوقتي','💎 أعلن معانا من 5 جنيه في اليوم'];
-/* بيانات الباقات (للفلترة + ملاحظة الفورم) */
 const PLAN_META = {
-  bronze:{name:'برونزي BRONZE', icon:'🥉', price:5, limit:'3 إعلانات'},
-  gold:{name:'ذهبي VIP', icon:'👑', price:10, limit:'10 إعلانات'},
-  plat:{name:'ماسي DIAMOND', icon:'💎', price:20, limit:'عدد غير محدود من الإعلانات'}
+  bronze:{name:'برونزي BRONZE', icon:'🥉'},
+  gold:{name:'ذهبي VIP', icon:'👑'},
+  plat:{name:'ماسي DIAMOND', icon:'💎'}
 };
 const PLAN_NOTE = {
   'عادي':'🥉 باقة برونزي BRONZE (5 ج/اليوم) تتيح لك عرض حتى 3 إعلانات في نفس الوقت طوال فترة اشتراكك.',
@@ -837,6 +846,8 @@ function stars(r){r=parseFloat(r)||0;let s='';for(let i=1;i<=5;i++)s+=i<=Math.ro
 function parseRatings(s){const nums=String(s||'').trim().split(/[\s,]+/).map(Number).filter(n=>!isNaN(n)&&n>=0&&n<=5);if(!nums.length)return{avg:0,count:0};const avg=nums.reduce((a,b)=>a+b,0)/nums.length;return{avg,count:nums.length};}
 function getViews(id){try{return JSON.parse(localStorage.getItem('dlk_views')||'{}')[id]||0}catch(e){return 0}}
 function addView(id){try{const v=JSON.parse(localStorage.getItem('dlk_views')||'{}');v[id]=(v[id]||0)+1;localStorage.setItem('dlk_views',JSON.stringify(v))}catch(e){}}
+/* فلتر متسامح: يعرض كل حاجة إلا "مخفي/موقوف" صراحة */
+function isVisible(status){return !/مخفي|موقوف|hidden|stopped/i.test(String(status||''));}
 
 /* ================= الحالة ================= */
 let ADS=[], STORIES=[], AREAS_MAP={}, TICKER_ITEMS=[];
@@ -844,9 +855,9 @@ let VISIBLE=PAGE_SIZE;
 let FAVS=new Set();try{FAVS=new Set(JSON.parse(localStorage.getItem('dlk_favs')||'[]'))}catch(e){}
 const state={q:'',quick:'all',cat:'',city:'',area:'',sort:'rand',plan:''};
 
-/* ================= جلب أي تبويب بالاسم ================= */
+/* ================= جلب أي تبويب (مع كسر كاش جوجل) ================= */
 async function fetchSheet(name){
-  const url='https://docs.google.com/spreadsheets/d/'+SHEET_ID+'/gviz/tq?tqx=out:json'+(name?'&sheet='+encodeURIComponent(name):'');
+  const url='https://docs.google.com/spreadsheets/d/'+SHEET_ID+'/gviz/tq?tqx=out:json'+(name?'&sheet='+encodeURIComponent(name):'')+'&t='+Date.now();
   const r=await fetch(url);const t=await r.text();
   return JSON.parse(t.substring(t.indexOf('(')+1,t.lastIndexOf(')')));
 }
@@ -869,7 +880,7 @@ async function loadTicker(){
     TICKER_ITEMS=j.table.rows.map(row=>{
       const g=k=>{if(I[k]<0)return '';const c=row.c[I[k]];return c?String(c.f??c.v??'').trim():''};
       return{txt:g('txt'),status:g('status')};
-    }).filter(x=>x.txt && /شغال|نشط|فعال|yes|^$/i.test(x.status||'شغال')).map(x=>x.txt);
+    }).filter(x=>x.txt && isVisible(x.status)).map(x=>x.txt);
   }catch(e){TICKER_ITEMS=[];}
   buildTicker();
 }
@@ -880,21 +891,17 @@ function buildTicker(){
   track.innerHTML=html+html;
   track.style.animationDuration=Math.max(16,items.length*3.5)+'s';
 }
-/* الشريط: اضغط = إيقاف + استئناف تلقائي بعد 15 ثانية */
 $('#ticker').addEventListener('click',function(){
-  if(this.classList.contains('paused')){ resumeTicker(); }
-  else{ pauseTicker(); }
+  if(this.classList.contains('paused'))resumeTicker(); else pauseTicker();
 });
 function pauseTicker(){
   $('#ticker').classList.add('paused');
   toast('⏸️ الشريط متوقف — هيشتغل لوحده بعد 15 ثانية');
-  clearTimeout(tickerResume);
-  tickerResume=setTimeout(resumeTicker,15000);
+  clearTimeout(tickerResume);tickerResume=setTimeout(resumeTicker,15000);
 }
 function resumeTicker(){
   $('#ticker').classList.remove('paused');
-  clearTimeout(tickerResume);
-  toast('▶️ استئناف الشريط');
+  clearTimeout(tickerResume);toast('▶️ استئناف الشريط');
 }
 
 /* ================= جلب الإعلانات ================= */
@@ -953,7 +960,6 @@ async function loadAds(){
     }).filter(a=>a.name && /شغال|نشط|فعال/i.test(a.status) && (a.daysLeft===null||a.daysLeft>=0));
     afterLoad();
   }catch(e){
-    $('#adsGrid')&&($('#adsGrid').innerHTML='');
     $('#diamondGrid').innerHTML='';$('#goldGrid').innerHTML='';$('#bronzeGrid').innerHTML='';$('#planGrid').innerHTML='';
     $('#emptyBox').style.display='block';
     $('#emptyBox').innerHTML=`<img src="${LOGO}" alt=""><span>⚠️</span>تعذر تحميل الإعلانات من الشيت<br><small style="font-weight:700">تأكد إن الشيت مشارك بصيغة "أي شخص لديه الرابط → مشاهد"</small><br><button class="hbtn" style="margin-top:12px" onclick="location.reload()">🔄 إعادة المحاولة</button>`;
@@ -976,15 +982,17 @@ async function loadStories(){
     STORIES=j.table.rows.map(row=>{
       const g=k=>{if(I[k]<0)return '';const c=row.c[I[k]];return c?String(c.f??c.v??'').trim():''};
       return{name:g('name'),gov:g('gov'),text:g('text'),rate:parseFloat(g('rate'))||0,img:g('img'),status:g('status')};
-    }).filter(s=>s.text && /شغال|نشط|فعال|yes|^$/i.test(s.status||'شغال'));
+    }).filter(s=>s.text && isVisible(s.status));
     renderStories();
   }catch(e){renderStories();}
 }
 function renderStories(){
   const row=$('#storyRow');
-  if(!STORIES.length){row.innerHTML='<div class="story-empty">🗣️ كن أول من يشارك قصته مع دليلك — تواصل معنا بعد تجربتك!</div>';return;}
-  row.innerHTML=STORIES.map(s=>`<div class="sc"><p>${esc(s.text)}</p><b>${esc(s.name)}${s.gov?' — '+esc(s.gov):''}</b><span class="stars">${stars(s.rate||5)}</span></div>`).join('');
+  const cards=STORIES.map(s=>`<div class="sc"><p>${esc(s.text)}</p><b>${esc(s.name)}${s.gov?' — '+esc(s.gov):''}</b><span class="stars">${stars(s.rate||5)}</span></div>`).join('');
+  const add=`<div class="sc sc-add" onclick="addStoryWA()" role="button"><span class="add-ic">✍️</span><b>أضف قصتك معنا</b><p>جرّبت دليلك؟ شاركنا تجربتك وهننشرها هنا لكل الزوار 🗣️</p><span class="add-btn">اكتب قصتك الآن 🚀</span></div>`;
+  row.innerHTML=cards+add;
 }
+function addStoryWA(){window.open(waLink(ADMIN_WA,'⭐ مرحبًا، عايز أضيف قصتي مع دليلك 🗣️\n👤 اسمي / نشاطي: \n✍️ قصتي: '),'_blank');}
 
 /* ================= المناطق ================= */
 async function loadAreas(){
@@ -1073,7 +1081,7 @@ function filtered(){
     case 'priceAsc':list.sort((a,b)=>a.priceNum-b.priceNum);break;
     case 'priceDesc':list.sort((a,b)=>b.priceNum-a.priceNum);break;
     case 'rating':list.sort((a,b)=>b.rateAvg-a.rateAvg);break;
-    default:list.sort((a,b)=>(planRank(a)-planRank(b))||(a._rnd-b._rnd)); /* مرجّح بالباقة + عشوائي جوه الباقة */
+    default:list.sort((a,b)=>(planRank(a)-planRank(b))||(a._rnd-b._rnd));
   }
   return list;
 }
@@ -1117,7 +1125,6 @@ function applyFilters(reset){
   if(reset)VISIBLE=PAGE_SIZE;
   const list=filtered();
   const hasPlan=!!state.plan;
-  /* إظهار/إخفاء الأقسام */
   $('#diamondHead').style.display=$('#diamondGrid').style.display=hasPlan?'none':'';
   $('#goldHead').style.display=$('#goldGrid').style.display=hasPlan?'none':'';
   $('#bronzeHead').style.display=$('#bronzeGrid').style.display=$('#bronzeMore').style.display=hasPlan?'none':'';
@@ -1213,7 +1220,6 @@ function openDetail(id){
   const planBadge=a.isPlat?`<span class="p"><span class="dia"></span> ماسي DIAMOND</span>`
     :a.isGold?`<span class="g">👑 ذهبي VIP</span>`
     :`<span class="brz">🥉 برونزي BRONZE</span>`;
-  /* اللوكيشن يظهر للذهبي والماسي بس */
   const locBtn=(a.loc&&a.isVip)?`<a class="da-loc" href="${esc(a.loc)}" target="_blank">🗺️ اللوكيشن</a>`:'';
   $('#detBody').innerHTML=`
     <div class="mhead"><h3>${esc(a.name)}</h3><button class="mx" data-close>✕</button></div>
@@ -1239,7 +1245,7 @@ function openDetail(id){
       <div class="rstars">${rateStars}</div>
     </div>
     <div class="dacts">
-      <a class="da-wa" href="${waLink(a.wa,'السلام عليكم، شفت إعلانكم في دليلك 👀\n📌 '+a.name)}" target="_blank">📱 واتساب</a>
+      <a class="da-wa" href="${waLink(a.wa,'السلام عليكم، شفت إعلانكم في دليلك 👀\n '+a.name)}" target="_blank">📱 واتساب</a>
       ${a.phone?`<a class="da-tel" href="tel:${esc(a.phone)}">📞 اتصال</a>`:`<a class="da-tel" href="${waLink(a.wa,'السلام عليكم')}" target="_blank">💬 تواصل</a>`}
       ${locBtn}
       ${a.fb?`<a class="da-fb" href="${esc(a.fb)}" target="_blank">📘 فيسبوك</a>`:''}
