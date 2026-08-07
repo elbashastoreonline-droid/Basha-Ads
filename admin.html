@@ -11,10 +11,10 @@
 h1,h2,h3,.disp{font-family:'Lalezar',cursive;font-weight:400}
 body{background:var(--bg);color:var(--ink);min-height:100vh;padding:16px}
 button{cursor:pointer;border:none;font-family:inherit}
-input,select{font-family:inherit;background:var(--card2);border:1.5px solid var(--line);color:var(--ink);border-radius:10px;padding:.7rem .9rem;width:100%;font-size:.95rem}
+input,select{font-family:inherit;background:var(--card2);border:1.5px solid var(--line);color:var(--ink);border-radius:10px;padding:.65rem .8rem;width:100%;font-size:.9rem}
 input:focus,select:focus{outline:none;border-color:var(--brand)}
+label{display:block;font-size:.72rem;color:var(--mut);font-weight:800;margin-bottom:4px}
 .wrap{max-width:1100px;margin:0 auto}
-/* ===== تسجيل الدخول ===== */
 #loginView{max-width:400px;margin:8vh auto;background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:28px;text-align:center}
 #loginView .logo{font-family:'Lalezar';font-size:2rem;color:var(--gold)}
 #loginView p{color:var(--mut);font-size:.82rem;font-weight:700;margin:6px 0 18px}
@@ -23,23 +23,19 @@ input:focus,select:focus{outline:none;border-color:var(--brand)}
 .btn.gold{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#3a2a00}
 .btn.google{background:var(--card2);color:var(--ink);border:1.5px solid var(--line);margin-top:8px}
 .btn:hover{filter:brightness(1.1);transform:translateY(-1px)}
-/* ===== الهيدر ===== */
 header{display:flex;align-items:center;gap:12px;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:12px 16px;margin-bottom:16px}
 header .t{font-family:'Lalezar';font-size:1.4rem;color:var(--gold)}
 header .em{color:var(--mut);font-size:.75rem;font-weight:700}
 header .out{margin-inline-start:auto;background:var(--card2);border:1.5px solid var(--line);color:var(--red);border-radius:10px;padding:.5rem .9rem;font-weight:800;font-size:.8rem}
-/* ===== الإحصائيات ===== */
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
 .st{background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:14px;text-align:center}
 .st b{font-family:'Lalezar';font-size:1.9rem;display:block;line-height:1.1}
 .st span{font-size:.75rem;font-weight:800;color:var(--mut)}
 .st.p b{color:var(--gold)}.st.h b{color:var(--dia)}.st.a b{color:var(--brand)}.st.r b{color:var(--red)}
-/* ===== الفلاتر ===== */
 .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
 .tab{background:var(--card);border:1.5px solid var(--line);color:var(--mut);border-radius:99px;padding:.5rem 1.1rem;font-weight:800;font-size:.8rem;transition:.2s}
 .tab.on{background:var(--gold);color:#3a2a00;border-color:var(--gold)}
 .filters select{width:auto;margin-inline-start:auto}
-/* ===== الطلبات ===== */
 .reqs{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
 .req{background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:16px;cursor:pointer;transition:.2s;position:relative}
 .req:hover{transform:translateY(-3px);border-color:var(--brand)}
@@ -56,7 +52,6 @@ header .out{margin-inline-start:auto;background:var(--card2);border:1.5px solid 
 .planb.gold{background:color-mix(in srgb,var(--gold) 25%,transparent);color:var(--gold)}
 .planb.plat{background:color-mix(in srgb,var(--dia) 25%,transparent);color:var(--dia)}
 .empty{grid-column:1/-1;text-align:center;color:var(--mut);font-weight:800;padding:40px;background:var(--card);border:1.5px dashed var(--line);border-radius:14px}
-/* ===== المودال ===== */
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:50;padding:16px}
 .modal.open{display:flex}
 .mp{background:var(--card);border:1.5px solid var(--line);border-radius:18px;max-width:640px;width:100%;max-height:90vh;overflow-y:auto;padding:22px}
@@ -68,11 +63,16 @@ header .out{margin-inline-start:auto;background:var(--card2);border:1.5px solid 
 .prev .pb{padding:14px}
 .prev h3{font-size:1.2rem}
 .prev .m{color:var(--mut);font-size:.78rem;font-weight:700}
-.rows{margin-bottom:14px}
+.noimg{padding:26px;text-align:center;color:var(--red);font-weight:800;font-size:.85rem;background:color-mix(in srgb,var(--red) 8%,transparent)}
+.rows{margin-bottom:12px}
 .row{display:flex;justify-content:space-between;gap:10px;padding:.5rem 0;border-bottom:1px dashed var(--line);font-size:.84rem;font-weight:700}
 .row b{color:var(--mut)}
 .row a{color:var(--dia);text-decoration:none;font-weight:800}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.editbtn{width:100%;background:var(--card2);border:1.5px dashed var(--line);color:var(--dia);border-radius:11px;padding:.7rem;font-weight:800;font-size:.88rem;margin-bottom:10px;transition:.2s}
+.editbtn:hover{border-color:var(--dia)}
 .acts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.acts.two{grid-template-columns:1fr 1fr}
 .acts button{padding:.8rem;border-radius:11px;font-weight:800;font-size:.9rem;transition:.2s}
 .acts .ok{background:var(--brand);color:#04241a}
 .acts .hd{background:color-mix(in srgb,var(--dia) 25%,transparent);color:var(--dia);border:1.5px solid var(--dia)}
@@ -82,12 +82,11 @@ header .out{margin-inline-start:auto;background:var(--card2);border:1.5px solid 
 .testbtn:hover{color:var(--gold);border-color:var(--gold)}
 .toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,80px);background:var(--ink);color:var(--bg);font-weight:800;padding:.7rem 1.4rem;border-radius:12px;transition:.3s;opacity:0;z-index:99}
 .toast.show{transform:translate(-50%,0);opacity:1}
-@media(max-width:700px){.stats{grid-template-columns:1fr 1fr}.acts{grid-template-columns:1fr}}
+@media(max-width:700px){.stats{grid-template-columns:1fr 1fr}.acts{grid-template-columns:1fr}.f2{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
-<!-- تسجيل الدخول -->
 <div id="loginView">
   <div class="logo">🛡️ دليلك — لوحة التحكم</div>
   <p>الدخول مسموح لحساب المدير فقط</p>
@@ -97,7 +96,6 @@ header .out{margin-inline-start:auto;background:var(--card2);border:1.5px solid 
   <button class="btn google" id="liGoogle">🔐 دخول بحساب جوجل</button>
 </div>
 
-<!-- اللوحة -->
 <div id="appView" class="wrap" style="display:none">
   <header>
     <span style="font-size:1.6rem">🛡️</span>
@@ -131,16 +129,20 @@ header .out{margin-inline-start:auto;background:var(--card2);border:1.5px solid 
   <div class="reqs" id="reqsBox"></div>
 </div>
 
-<!-- مودال المعاينة -->
 <div class="modal" id="reqModal">
   <div class="mp">
-    <div class="mhead"><h2>معاينة الطلب</h2><button class="mx" id="mClose">✕</button></div>
+    <div class="mhead"><h2 id="mTitle">معاينة الطلب</h2><button class="mx" id="mClose">✕</button></div>
     <div class="prev" id="prevBox"></div>
     <div class="rows" id="rowsBox"></div>
-    <div class="acts">
+    <button class="editbtn" id="btnEdit">✏️ تعديل البيانات</button>
+    <div class="acts" id="actsRow">
       <button class="ok" id="actApprove">✅ تأكيد ونشر</button>
       <button class="hd" id="actHold">⏸️ تأجيل</button>
       <button class="rj" id="actReject">❌ رفض</button>
+    </div>
+    <div class="acts two" id="saveBar" style="display:none">
+      <button class="ok" id="btnSave">💾 حفظ التعديلات</button>
+      <button class="hd" id="btnCancelEdit">إلغاء</button>
     </div>
   </div>
 </div>
@@ -152,7 +154,6 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/fireba
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
 import { getFirestore, collection, onSnapshot, query, orderBy, addDoc, updateDoc, doc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 
-/* ===== إعدادات مشروعك ===== */
 const firebaseConfig = {
   apiKey: "AIzaSyAErZex3BsKMO9cHtalN_Nhb0D7A4tFWe4",
   authDomain: "daleelak-22dc6.firebaseapp.com",
@@ -162,7 +163,6 @@ const firebaseConfig = {
   appId: "1:774332263419:web:527fc4de3d7ed6ce1e395e"
 };
 const ADMIN_EMAIL = "daleelak317@gmail.com";
-
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
@@ -170,74 +170,73 @@ const db = getFirestore(app);
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2400); }
+window.imgFail = el => { const d=document.createElement('div'); d.className='noimg'; d.textContent='⚠️ الصورة مش شغالة — كلم العميل أو عدّل اللينك من ✏️ تعديل'; el.replaceWith(d); };
 
 const PLAN = { bronze:{n:'🥉 برونزي',c:'bronze'}, gold:{n:'👑 ذهبي VIP',c:'gold'}, plat:{n:'💎 ماسي DIAMOND',c:'plat'} };
 const ST   = { pending:'معلق', hold:'مؤجل', approved:'مكتمل', rejected:'مرفوض' };
+let ALL = [], curTab='pending', curPlan='', curId=null, curReq=null, editing=false;
 
-let ALL = [], curTab = 'pending', curPlan = '', curId = null;
-
-/* ===== حارس الدخول: المدير بس ===== */
 onAuthStateChanged(auth, u => {
   if (u && u.email === ADMIN_EMAIL) {
-    $('#loginView').style.display = 'none';
-    $('#appView').style.display = '';
-    $('#adminEmail').textContent = u.email;
-    listen();
+    $('#loginView').style.display='none'; $('#appView').style.display='';
+    $('#adminEmail').textContent=u.email; listen();
   } else {
-    if (u) { signOut(auth); toast(' هذا الحساب غير مصرح له'); }
-    $('#loginView').style.display = '';
-    $('#appView').style.display = 'none';
+    if (u) signOut(auth);
+    $('#loginView').style.display=''; $('#appView').style.display='none';
   }
 });
-$('#liBtn').onclick = async () => {
-  try { await signInWithEmailAndPassword(auth, $('#liEmail').value.trim(), $('#liPass').value); }
-  catch(e){ toast('❌ بيانات الدخول مش صحيحة'); }
-};
-$('#liGoogle').onclick = async () => {
-  try { await signInWithPopup(auth, new GoogleAuthProvider()); }
-  catch(e){ toast('❌ تعذر الدخول بجوجل — تأكد إن الدومين مضاف في Authorized domains'); }
-};
+$('#liBtn').onclick = async () => { try{ await signInWithEmailAndPassword(auth,$('#liEmail').value.trim(),$('#liPass').value);}catch(e){toast('❌ بيانات الدخول مش صحيحة');} };
+$('#liGoogle').onclick = async () => { try{ await signInWithPopup(auth,new GoogleAuthProvider());}catch(e){toast('❌ تأكد إن الدومين مضاف في Authorized domains');} };
 $('#outBtn').onclick = () => signOut(auth);
 
-/* ===== استماع لحظي للطلبات ===== */
 function listen(){
   onSnapshot(query(collection(db,'requests'), orderBy('createdAt','desc')), snap => {
     ALL = snap.docs.map(d => ({ id:d.id, ...d.data() }));
     renderStats(); renderList();
+    if (curId) { curReq = ALL.find(x=>x.id===curId)||null; if(curReq && $('#reqModal').classList.contains('open')) renderView(); }
   }, err => { console.error(err); toast('⚠️ مشكلة في قراءة Firestore'); });
 }
 function renderStats(){
-  const c = s => ALL.filter(r=>r.status===s).length;
+  const c=s=>ALL.filter(r=>r.status===s).length;
   $('#cPend').textContent=c('pending'); $('#cHold').textContent=c('hold');
   $('#cApp').textContent=c('approved'); $('#cRej').textContent=c('rejected');
 }
 function renderList(){
   let list = ALL.filter(r => curTab==='all' ? true : r.status===curTab);
-  if (curPlan) list = list.filter(r => r.plan===curPlan);
+  if (curPlan) list = list.filter(r=>r.plan===curPlan);
   $('#reqsBox').innerHTML = list.length ? list.map(r => `
     <div class="req" data-id="${r.id}">
       <span class="badge ${r.status}">${ST[r.status]||r.status}</span>
-      <span class="planb ${PLAN[r.plan]?.c||'bronze'}">${PLAN[r.plan]?.n||r.plan}</span>
+      <span class="planb ${PLAN[r.plan]?.c||'bronze'}">${PLAN[r.plan]?.n||esc(r.plan)}</span>
       <h3>${esc(r.name)}</h3>
       <div class="meta">📂 ${esc(r.cat||'—')} • 📍 ${esc(r.city||'—')}<br>📱 ${esc(r.wa||'—')}<br>🕐 ${r.createdAt?.toDate ? r.createdAt.toDate().toLocaleString('ar-EG') : ''}</div>
       <div class="tot">${esc(r.total||0)} ج</div>
     </div>`).join('')
-    : `<div class="empty">مفيش طلبات في التصنيف ده حاليًا 📭</div>`;
+  : `<div class="empty">مفيش طلبات في التصنيف ده حاليًا 📭</div>`;
 }
 document.querySelectorAll('.tab').forEach(t => t.onclick = () => {
-  curTab = t.dataset.st;
-  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on', x===t));
+  curTab=t.dataset.st;
+  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===t));
   renderList();
 });
-$('#planFilter').onchange = e => { curPlan = e.target.value; renderList(); };
+$('#planFilter').onchange = e => { curPlan=e.target.value; renderList(); };
 
-/* ===== فتح المعاينة ===== */
 $('#reqsBox').addEventListener('click', e => {
-  const card = e.target.closest('.req'); if(!card) return;
-  const r = ALL.find(x=>x.id===card.dataset.id); if(!r) return;
-  curId = r.id;
-  $('#prevBox').innerHTML = `
-    <img src="${esc(r.img)||'https://i.ibb.co/M5StFDSQ/file-00000000335471f48a03a0acb621d53c.png'}" onerror="this.style.display='none'">
+  const card=e.target.closest('.req'); if(!card) return;
+  curReq = ALL.find(x=>x.id===card.dataset.id); if(!curReq) return;
+  curId = curReq.id; editing=false;
+  $('#reqModal').classList.add('open'); renderView();
+});
+$('#mClose').onclick = () => $('#reqModal').classList.remove('open');
+
+function renderView(){
+  if (editing) renderEdit(); else renderPreview();
+}
+function renderPreview(){
+  const r=curReq;
+  $('#mTitle').textContent='معاينة الطلب';
+  $('#prevBox').style.display=''; $('#prevBox').innerHTML = `
+    <img src="${esc(r.img)||''}" onerror="imgFail(this)">
     <div class="pb"><h3>${esc(r.name)}</h3><div class="m">📂 ${esc(r.cat||'—')} • 📍 ${esc(r.city||'—')}${r.area?' — '+esc(r.area):''}<br>${esc(r.desc||'')}</div></div>`;
   $('#rowsBox').innerHTML = `
     <div class="row"><b>الباقة</b><span>${PLAN[r.plan]?.n||esc(r.plan)}</span></div>
@@ -247,26 +246,61 @@ $('#reqsBox').addEventListener('click', e => {
     <div class="row"><b>لوكيشن</b><span>${r.loc?`<a href="${esc(r.loc)}" target="_blank">فتح ↗</a>`:'—'}</span></div>
     <div class="row"><b>سكرين الدفع</b><span>${r.payImg?`<a href="${esc(r.payImg)}" target="_blank">فتح ↗</a>`:'— مفيش'}</span></div>
     <div class="row"><b>كود خصم</b><span>${esc(r.code||'—')}</span></div>`;
-  $('#reqModal').classList.add('open');
-});
-$('#mClose').onclick = () => $('#reqModal').classList.remove('open');
-
-/* ===== الإجراءات ===== */
-async function setStatus(id, status){
-  await updateDoc(doc(db,'requests',id), { status });
-  $('#reqModal').classList.remove('open');
+  $('#btnEdit').style.display=''; $('#actsRow').style.display=''; $('#saveBar').style.display='none';
 }
+function renderEdit(){
+  const r=curReq;
+  $('#mTitle').textContent='✏️ تعديل الطلب';
+  $('#prevBox').style.display='none';
+  $('#rowsBox').innerHTML = `
+    <div class="f2">
+      <div><label>الاسم</label><input id="ed_name" value="${esc(r.name||'')}"></div>
+      <div><label>الباقة</label><select id="ed_plan">
+        <option value="bronze" ${r.plan==='bronze'?'selected':''}>🥉 برونزي</option>
+        <option value="gold" ${r.plan==='gold'?'selected':''}>👑 ذهبي</option>
+        <option value="plat" ${r.plan==='plat'?'selected':''}>💎 ماسي</option>
+      </select></div>
+      <div><label>لينك صورة الإعلان</label><input id="ed_img" value="${esc(r.img||'')}"></div>
+      <div><label>لينك سكرين الدفع</label><input id="ed_payImg" value="${esc(r.payImg||'')}"></div>
+      <div><label>واتساب</label><input id="ed_wa" value="${esc(r.wa||'')}"></div>
+      <div><label>اتصال</label><input id="ed_phone" value="${esc(r.phone||'')}"></div>
+      <div><label>الفئة</label><input id="ed_cat" value="${esc(r.cat||'')}"></div>
+      <div><label>المحافظة</label><input id="ed_city" value="${esc(r.city||'')}"></div>
+      <div><label>المنطقة</label><input id="ed_area" value="${esc(r.area||'')}"></div>
+      <div><label>الإجمالي (ج)</label><input id="ed_total" type="number" value="${esc(r.total||0)}"></div>
+      <div><label>المدة (يوم)</label><input id="ed_duration" type="number" value="${esc(r.duration||7)}"></div>
+      <div><label>كود خصم</label><input id="ed_code" value="${esc(r.code||'')}"></div>
+      <div><label>سعر قبل</label><input id="ed_pb" value="${esc(r.pb||'')}"></div>
+      <div><label>سعر بعد</label><input id="ed_pa" value="${esc(r.pa||'')}"></div>
+    </div>
+    <div style="margin-bottom:8px"><label>الوصف</label><input id="ed_desc" value="${esc(r.desc||'')}"></div>
+    <div style="margin-bottom:8px"><label>لوكيشن</label><input id="ed_loc" value="${esc(r.loc||'')}"></div>`;
+  $('#btnEdit').style.display='none'; $('#actsRow').style.display='none'; $('#saveBar').style.display='';
+}
+$('#btnEdit').onclick = () => { editing=true; renderView(); };
+$('#btnCancelEdit').onclick = () => { editing=false; renderView(); };
+$('#btnSave').onclick = async () => {
+  const g=id=>$('#ed_'+id).value.trim();
+  await updateDoc(doc(db,'requests',curReq.id), {
+    name:g('name'), plan:$('#ed_plan').value, img:g('img'), payImg:g('payImg'), wa:g('wa'), phone:g('phone'),
+    cat:g('cat'), city:g('city'), area:g('area'), total:+$('#ed_total').value||0, duration:+$('#ed_duration').value||7,
+    code:g('code'), pb:g('pb'), pa:g('pa'), desc:g('desc'), loc:g('loc')
+  });
+  toast('💾 تم حفظ التعديلات'); editing=false; renderView();
+};
+
+async function setStatus(id,status){ await updateDoc(doc(db,'requests',id),{status}); $('#reqModal').classList.remove('open'); }
 $('#actApprove').onclick = async () => {
-  const r = ALL.find(x=>x.id===curId); if(!r) return;
+  const r=curReq; if(!r) return;
+  const dur=+r.duration||7, now=Date.now();
   const { id, status, createdAt, ...adData } = r;
-  await addDoc(collection(db,'ads'), { ...adData, status:'شغال', approvedAt: serverTimestamp() });
-  await setStatus(curId,'approved');
-  toast('✅ تم نشر الإعلان في مجموعة ads');
+  await addDoc(collection(db,'ads'), { ...adData, status:'شغال', startAt:now, endsAt: now + dur*86400000, approvedAt: serverTimestamp() });
+  await setStatus(id,'approved');
+  toast('✅ تم النشر في مجموعة ads (لمدة '+dur+' يوم)');
 };
 $('#actHold').onclick  = () => setStatus(curId,'hold').then(()=>toast('⏸️ تم التأجيل'));
 $('#actReject').onclick= () => setStatus(curId,'rejected').then(()=>toast('❌ تم الرفض'));
 
-/* ===== طلب تجريبي ===== */
 $('#testBtn').onclick = async () => {
   await addDoc(collection(db,'requests'), {
     name:'إعلان تجريبي — كافيه النجمة', type:'مكان', plan:'gold', duration:7, total:70,
@@ -275,7 +309,7 @@ $('#testBtn').onclick = async () => {
     pb:'', pa:'', loc:'', code:'TEST10', img:'https://i.ibb.co/M5StFDSQ/file-00000000335471f48a03a0acb621d53c.png', payImg:'',
     status:'pending', createdAt: serverTimestamp()
   });
-  toast('🧪 اتضاف طلب تجريبي — شوفه في قائمة المعلق');
+  toast('🧪 اتضاف طلب تجريبي — شوفه في المعلق');
 };
 </script>
 </body>
