@@ -249,6 +249,7 @@ footer p{font-size:.82rem;font-weight:700;opacity:.85}
 .fld label{display:block;font-size:.8rem;font-weight:800;margin-bottom:4px;color:var(--mut)}
 .helpbtn{width:22px;height:22px;border-radius:50%;background:var(--brand);color:#fff;font-weight:800;font-size:.8rem;display:inline-flex;align-items:center;justify-content:center;margin-inline-start:6px}
 .helpbox{background:color-mix(in srgb,var(--brand) 8%,transparent);border:1.5px dashed var(--brand);border-radius:10px;padding:10px 12px;font-size:.75rem;font-weight:700;color:var(--mut);margin:6px 0 10px;line-height:1.9}
+.copymini{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:.15rem .6rem;font-size:.7rem;font-weight:800;color:var(--brand);margin-inline-start:6px}
 .plannote{background:color-mix(in srgb,var(--brand) 8%,transparent);border:1.5px solid color-mix(in srgb,var(--brand) 30%,transparent);border-radius:10px;padding:9px 12px;font-size:.78rem;font-weight:800;color:var(--brand);margin:8px 0;line-height:1.6}
 .paybox{background:var(--card);border:1.5px dashed var(--gold);border-radius:12px;padding:12px;margin:12px 0;font-size:.85rem;font-weight:800}
 .paybox .prow{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:.3rem 0}
@@ -444,6 +445,7 @@ footer p{font-size:.82rem;font-weight:700;opacity:.85}
   <div class="faq rv">
     <div class="qa"><button onclick="toggleQa(this)">إزاي أعلن في دليلك؟ <i>+</i></button><div class="ans">اضغط "🚀 أضف إعلانك"، املأ البيانات، حوّل قيمة الباقة، وابعت الطلب — هيوصل للإدارة للمراجعة وينشر تلقائيًا بعد التأكيد.</div></div>
     <div class="qa"><button onclick="toggleQa(this)">مش عارف أرفع الصورة؟ <i>+</i></button><div class="ans">دوس على علامة ؟ جنب خانة الصورة وهتلاقي شرح مبسط. ولو لسه صعبة، سيب الخانة فاضية وابعت الصورة واتساب للإدارة وهنرفعها ونظبطهالك. ✅</div></div>
+    <div class="qa"><button onclick="toggleQa(this)">فئتي مش موجودة؟ <i>+</i></button><div class="ans">اختار من القائمة "✏️ فئة جديدة (اكتبها)" واكتب فئتك. أول ما إعلانك يتوافق عليه، الفئة بتظهر أوتوماتيك في الموقع كله من غير تعديل كود. ✅</div></div>
     <div class="qa"><button onclick="toggleQa(this)">إيه طرق الدفع؟ <i>+</i></button><div class="ans">🟣 إنستاباي أو We Pay: <b>01550720161</b><br>🔴 فودافون كاش: <b>01288023436</b></div></div>
     <div class="qa"><button onclick="toggleQa(this)">إزاي أجدد إعلاني؟ <i>+</i></button><div class="ans"><button class="hbtn" onclick="renewAd()">📱 اطلب التجديد بالواتساب</button></div></div>
   </div>
@@ -481,9 +483,11 @@ footer p{font-size:.82rem;font-weight:700;opacity:.85}
     <div class="fld"><label>القسم / الفئة *</label><select id="adCat"></select></div>
     <div class="fld"><label>المحافظة *</label><select id="adCity"></select></div>
   </div>
+  <div class="fld" id="adCatCustomWrap" style="display:none"><label>✏️ اكتب الفئة الجديدة</label><input id="adCatCustom" placeholder="مثال: 🐾 مستلزمات حيوانات"></div>
   <div class="fld"><label>المنطقة</label><select id="adArea"><option value="">— اختر المحافظة أولاً —</option></select></div>
 
-  <div id="prodSec">
+  <!-- ✅ تم إخفاء تفاصيل المنتج افتراضيًا (تظهر فقط عند اختيار "منتج") -->
+  <div id="prodSec" style="display:none">
     <div class="fld"><label style="color:var(--gold)">💰 تفاصيل المنتج والأسعار</label></div>
     <div class="fld"><label>يُباع في (اسم المكان/المحل)</label><input id="adSold" placeholder="اسم المحل"></div>
     <div class="f2">
@@ -502,13 +506,13 @@ footer p{font-size:.82rem;font-weight:700;opacity:.85}
 
   <div class="fld"><label>إضافة لينك صورة الإعلان (اختياري) <button type="button" class="helpbtn" onclick="toggleHelp('imgHelp')">؟</button></label>
     <input id="adImg" placeholder="https://i.ibb.co/…"></div>
-  <div class="helpbox" id="imgHelp" style="display:none">📌 <b>إزاي ترفع صورتك؟</b><br>1) افتح موقع <b>ibb.co</b> واضغط Upload.<br>2) اختر صورتك وانتظر ثواني.<br>3) انسخ الـ "Direct link" والصقه في الخانة.<br>💡 <b>مش عارف؟</b> سيب الخانة فاضية تمامًا وابعت صورتك على واتساب الإدارة (<b>01288023436</b>) وهنرفعها ونظبطهالك. ✅</div>
+  <div class="helpbox" id="imgHelp" style="display:none">📌 <b>إزاي ترفع صورتك؟</b><br>1) افتح موقع <b>ibb.co</b> واضغط Upload.<br>2) اختر صورتك وانتظر ثواني.<br>3) انسخ الـ "Direct link" والصقه في الخانة.<br>💡 <b>مش عارف؟</b> سيب الخانة فاضية وابعت صورتك واتساب للإدارة على <b>01288023436</b> <button type="button" class="copymini" onclick="copyTxt('01288023436','تم نسخ رقم الإدارة 📋')">📋 نسخ</button> وهنرفعها ونظبطهالك. ✅</div>
 
   <div class="fld"><label>الرقم المحوّل منه (اللي حوّلت منه الفلوس)</label><input id="adSender" placeholder="01xxxxxxxxx — بيسهّل مراجعة التحويل"></div>
 
   <div class="fld"><label>إضافة لينك سكرين الدفع (اختياري) <button type="button" class="helpbtn" onclick="toggleHelp('payHelp')">؟</button></label>
     <input id="adPayImg" placeholder="https://i.ibb.co/…"></div>
-  <div class="helpbox" id="payHelp" style="display:none">📌 بعد ما تحوّل، صوّر رسالة التحويل (سكرين شوت)، ارفعها على <b>ibb.co</b> زي صورة الإعلان بالظبط والصق اللينك هنا. ولو مش عارف، ابعت السكرين واتساب للإدارة مباشرة. ✅</div>
+  <div class="helpbox" id="payHelp" style="display:none">📌 بعد ما تحوّل، صوّر رسالة التحويل (سكرين شوت)، ارفعها على <b>ibb.co</b> زي صورة الإعلان بالظبط والصق اللينك هنا. ولو مش عارف، ابعت السكرين واتساب للإدارة على <b>01288023436</b> <button type="button" class="copymini" onclick="copyTxt('01288023436','تم نسخ رقم الإدارة 📋')">📋 نسخ</button> مباشرة. ✅</div>
 
   <div class="fld"><label>إضافة كود خصم (إن وجد)</label><input id="adCode" placeholder="مثال: DALEELAK10"></div>
 
@@ -614,11 +618,18 @@ async function loadAds(){
     $('#emptyBox').innerHTML=`<span>⚠️</span>تعذر تحميل الإعلانات<br><small>تأكد إن الشيت مشارك "أي شخص لديه الرابط → مشاهد"</small>`;
   }
 }
-function afterLoad(){buildDeal();buildStatBar();applyFilters(true);const el=$('#lastUpd');if(el)el.textContent='🕐 آخر تحديث: '+new Date().toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'});}
+function afterLoad(){buildCats();buildDeal();buildStatBar();applyFilters(true);const el=$('#lastUpd');if(el)el.textContent='🕐 آخر تحديث: '+new Date().toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'});}
+
+/* ===== الفئات الديناميكية: الأساسية + أي فئة ظهرت في إعلان حي ===== */
+function allCats(){const set=[...CATS];ADS.forEach(a=>{if(a.cat&&!set.includes(a.cat))set.push(a.cat)});return set;}
+function buildCats(){const list=allCats();
+  $('#catsRow').innerHTML=`<button class="cat" data-cat="">🌍 الكل</button>`+list.map(c=>`<button class="cat" data-cat="${esc(c)}">${esc(c)}</button>`).join('');
+  $('#drawerCats').innerHTML=list.map(c=>`<a class="dlink" href="#adsGrid" data-cat="${esc(c)}" data-close>${esc(c)}</a>`).join('');
+  $('#adCat').innerHTML='<option value="">— اختر القسم —</option>'+list.map(c=>`<option>${esc(c)}</option>`).join('')+'<option value="__custom">✏️ فئة جديدة (اكتبها)</option>';}
 
 async function loadStories(){try{const j=await fetchSheet('قصص النجاح');const{col}=mapCols(j);const I={name:col(['اسم المعلن'],['الاسم']),gov:col(['المحافظة']),text:col(['نص القصة'],['النص']),rate:col(['النجوم']),status:col(['الحالة'])};STORIES=j.table.rows.map(r=>{const g=k=>{if(I[k]<0)return'';const c=r.c[I[k]];return c?String(c.f??c.v??'').trim():''};return{name:g('name'),gov:g('gov'),text:g('text'),rate:parseFloat(g('rate'))||0,status:g('status')};}).filter(s=>s.text&&isVisible(s.status));renderStories();}catch(e){renderStories();}}
 function renderStories(){const row=$('#storyRow');const cards=STORIES.map(s=>`<div class="sc"><p>${esc(s.text)}</p><b>${esc(s.name)}${s.gov?' — '+esc(s.gov):''}</b><span class="stars">${stars(s.rate||5)}</span></div>`).join('');row.innerHTML=cards+`<div class="sc sc-add" onclick="addStoryWA()"><span class="add-ic">✍️</span><b>أضف قصتك معنا</b><p>جرّبت دليلك؟ شاركنا تجربتك وهننشرها هنا 🗣️</p><span class="add-btn">اكتب قصتك الآن 🚀</span></div>`;}
-function addStoryWA(){window.open(waLink(ADMIN_WA,'⭐ مرحبًا، عايز أضيف قصتي مع دليلك 🗣️\n اسمي / نشاطي: \n✍️ قصتي: '),'_blank');}
+function addStoryWA(){window.open(waLink(ADMIN_WA,'⭐ مرحبًا، عايز أضيف قصتي مع دليلك 🗣️\n👤 اسمي / نشاطي: \n✍️ قصتي: '),'_blank');}
 
 async function loadAreas(){try{const j=await fetchSheet('المناطق');const cols=j.table.cols.map(c=>(c.label||'').trim());AREAS_MAP={};cols.forEach((gov,ci)=>{if(!gov)return;const list=j.table.rows.map(r=>{const c=r.c[ci];return c?String(c.f??c.v??'').trim():''}).filter(Boolean);if(list.length)AREAS_MAP[gov]=list;});}catch(e){AREAS_MAP={};}}
 function fillAreasFor(sel,gov,keep){const list=gov&&AREAS_MAP[gov]?AREAS_MAP[gov]:[];const ph=sel.id==='fArea'?'📍 جميع المناطق':'— اختر المنطقة —';sel.innerHTML=`<option value="">${ph}</option>`+list.map(a=>`<option>${esc(a)}</option>`).join('');if(keep&&list.includes(keep))sel.value=keep;}
@@ -722,20 +733,22 @@ $('#chargeHead').onclick=()=>$('#charge').classList.toggle('open');
 
 let capAns=0;
 function newCap(){const a=Math.floor(Math.random()*8)+2,b=Math.floor(Math.random()*8)+2;capAns=a+b;$('#capQ').textContent=a+' + '+b;$('#capA').value='';}
-function openAdd(plan){$('#adPlan').value=plan||'عادي';calcTotal();updatePlanNote();newCap();openModal('#addModal');}
+function openAdd(plan){$('#adPlan').value=plan||'عادي';calcTotal();updatePlanNote();newCap();$('#adType').value='مكان';$('#prodSec').style.display='none';openModal('#addModal');}
 function calcTotal(){$('#adTotal').textContent=(RATES[$('#adPlan').value]||5)*(+$('#adDur').value||7);}
 function updatePlanNote(){$('#planNote').textContent=PLAN_NOTE[$('#adPlan').value]||'';}
 $('#adPlan').onchange=()=>{calcTotal();updatePlanNote();};
 $('#adDur').onchange=calcTotal;
 $('#adType').onchange=()=>{$('#prodSec').style.display=$('#adType').value==='منتج'?'block':'none';};
+$('#adCat').onchange=e=>{$('#adCatCustomWrap').style.display=e.target.value==='__custom'?'':'none';};
 $('#addBtnTop').onclick=()=>openAdd();
 $('#addBtnFab').onclick=()=>openAdd();
 
-/* ===== إرسال الطلب لـ Firestore بدل الواتساب ===== */
 $('#sendAd').onclick=async()=>{
   if($('#adSite').value)return;
   if(($('#capA').value||'').trim()!=String(capAns)){toast('🛡️ إجابة سؤال الأمان غلط');newCap();return;}
-  const name=$('#adName').value.trim(),wa=$('#adWa').value.trim(),cat=$('#adCat').value,city=$('#adCity').value;
+  let cat=$('#adCat').value;
+  if(cat==='__custom'){cat=$('#adCatCustom').value.trim();if(!cat){toast('✏️ اكتب اسم الفئة الجديدة');return;}}
+  const name=$('#adName').value.trim(),wa=$('#adWa').value.trim(),city=$('#adCity').value;
   if(!name||!wa||!cat||!city){toast('من فضلك املأ الحقول المطلوبة *');return;}
   const planMap={'عادي':'bronze','VIP':'gold','بلاتيني':'plat'};
   const plan=planMap[$('#adPlan').value]||'bronze';
@@ -745,7 +758,7 @@ $('#sendAd').onclick=async()=>{
       name, type:$('#adType').value, plan, duration:dur, total:(RATES[$('#adPlan').value]||5)*dur,
       cat, city, area:$('#adArea').value||'', desc:$('#adDesc').value||'',
       loc:$('#adLoc').value||'', wa, phone:$('#adPhone').value||'',
-      senderPhone:$('#adSender').value||'',           /* الرقم المحوّل منه */
+      senderPhone:$('#adSender').value||'',
       img:$('#adImg').value||'', payImg:$('#adPayImg').value||'',
       code:$('#adCode').value||'', sold:$('#adSold').value||'',
       pb:$('#adPb').value||'', pa:$('#adPa').value||'', del:$('#adDel').value||'',
@@ -757,7 +770,7 @@ $('#sendAd').onclick=async()=>{
 };
 function orderCharge(s){window.open(waLink(ADMIN_WA,'السلام عليكم يا باشا 🎮\nعايز: '+s+'\nكود الخصم: DALEELAK'),'_blank');}
 
-function buildLists(){$('#adCat').innerHTML='<option value="">— اختر القسم —</option>'+CATS.map(c=>`<option>${c}</option>`).join('');$('#adCity').innerHTML='<option value="">— اختر المحافظة —</option>'+GOVS.map(g=>`<option>${g}</option>`).join('');$('#fCity').innerHTML='<option value="">🌍 جميع المحافظات</option>'+GOVS.map(g=>`<option>${g}</option>`).join('');$('#catsRow').innerHTML=`<button class="cat" data-cat="">🌍 الكل</button>`+CATS.map(c=>`<button class="cat" data-cat="${esc(c)}">${esc(c)}</button>`).join('');$('#drawerCats').innerHTML=CATS.map(c=>`<a class="dlink" href="#adsGrid" data-cat="${esc(c)}" data-close>${esc(c)}</a>`).join('');}
+function buildLists(){$('#adCity').innerHTML='<option value="">— اختر المحافظة —</option>'+GOVS.map(g=>`<option>${g}</option>`).join('');$('#fCity').innerHTML='<option value="">🌍 جميع المحافظات</option>'+GOVS.map(g=>`<option>${g}</option>`).join('');}
 document.addEventListener('click',e=>{const c=e.target.closest('.cat,[data-cat].dlink');if(c&&!c.classList.contains('chip'))filterByCat(c.dataset.cat);});
 $$('.qp').forEach(p=>p.onclick=()=>{state.quick=p.dataset.quick;$$('.qp').forEach(x=>x.classList.toggle('on',x===p));applyFilters(true);if(state.quick==='fav'&&!FAVS.size)toast('لسه مفيش مفضلة.. دوس 🤍 على أي إعلان ❤️');});
 $('#q').addEventListener('input',e=>{state.q=e.target.value;applyFilters(true);});
@@ -770,7 +783,7 @@ $('#refreshBtn').onclick=function(){this.classList.add('spin');toast('🔄 جا�
 
 const savedTheme=localStorage.getItem('dlk_theme');
 if(savedTheme==='dark'||(!savedTheme&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.dataset.theme='dark';
-function syncThemeBtn(){$('#themeBtn').textContent=document.documentElement.dataset.theme==='dark'?'☀️':'';}
+function syncThemeBtn(){$('#themeBtn').textContent=document.documentElement.dataset.theme==='dark'?'☀️':'🌙';}
 $('#themeBtn').onclick=()=>{const d=document.documentElement.dataset.theme==='dark';document.documentElement.dataset.theme=d?'':'dark';localStorage.setItem('dlk_theme',d?'light':'dark');syncThemeBtn();toast(d?'الوضع النهاري ☀️':'الوضع الليلي 🌙');};
 syncThemeBtn();
 function toggleQa(b){b.parentElement.classList.toggle('open');}
@@ -779,7 +792,6 @@ $('#topBtn').onclick=()=>scrollTo({top:0,behavior:'smooth'});
 const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}}),{threshold:.12});
 $$('.rv').forEach(el=>io.observe(el));
 
-/* إتاحة الدوال للـ onclick */
 window.applyFilters=applyFilters;window.resetFilters=resetFilters;window.openAdd=openAdd;window.orderCharge=orderCharge;window.copyTxt=copyTxt;window.toggleQa=toggleQa;window.renewAd=renewAd;window.reportAd=reportAd;window.openImg=openImg;window.addStoryWA=addStoryWA;window.toggleHelp=toggleHelp;window.shareAdById=shareAdById;
 
 $('#diamondGrid').innerHTML=LOADER_HTML;$('#goldGrid').innerHTML=LOADER_HTML;$('#bronzeGrid').innerHTML=LOADER_HTML;$('#storyRow').innerHTML=LOADER_HTML;
