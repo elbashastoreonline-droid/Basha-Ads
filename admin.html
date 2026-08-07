@@ -242,6 +242,7 @@ function renderPreview(){
     <div class="row"><b>الباقة</b><span>${PLAN[r.plan]?.n||esc(r.plan)}</span></div>
     <div class="row"><b>المدة / الإجمالي</b><span>${esc(r.duration||'—')} يوم / ${esc(r.total||0)} ج</span></div>
     <div class="row"><b>واتساب / اتصال</b><span>${esc(r.wa||'—')} / ${esc(r.phone||'—')}</span></div>
+    <div class="row"><b>📤 الرقم المحوّل منه</b><span>${esc(r.senderPhone||'—')}</span></div>
     <div class="row"><b>الأسعار</b><span>قبل: ${esc(r.pb||'—')} / بعد: ${esc(r.pa||'—')}</span></div>
     <div class="row"><b>لوكيشن</b><span>${r.loc?`<a href="${esc(r.loc)}" target="_blank">فتح ↗</a>`:'—'}</span></div>
     <div class="row"><b>سكرين الدفع</b><span>${r.payImg?`<a href="${esc(r.payImg)}" target="_blank">فتح ↗</a>`:'— مفيش'}</span></div>
@@ -264,6 +265,7 @@ function renderEdit(){
       <div><label>لينك سكرين الدفع</label><input id="ed_payImg" value="${esc(r.payImg||'')}"></div>
       <div><label>واتساب</label><input id="ed_wa" value="${esc(r.wa||'')}"></div>
       <div><label>اتصال</label><input id="ed_phone" value="${esc(r.phone||'')}"></div>
+      <div><label>📤 الرقم المحوّل منه</label><input id="ed_sender" value="${esc(r.senderPhone||'')}"></div>
       <div><label>الفئة</label><input id="ed_cat" value="${esc(r.cat||'')}"></div>
       <div><label>المحافظة</label><input id="ed_city" value="${esc(r.city||'')}"></div>
       <div><label>المنطقة</label><input id="ed_area" value="${esc(r.area||'')}"></div>
@@ -282,7 +284,7 @@ $('#btnCancelEdit').onclick = () => { editing=false; renderView(); };
 $('#btnSave').onclick = async () => {
   const g=id=>$('#ed_'+id).value.trim();
   await updateDoc(doc(db,'requests',curReq.id), {
-    name:g('name'), plan:$('#ed_plan').value, img:g('img'), payImg:g('payImg'), wa:g('wa'), phone:g('phone'),
+    name:g('name'), plan:$('#ed_plan').value, img:g('img'), payImg:g('payImg'), wa:g('wa'), phone:g('phone'), senderPhone:g('sender'),
     cat:g('cat'), city:g('city'), area:g('area'), total:+$('#ed_total').value||0, duration:+$('#ed_duration').value||7,
     code:g('code'), pb:g('pb'), pa:g('pa'), desc:g('desc'), loc:g('loc')
   });
