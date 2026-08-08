@@ -20,6 +20,7 @@ h1,h2,h3{font-family:'Lalezar',cursive;font-weight:400}
 img{max-width:100%;display:block}
 button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
 input,select,textarea{font-family:inherit;font-size:1rem;color:var(--ink);background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:.65rem .8rem;width:100%;max-width:100%}
+input::placeholder,textarea::placeholder{color:color-mix(in srgb,var(--mut) 60%,transparent);font-weight:400}
 .wrap{max-width:1180px;margin:0 auto;padding:0 16px}
 .hl{background:linear-gradient(transparent 62%,color-mix(in srgb,var(--gold) 55%,transparent) 62%);padding:0 4px}
 .topbar{position:sticky;top:0;z-index:50}
@@ -109,9 +110,6 @@ header{background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:b
 .platcard{border:2.5px solid transparent;background:linear-gradient(160deg,var(--platbg1),var(--platbg2)) padding-box,linear-gradient(135deg,var(--dia1),var(--dia2),var(--dia3),var(--dia4)) border-box;position:relative;overflow:hidden}
 .platcard::before{content:"";position:absolute;top:0;inset-inline-start:-60%;width:45%;height:100%;background:linear-gradient(110deg,transparent,color-mix(in srgb,var(--dia1) 65%,transparent),transparent);transform:skewX(-18deg);animation:psh 4s infinite;z-index:1}
 @keyframes psh{0%,50%{inset-inline-start:-60%}100%{inset-inline-start:135%}}
-.loader{grid-column:1/-1;text-align:center;padding:50px}
-.loader img{width:78px;height:78px;border-radius:20px;border:3px solid var(--gold);margin:0 auto 10px;animation:lp 1.5s infinite}
-@keyframes lp{50%{transform:scale(1.09) rotate(7deg)}}
 .empty{text-align:center;padding:50px 16px;color:var(--mut);font-weight:800}
 .morebtn{margin-top:22px;background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;font-weight:800;padding:.85rem 2rem;border-radius:13px}
 .charge{background:linear-gradient(140deg,#0a2e21,#0c4632);border-radius:20px;padding:24px;color:#fff;margin:44px 0;border:2px solid var(--gold)}
@@ -124,17 +122,28 @@ header{background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:b
 .coupon{display:flex;gap:12px;justify-content:center;align-items:center;background:rgba(0,0,0,.25);border:2px dashed var(--gold2);border-radius:13px;padding:12px;flex-wrap:wrap}
 .coupon code{font-family:'Lalezar';font-size:1.4rem;color:var(--gold2)}
 .coupon button{background:var(--gold2);color:#3a2a00;font-weight:800;padding:.45rem 1.2rem;border-radius:9px}
-.plans{display:grid;grid-template-columns:1fr 1.15fr 1fr;gap:16px}
-.plan{background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:22px 18px;display:flex;flex-direction:column}
+/* ===== الباقات (نسخة premium) ===== */
+.plans{display:grid;grid-template-columns:1fr 1.15fr 1fr;gap:16px;align-items:stretch}
+.plan{position:relative;background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:26px 18px 22px;display:flex;flex-direction:column}
+.plan .btag{position:absolute;top:-13px;inset-inline-start:50%;transform:translateX(50%);background:var(--brand);color:#fff;font-size:.72rem;font-weight:800;padding:.25rem .95rem;border-radius:99px;white-space:nowrap;box-shadow:var(--sh)}
+.plan h3{font-size:1.35rem}
 .plan .pp{font-family:'Lalezar';font-size:2.4rem;color:var(--brand)}
 .plan ul{list-style:none;margin:12px 0;flex:1}
 .plan li{padding:.3rem 0;font-size:.85rem;font-weight:700;color:var(--mut)}
 .plan li::before{content:"✔";color:var(--brand);margin-inline-end:7px}
 .plan li.no::before{content:"✖";color:var(--red)}
 .plan .pbtn{background:var(--brand);color:#fff;font-weight:800;padding:.7rem;border-radius:11px}
-.plan.bronze{background:linear-gradient(160deg,var(--bronzebg1),var(--bronzebg2))}
-.plan.hot{border:2.5px solid var(--gold);transform:scale(1.04)}
-.plan.royal{border:2.5px solid var(--dia2)}
+.plan.bronze{background:linear-gradient(160deg,var(--bronzebg1),var(--bronzebg2));border-color:color-mix(in srgb,var(--bronze) 45%,var(--line))}
+.plan.bronze .btag{background:linear-gradient(135deg,var(--bronze),var(--bronze2))}
+.plan.hot{border:2.5px solid transparent;background:linear-gradient(160deg,var(--vipbg1),var(--vipbg2)) padding-box,linear-gradient(135deg,var(--gold2),var(--gold),#b8860b) border-box;transform:scale(1.04);box-shadow:0 10px 28px color-mix(in srgb,var(--gold) 35%,transparent)}
+.plan.hot .btag{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#3a2a00}
+.plan.hot .pp{color:#b8860b}
+.plan.hot .pbtn{background:linear-gradient(135deg,var(--gold),#b8860b)}
+.plan.royal{border:2.5px solid transparent;background:linear-gradient(160deg,var(--platbg1),var(--platbg2)) padding-box,linear-gradient(135deg,var(--dia1),var(--dia2),var(--dia3),var(--dia4)) border-box;overflow:hidden;box-shadow:0 10px 28px color-mix(in srgb,var(--dia2) 35%,transparent)}
+.plan.royal::before{content:"";position:absolute;top:0;inset-inline-start:-60%;width:45%;height:100%;background:linear-gradient(110deg,transparent,color-mix(in srgb,var(--dia1) 60%,transparent),transparent);transform:skewX(-18deg);animation:psh 4s infinite;pointer-events:none}
+.plan.royal .btag{background:linear-gradient(110deg,var(--dia4),var(--dia1),var(--dia3),var(--dia4));background-size:220% 100%;animation:dsh 3.2s linear infinite;color:var(--diaink)}
+.plan.royal .pp{color:var(--dia4)}
+.plan.royal .pbtn{background:linear-gradient(135deg,var(--dia2),var(--dia4))}
 .cmp-wrap{overflow-x:auto;margin-top:26px;border-radius:14px;border:1.5px solid var(--line)}
 table.cmp{width:100%;border-collapse:collapse;min-width:660px;background:var(--card)}
 table.cmp th,table.cmp td{padding:.7rem .8rem;text-align:center;font-size:.82rem;font-weight:700;border-bottom:1px solid var(--line)}
@@ -155,10 +164,10 @@ table.cmp .yes{color:var(--brand)}table.cmp .no{color:var(--red)}
 .qa{background:var(--card);border:1.5px solid var(--line);border-radius:12px;margin-bottom:10px;overflow:hidden}
 .qa button{width:100%;display:flex;justify-content:space-between;padding:14px 16px;font-weight:800}
 .qa .ans{max-height:0;overflow:hidden;transition:.35s;color:var(--mut);padding:0 16px}
-.qa.open .ans{max-height:300px;padding:0 16px 14px}
+.qa.open .ans{max-height:400px;padding:0 16px 14px}
 .subbar{display:flex;align-items:center;justify-content:space-between;gap:14px;background:linear-gradient(135deg,var(--gold2),var(--gold));color:#3a2a00;border-radius:16px;padding:18px 22px;margin:40px 0;flex-wrap:wrap}
 .subbar a{background:#3a2a00;color:var(--gold2);font-weight:800;padding:.6rem 1.4rem;border-radius:11px;text-decoration:none}
-footer{background:#0a1f16;color:#cfe3d7;padding:36px 0 120px;margin-top:20px}
+footer{background:#0a1f16;color:#cfe3d7;padding:36px 0 160px;margin-top:20px}
 .fgrid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:26px}
 footer h4{font-family:'Lalezar';color:var(--gold2);margin-bottom:10px}
 footer a{color:#cfe3d7;text-decoration:none;display:block;padding:.22rem 0;font-size:.85rem}
@@ -213,7 +222,7 @@ footer a{color:#cfe3d7;text-decoration:none;display:block;padding:.22rem 0;font-
 #imgModal img{max-width:94vw;max-height:88vh;border-radius:14px}
 .toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,80px);background:var(--ink);color:var(--bg);font-weight:800;padding:.7rem 1.5rem;border-radius:12px;transition:.35s;opacity:0;z-index:300}
 .toast.show{transform:translate(-50%,0);opacity:1}
-@media(max-width:900px){.hero{grid-template-columns:1fr}.frow{grid-template-columns:1fr 1fr}.stgrid{grid-template-columns:1fr 1fr}.fgrid{grid-template-columns:1fr}.plans{grid-template-columns:1fr}}
+@media(max-width:900px){.hero{grid-template-columns:1fr}.frow{grid-template-columns:1fr 1fr}.stgrid{grid-template-columns:1fr 1fr}.fgrid{grid-template-columns:1fr}.plans{grid-template-columns:1fr}.plan.hot{transform:none}}
 @media(max-width:560px){.f2{grid-template-columns:1fr}}
 </style>
 </head>
@@ -312,9 +321,9 @@ footer a{color:#cfe3d7;text-decoration:none;display:block;padding:.22rem 0;font-
 
   <div class="sec-h" id="plans"><h2>💎 باقات الإعلان والأسعار</h2></div>
   <div class="plans">
-    <div class="plan bronze"><h3>🥉 برونزي</h3><div class="pp" id="pBronze">5 ج</div><ul><li>ظهور في قسم البرونزي</li><li>واتساب + اتصال</li><li>حتى 3 إعلانات</li><li class="no">لوكيشن</li></ul><button class="pbtn" data-plan-open="عادي">ابدأ</button></div>
-    <div class="plan hot"><h3>👑 ذهبي VIP</h3><div class="pp" id="pGold">10 ج</div><ul><li>كل مميزات البرونزي</li><li>قسم خاص</li><li>لوكيشن</li><li>حتى 10 إعلانات</li></ul><button class="pbtn" data-plan-open="VIP">اطلب</button></div>
-    <div class="plan royal"><h3>💎 ماسي DIAMOND</h3><div class="pp" id="pPlat">20 ج</div><ul><li>كل مميزات الذهبي</li><li>قسم الماسي + لمعة</li><li>عرض اليوم</li><li>غير محدود</li></ul><button class="pbtn" data-plan-open="بلاتيني">انضم</button></div>
+    <div class="plan bronze"><span class="btag">🥉 البداية الذكية</span><h3>🥉 برونزي</h3><div class="pp" id="pBronze">5 ج</div><ul><li>ظهور في قسم البرونزي</li><li>واتساب + اتصال</li><li>حتى 3 إعلانات</li><li class="no">لوكيشن</li></ul><button class="pbtn" data-plan-open="عادي">ابدأ إعلانك</button></div>
+    <div class="plan hot"><span class="btag">⭐ الأكثر طلبًا</span><h3>👑 ذهبي VIP</h3><div class="pp" id="pGold">10 ج</div><ul><li>كل مميزات البرونزي</li><li>قسم خاص فوق</li><li>لوكيشن</li><li>حتى 10 إعلانات</li></ul><button class="pbtn" data-plan-open="VIP">اطلب الذهبي</button></div>
+    <div class="plan royal"><span class="btag">💎 الأفخم على الإطلاق</span><h3>💎 ماسي DIAMOND</h3><div class="pp" id="pPlat">20 ج</div><ul><li>كل مميزات الذهبي</li><li>قسم الماسي + لمعة</li><li>عرض اليوم</li><li>غير محدود</li></ul><button class="pbtn" data-plan-open="بلاتيني">انضم للماسي</button></div>
   </div>
   <div class="cmp-wrap"><table class="cmp">
     <thead><tr><th>الميزة</th><th class="b-bronze">🥉 برونزي</th><th class="b-gold">👑 ذهبي</th><th class="b-plat">💎 ماسي</th></tr></thead>
@@ -338,9 +347,14 @@ footer a{color:#cfe3d7;text-decoration:none;display:block;padding:.22rem 0;font-
 
   <div class="sec-h" id="faq"><h2>❓ الأسئلة الشائعة</h2></div>
   <div class="faq">
-    <div class="qa"><button class="qab">إزاي أعلن؟ <i>+</i></button><div class="ans">املا الفورم، حوّل، وابعت — المراجعة والنشر من لوحة الإدارة.</div></div>
-    <div class="qa"><button class="qab">مش عارف أرفع صورة؟ <i>+</i></button><div class="ans">دوس ؟ في الفورم للشرح، أو ابعتها واتساب للإدارة وهنرفعها عنك.</div></div>
-    <div class="qa"><button class="qab">طرق الدفع؟ <i>+</i></button><div class="ans">🟣 إنستاباي 01550720161 — 🔴 فودافون كاش 01288023436</div></div>
+    <div class="qa"><button class="qab">إزاي أعلن في دليلك؟ <i>+</i></button><div class="ans">دوس "🚀 أضف إعلانك"، اختار الباقة والمدة، املا البيانات، حوّل القيمة، وابعت الطلب — الإدارة بتراجع وتنشر خلال ساعات.</div></div>
+    <div class="qa"><button class="qab">مش عارف أرفع صورة؟ <i>+</i></button><div class="ans">دوس علامة ؟ جنب خانة الصورة وهتلاقي شرح بالخطوات، أو سيبها فاضية وابعت الصورة واتساب للإدارة وهنرفعها عنك.</div></div>
+    <div class="qa"><button class="qab">طرق الدفع؟ <i>+</i></button><div class="ans">🟣 إنستاباي / We Pay: 01550720161 — 🔴 فودافون كاش: 01288023436.</div></div>
+    <div class="qa"><button class="qab">إيه الفرق بين البرونزي والذهبي والماسي؟ <i>+</i></button><div class="ans">البرونزي ظهور عادي، الذهبي قسم خاص ولوكيشن وأولوية، والماسي قسم ماسي لامع + عرض اليوم بالعدّاد وأولوية قصوى.</div></div>
+    <div class="qa"><button class="qab">إمتى ينشر إعلاني؟ <i>+</i></button><div class="ans">بعد ما الإدارة تتأكد من الدفع، بيتم التأكيد من لوحة التحكم والإعلان ينزل تلقائيًا في قسم باقته.</div></div>
+    <div class="qa"><button class="qab">إزاي أجدد إعلاني؟ <i>+</i></button><div class="ans">كلّم الإدارة واتساب على 01288023436 وهما يجددوهالك، أو من لوحة التحكم لو مفعّلة.</div></div>
+    <div class="qa"><button class="qab">ليه إعلاني بيختفي؟ <i>+</i></button><div class="ans">الإعلان بيوقف تلقائيًا بنهاية مدة الباقة (تاريخ النهاية)، وبيظهر عدّاد "باقي X يوم" على كل إعلان.</div></div>
+    <div class="qa"><button class="qab">إزاي أتواصل مع الإدارة؟ <i>+</i></button><div class="ans">واتساب: 01288023436 — أو من القائمة الجانبية ← "تواصل مع الإدارة".</div></div>
   </div>
 
   <div class="subbar"><b>🔔 عايز العروض أول بأول؟</b><a href="https://whatsapp.com/channel/0029VatXp3sJ93wLh8S6Fd3b" target="_blank">اشترك مجانًا 🚀</a></div>
@@ -364,7 +378,7 @@ footer a{color:#cfe3d7;text-decoration:none;display:block;padding:.22rem 0;font-
   <input class="hp" id="adSite">
   <div class="f2">
     <div class="fld"><label>نوع الإعلان</label><select id="adType"><option value="مكان">🏢 مكان</option><option value="منتج">🛍️ منتج</option></select></div>
-    <div class="fld"><label>الاسم *</label><input id="adName"></div>
+    <div class="fld"><label>الاسم *</label><input id="adName" placeholder="مثال: صيدلية النور"></div>
   </div>
   <div class="fld"><label>الباقة</label><select id="adPlan"><option value="عادي">🥉 برونزي</option><option value="VIP">👑 ذهبي VIP</option><option value="بلاتيني">💎 ماسي DIAMOND</option></select></div>
   <div class="plannote" id="planNote"></div>
@@ -373,7 +387,7 @@ footer a{color:#cfe3d7;text-decoration:none;display:block;padding:.22rem 0;font-
       <option value="day1">يوم واحد</option><option value="custom">عدد أيام مخصص</option>
       <option value="s7">🔥 توفير 7 أيام</option><option value="s15">🔥 توفير 15 يوم</option><option value="s30">🔥 توفير 30 يوم</option>
     </select></div>
-    <div class="fld" id="daysWrap" style="display:none"><label>عدد الأيام</label><input id="adDays" type="number" min="1" value="1"></div>
+    <div class="fld" id="daysWrap" style="display:none"><label>عدد الأيام</label><input id="adDays" type="number" min="1" value="1" placeholder="مثال: 10"></div>
   </div>
   <div class="savenote" id="saveNote" style="display:none">🎉 سعر عرض التوفير — لفترة محدودة!</div>
   <div class="f2">
@@ -383,25 +397,25 @@ footer a{color:#cfe3d7;text-decoration:none;display:block;padding:.22rem 0;font-
   <div class="fld" id="adCatCustomWrap" style="display:none"><label>✏️ اكتب الفئة الجديدة</label><input id="adCatCustom" placeholder="مثال: 🐾 مستلزمات حيوانات"></div>
   <div class="fld"><label>المنطقة</label><select id="adArea"></select></div>
   <div id="prodSec" style="display:none">
-    <div class="f2"><div class="fld"><label>سعر قبل</label><input id="adPb" type="number"></div><div class="fld"><label>سعر بعد</label><input id="adPa" type="number"></div></div>
-    <div class="fld"><label>يُباع في</label><input id="adSold"></div>
+    <div class="f2"><div class="fld"><label>سعر قبل (ج)</label><input id="adPb" type="number" placeholder="مثال: 300"></div><div class="fld"><label>سعر بعد (ج)</label><input id="adPa" type="number" placeholder="مثال: 270"></div></div>
+    <div class="fld"><label>يُباع في</label><input id="adSold" placeholder="مثال: صيدلية د/سمر"></div>
     <div class="fld"><label>التوصيل</label><select id="adDel"><option value="">غير محدد</option><option>🚚 دليفري</option><option>📦 شحن محافظات</option><option>🏪 استلام من الفرع</option></select></div>
   </div>
-  <div class="fld"><label>الوصف</label><textarea id="adDesc" rows="2"></textarea></div>
+  <div class="fld"><label>الوصف</label><textarea id="adDesc" rows="2" placeholder="مثال: خصم 10% على كل المنتجات وتوصيل مجاني…"></textarea></div>
   <div class="fld"><label>إضافة موقع (لوكيشن)</label><input id="adLoc" placeholder="https://maps.app.goo.gl/…"></div>
-  <div class="f2"><div class="fld"><label>واتساب *</label><input id="adWa"></div><div class="fld"><label>اتصال</label><input id="adPhone"></div></div>
+  <div class="f2"><div class="fld"><label>واتساب *</label><input id="adWa" placeholder="01xxxxxxxxx"></div><div class="fld"><label>اتصال</label><input id="adPhone" placeholder="01xxxxxxxxx"></div></div>
   <div class="fld"><label>لينك صورة الإعلان (اختياري) <button type="button" class="helpbtn" id="imgHelpBtn">؟</button></label><input id="adImg" placeholder="https://i.ibb.co/…"></div>
   <div class="helpbox" id="imgHelp" style="display:none">📌 <b>إزاي ترفع صورتك؟</b><br>1) دوس "فتح ibb.co" وارفع صورتك. <a class="linkbtn" href="https://ibb.co" target="_blank">🌐 فتح ibb.co</a><br>2) انسخ الـ Direct link والصقه فوق.<br>💡 مش عارف؟ سيبها فاضية ودوس تواصل واتساب وهنرفعها عنك. ✅<br><a class="wabtn" href="https://wa.me/201288023436?text=السلام عليكم، عايز أضيف صورة لإعلاني 📸" target="_blank">📱 تواصل واتساب لإضافة الصورة</a></div>
-  <div class="fld"><label>الرقم المحوّل منه</label><input id="adSender"></div>
+  <div class="fld"><label>الرقم المحوّل منه</label><input id="adSender" placeholder="01xxxxxxxxx"></div>
   <div class="fld"><label>لينك سكرين الدفع (اختياري) <button type="button" class="helpbtn" id="payHelpBtn">؟</button></label><input id="adPayImg" placeholder="https://i.ibb.co/…"></div>
   <div class="helpbox" id="payHelp" style="display:none">📌 ارفع سكرين الدفع على ibb.co والصق اللينك. <a class="linkbtn" href="https://ibb.co" target="_blank">🌐 فتح ibb.co</a><br>أو ابعت السكرين واتساب مباشرة: <a class="wabtn" href="https://wa.me/201288023436?text=السلام عليكم، ده سكرين إثبات الدفع 💳" target="_blank">📱 إرسال سكرين الدفع</a></div>
-  <div class="fld"><label>كود خصم (إن وجد)</label><input id="adCode"></div>
+  <div class="fld"><label>كود خصم (إن وجد)</label><input id="adCode" placeholder="مثال: DALEELAK10"></div>
   <div class="total">الإجمالي: <span id="adTotal">0</span> جنيه</div>
   <div class="paybox">الدفع:
     <div class="prow"><span>🟣 إنستاباي: <b id="payInsta">01550720161</b></span><button id="copyInsta">نسخ</button></div>
     <div class="prow"><span>🔴 فودافون كاش: <b id="payVoda">01288023436</b></span><button id="copyVoda">نسخ</button></div>
   </div>
-  <div class="capbox"><span>🛡️ <b id="capQ"></b> =</span><input id="capA" type="number"></div>
+  <div class="capbox"><span>🛡️ <b id="capQ"></b> =</span><input id="capA" type="number" placeholder="؟"></div>
   <div class="note">📸 بعد الإرسال هيوصل طلبك للوحة الإدارة للمراجعة وينشر بعد التأكيد.</div>
   <button class="bigsend" id="sendAd">إرسال للمراجعة 🚀</button>
 </div></div>
@@ -414,6 +428,8 @@ footer a{color:#cfe3d7;text-decoration:none;display:block;padding:.22rem 0;font-
 import{initializeApp}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
 import{getFirestore,collection,getDocs,addDoc,doc,getDoc,serverTimestamp}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 const db=getFirestore(initializeApp({apiKey:"AIzaSyAErZex3BsKMO9cHtalN_Nhb0D7A4tFWe4",authDomain:"daleelak-22dc6.firebaseapp.com",projectId:"daleelak-22dc6",storageBucket:"daleelak-22dc6.firebasestorage.app",messagingSenderId:"774332263419",appId:"1:774332263419:web:527fc4de3d7ed6ce1e395e"}));
+/* ⚙️ وضع الطوارئ: خليها true لو عايز الفورم يبعت واتساب بس بدل لوحة التحكم */
+const CONFIG={USE_WHATSAPP_FORM:false};
 const SHEET_ID='1wgNuXx8KAYFjiRekzks3M4lgpOuBz6i3MHXsai2NIuY';
 const DEF={badge:"📍 دليل مصر المحلي للعروض والأماكن",h1:"كل اللي محتاجه…",h2:"هتلاقيه عندنا",hl:true,announce:"📢 مفاجأة الافتتاح: خصم خاص على إعلانات الـ VIP لفترة محدودة! | برعاية GAME BASHA 🎮",wa:"01288023436",insta:"01550720161",voda:"01288023436",coupon:"DALEELAK",savings:true,splash:{active:false,img:"",link:""},prices:{bronze:{day:5,d7:30,d15:60,d30:100},gold:{day:10,d7:50,d15:100,d30:150},plat:{day:20,d7:100,d15:250,d30:500}}};
 const CATS=['🛒 سوبر ماركت وبقالة','💊 صيدليات ومستلزمات طبية','💄 إكسسوارات وأدوات تجميل','🍔 مطاعم وكافيهات','👗 ملابس وأحذية','👶 مستلزمات أطفال','🎮 شحن ألعاب وخدمات','📱 إلكترونيات وموبايلات','🛠️ خدمات وصيانة','🏥 مستشفيات وعيادات وأطباء','🏢 عقارات وديكور','🚗 سيارات ومواصلات','🕌 دار تحفيظ قرآن','📌 أخرى'];
@@ -466,7 +482,7 @@ function showDeal(i,locked){const a=dealList[i];if(!a)return;$('#dealImg').src=a
 function fmt(s){s=Math.max(0,Math.floor(s));return String(Math.floor(s/3600)).padStart(2,'0')+':'+String(Math.floor(s%3600/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');}
 function maybeSplash(){if(!S.splash||!S.splash.active||!S.splash.img)return;if(localStorage.getItem('dlk_splash')===new Date().toDateString())return;$('#splashImg').src=S.splash.img;$('#splashLink').href=S.splash.link||'#';$('#splash').classList.add('open');localStorage.setItem('dlk_splash',new Date().toDateString());}
 function buildStats(){$('#sbOrd').textContent=ADS.filter(a=>a.isBronze).length;$('#sbVip').textContent=ADS.filter(a=>a.isGold).length;$('#sbPlat').textContent=ADS.filter(a=>a.isPlat).length;const c={};ADS.forEach(a=>{if(a.city)c[a.city]=(c[a.city]||0)+1});$('#sbCov').textContent=Object.values(c).filter(n=>n>=1).length;}
-function renderStories(){$('#storyRow').innerHTML=STORIES.map(s=>`<div class="sc"><p>${esc(s.text)}</p><b>${esc(s.name||'')}</b></div>`).join('')+`<div class="sc sc-add" id="addStory"><b>✍️ أضف قصتك معنا</b></div>`;}
+function renderStories(){$('#storyRow').innerHTML=STORIES.map(s=>`<div class="sc"><p>${esc(s.text)}</p><b>${esc(s.name||'')}</b></div>`).join('')+`<div class="sc sc-add" id="addStory"><b>✍️ أضف قصتك معنا</b><span style="font-size:.75rem;color:var(--mut)">دوس هنا وهتفتح واتساب برسالة جاهزة تكتب فيها قصتك وننشرها نحن 🗣️</span></div>`;}
 function filtered(){let l=[...ADS];if(state.q)l=l.filter(a=>[a.name,a.desc,a.cat,a.city].join(' ').includes(state.q));
   if(state.quick==='place')l=l.filter(a=>a.type!=='منتج');if(state.quick==='product')l=l.filter(a=>a.type==='منتج');if(state.quick==='fav')l=l.filter(a=>FAVS.has(a.key));
   if(state.cat)l=l.filter(a=>a.cat===state.cat);if(state.city)l=l.filter(a=>a.city===state.city);if(state.area)l=l.filter(a=>(a.area||'').includes(state.area));
@@ -507,7 +523,7 @@ function calcTotal(){const P=S.prices[planKey()]||{day:5};const m=$('#adDurMode'
   $('#adTotal').textContent=t;$('#daysWrap').style.display=m==='custom'?'':'none';$('#saveNote').style.display=(sv&&S.savings)?'':'none';
   $('#planNote').textContent=(planKey()==='bronze'?'🥉 برونزي':planKey()==='gold'?'👑 ذهبي':'💎 ماسي')+': اليوم بـ '+P.day+'ج';}
 function openAdd(p){if(p)$('#adPlan').value=p;newCap();calcTotal();$('#addModal').classList.add('open');}
-/* ===== ربط كل الأزرار (مفيش inline onclick خالص) ===== */
+function buildAdMessage(){const P=planKey();return '🚀 *طلب إعلان جديد — دليلك*\n━━━━━━━━━━\n📛 الاسم: '+$('#adName').value+'\n💎 الباقة: '+$('#adPlan').value+'\n⏱️ المدة: '+$('#adDurMode').value+' ('+$('#adDays').value||1+' يوم)\n💰 الإجمالي: '+$('#adTotal').textContent+' ج\n📂 الفئة: '+$('#adCat').value+'\n📍 المحافظة: '+$('#adCity').value+' — '+$('#adArea').value+'\n📝 الوصف: '+$('#adDesc').value+'\n📱 واتساب: '+$('#adWa').value+'\n️ صورة: '+($('#adImg').value||'هبعتها واتساب')+'\n💳 الرقم المحوّل منه: '+$('#adSender').value;}
 $('#addBtnTop').addEventListener('click',()=>openAdd());
 $('#addBtnFab').addEventListener('click',()=>openAdd());
 $$('[data-plan-open]').forEach(b=>b.addEventListener('click',()=>openAdd(b.dataset.planOpen)));
@@ -520,7 +536,7 @@ $('#imgHelpBtn').addEventListener('click',()=>{$('#imgHelp').style.display=$('#i
 $('#payHelpBtn').addEventListener('click',()=>{$('#payHelp').style.display=$('#payHelp').style.display==='none'?'':'none';});
 $$('.chbtn').forEach(b=>b.addEventListener('click',()=>window.open(waLink(S.wa,'عايز: '+b.dataset.ch),'_blank')));
 $$('.qab').forEach(b=>b.addEventListener('click',()=>b.parentElement.classList.toggle('open')));
-$('#addStory')&&document.addEventListener('click',e=>{if(e.target.closest('#addStory'))window.open(waLink(S.wa,'عايز أضيف قصتي 🗣️'),'_blank');});
+document.addEventListener('click',e=>{if(e.target.closest('#addStory'))window.open(waLink(S.wa,'السلام عليكم، عايز أضيف قصتي مع دليلك 🗣️\n👤 اسمي/نشاطي: \n✍️ قصتي: '),'_blank');});
 $('#adPlan').addEventListener('change',calcTotal);
 $('#adDurMode').addEventListener('change',calcTotal);
 $('#adDays').addEventListener('input',calcTotal);
@@ -552,15 +568,11 @@ $('#sendAd').addEventListener('click',async()=>{if($('#adSite').value)return;if(
   let cat=$('#adCat').value;if(cat==='__custom'){cat=$('#adCatCustom').value.trim();if(!cat){toast('✏️ اكتب اسم الفئة');return;}}
   const name=$('#adName').value.trim(),wa=$('#adWa').value.trim(),city=$('#adCity').value;
   if(!name||!wa||!cat||!city){toast('املأ الحقول المطلوبة *');return;}
+  const msg=buildAdMessage();
+  if(CONFIG.USE_WHATSAPP_FORM){window.open(waLink(S.wa,msg),'_blank');toast('✅ فتح واتساب لإرسال الطلب');$('#addModal').classList.remove('open');return;}
   try{await addDoc(collection(db,'requests'),{name,type:$('#adType').value,plan:planKey(),duration:$('#adDurMode').value,days:$('#adDays').value||1,total:+$('#adTotal').textContent,cat,city,area:$('#adArea').value||'',desc:$('#adDesc').value||'',loc:$('#adLoc').value||'',wa,phone:$('#adPhone').value||'',senderPhone:$('#adSender').value||'',img:$('#adImg').value||'',payImg:$('#adPayImg').value||'',pb:$('#adPb').value||'',pa:$('#adPa').value||'',sold:$('#adSold').value||'',del:$('#adDel').value||'',code:$('#adCode').value||'',status:'pending',createdAt:serverTimestamp()});
     toast('✅ تم الإرسال للمراجعة');$('#addModal').classList.remove('open');}catch(e){toast('⚠️ خطأ في الإرسال');}});
 $('#chargeHead').addEventListener('click',()=>$('#charge').classList.toggle('open'));
 $('#refreshBtn').addEventListener('click',()=>location.reload());
 addEventListener('scroll',()=>$('#topBtn').classList.toggle('show',scrollY>500));
-$('#topBtn').addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}));
-if(localStorage.getItem('dlk_theme')==='dark')document.documentElement.dataset.theme='dark';
-$('#themeBtn').addEventListener('click',()=>{const d=document.documentElement.dataset.theme==='dark';document.documentElement.dataset.theme=d?'':'dark';localStorage.setItem('dlk_theme',d?'light':'dark');});
-loadAll();
-</script>
-</body>
-</html>
+$('#topBtn').addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'});
