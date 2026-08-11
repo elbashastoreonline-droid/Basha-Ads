@@ -25,7 +25,7 @@ h1,h2,h3{font-weight:800}
 .b-ok{background:var(--brand);color:#04241a}.b-no{background:var(--red);color:#fff}
 .b-hold{background:var(--gold);color:#3a2a00}.b-ed{background:var(--card2);border:1px solid var(--line)}
 .badge{display:inline-block;font-size:.68rem;font-weight:800;border-radius:99px;padding:.15rem .6rem;margin-bottom:6px}
-.st-p{background:#3a2f10;color:var(--gold)}.st-a{background:#0d3a2c;color:var(--brand)}.st-r{background:#3a1414;color:var(--red)}.st-h{background:#332b0e;color:var(--gold)}
+.st-p{background:#3a2f10;color:var(--gold)}.st-a{background:#0d3a2c;color:var(--brand)}.st-r{background:#3a1414;color:var(--red)}
 .panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:16px}
 .panel h2{font-size:1rem;margin-bottom:12px}
 .f2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -34,6 +34,7 @@ h1,h2,h3{font-weight:800}
 #login{max-width:380px;margin:10vh auto;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;text-align:center}
 #login button{background:var(--brand);color:#04241a;border-radius:10px;padding:.7rem 1.4rem;font-weight:800;width:100%}
 .hide{display:none}
+.err{background:#3a1414;border:1px solid var(--red);color:#ffb4b4;border-radius:12px;padding:14px;font-size:.8rem;font-weight:700;margin-bottom:12px;white-space:pre-wrap}
 </style>
 </head>
 <body>
@@ -56,55 +57,63 @@ h1,h2,h3{font-weight:800}
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
 import{getAuth,signInWithPopup,GoogleAuthProvider,signOut,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
-import{getFirestore,collection,getDocs,addDoc,updateDoc,deleteDoc,doc,getDoc,setDoc,serverTimestamp}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+import{getFirestore,collection,getDocs,addDoc,updateDoc,deleteDoc,doc,getDoc,setDoc}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 const app=initializeApp({apiKey:"AIzaSyAErZex3BsKMO9cHtalN_Nhb0D7A4tFWe4",authDomain:"daleelak-22dc6.firebaseapp.com",projectId:"daleelak-22dc6",storageBucket:"daleelak-22dc6.firebasestorage.app",messagingSenderId:"774332263419",appId:"1:774332263419:web:527fc4de3d7ed6ce1e395e"});
 const db=getFirestore(app),auth=getAuth(app);
 const ADMIN=['daleelak317@gmail.com'];
 let S={},REQ=[],ADS=[],TICK=[],STOR=[],AREAS=[],CUR='req';
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-onAuthStateChanged(auth,u=>{if(u&&ADMIN.includes(u.email)){$('#login').classList.add('hide');$('#app').classList.remove('hide');loadAll();}else{$('#login').classList.remove('hide');$('#app').classList.add('hide');}});
-$('#gLogin').onclick=()=>signInWithPopup(auth,new GoogleAuthProvider());
+function showErr(e){$('#view').innerHTML=`<div class="err">⚠️ حصل خطأ:\n${esc(String(e&&e.message?e.message:e))}\n\nتأكد إنك:\n1) نشرت قواعد Firestore (الخطوة تحت).\n2) داخل بحساب ${ADMIN[0]}.</div>`;}
+/* ربط أزرار التبويبات أول حاجة عشان تشتغل دايمًا */
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{CUR=b.dataset.t;render();});
 $('#out').onclick=()=>signOut(auth);
+$('#gLogin').onclick=()=>signInWithPopup(auth,new GoogleAuthProvider()).catch(showErr);
+onAuthStateChanged(auth,u=>{
+  if(u&&ADMIN.includes(u.email)){$('#login').classList.add('hide');$('#app').classList.remove('hide');loadAll().catch(showErr);}
+  else{$('#login').classList.remove('hide');$('#app').classList.add('hide');}
+});
+async function safe(p){try{return await p;}catch(e){console.warn(e);return null;}}
 async function loadAll(){
-  const sd=await getDoc(doc(db,'settings','site'));S=sd.exists()?sd.data():{};
-  REQ=(await getDocs(collection(db,'requests'))).docs.map(d=>({id:d.id,...d.data()}));
-  ADS=(await getDocs(collection(db,'ads'))).docs.map(d=>({id:d.id,...d.data()}));
-  TICK=(await getDocs(collection(db,'ticker'))).docs.map(d=>({id:d.id,...d.data()}));
-  STOR=(await getDocs(collection(db,'stories'))).docs.map(d=>({id:d.id,...d.data()}));
-  AREAS=(await getDocs(collection(db,'areas'))).docs.map(d=>({id:d.id,...d.data()}));
+  const sd=await safe(getDoc(doc(db,'settings','site')));S=(sd&&sd.exists())?sd.data():{};
+  const rq=await safe(getDocs(collection(db,'requests')));REQ=rq?rq.docs.map(d=>({id:d.id,...d.data()})):[];
+  const ad=await safe(getDocs(collection(db,'ads')));ADS=ad?ad.docs.map(d=>({id:d.id,...d.data()})):[];
+  const tk=await safe(getDocs(collection(db,'ticker')));TICK=tk?tk.docs.map(d=>({id:d.id,...d.data()})):[];
+  const st=await safe(getDocs(collection(db,'stories')));STOR=st?st.docs.map(d=>({id:d.id,...d.data()})):[];
+  const ar=await safe(getDocs(collection(db,'areas')));AREAS=ar?ar.docs.map(d=>({id:d.id,...d.data()})):[];
   render();
 }
-const durDays=r=>r.duration==='s7'?7:r.duration==='s15'?15:r.duration==='s30'?30:r.duration==='custom'?(+r.days||1):(+r.days||1);
+const durDays=r=>r.duration==='s7'?7:r.duration==='s15'?15:r.duration==='s30'?30:(+r.days||1);
 async function approve(r){const days=durDays(r);await addDoc(collection(db,'ads'),{name:r.name,desc:r.desc||'',cat:r.cat||'',img:r.img||'',wa:r.wa||'',phone:r.phone||'',plan:r.plan||'bronze',city:r.city||'',area:r.area||'',loc:r.loc||'',pb:r.pb||'',pa:r.pa||'',sold:r.sold||'',del:r.del||'',code:r.code||'',ver:'',type:r.type||'',status:'شغال',rank:0,hours:0,startAt:Date.now(),endsAt:Date.now()+days*864e5});await updateDoc(doc(db,'requests',r.id),{status:'approved'});loadAll();}
 async function setReq(r,st){await updateDoc(doc(db,'requests',r.id),{status:st});loadAll();}
 async function delAd(id){if(confirm('حذف الإعلان؟')){await deleteDoc(doc(db,'ads',id));loadAll();}}
 async function toggleAd(a){await updateDoc(doc(db,'ads',a.id),{status:a.status==='شغال'?'موقوف':'شغال'});loadAll();}
 async function verifyAd(a){await updateDoc(doc(db,'ads',a.id),{ver:a.ver==='نعم'?'':'نعم'});loadAll();}
 async function toSplash(a){await setDoc(doc(db,'settings','site'),{...S,splash:{active:true,img:a.img||'',link:a.loc||'#',id:'ad'+a.id,price8:50,priceDay:100}});alert('✅ بقى الإعلان العائم');loadAll();}
-async function toTicker(a){await addDoc(collection(db,'ticker'),{txt:'🔥 '+a.name+' — '+ (a.cat||''),status:'شغال'});alert('✅ اتضاف للشريط');loadAll();}
-async function toDeal(a){const h=prompt('مدة العرض بالساعات (عرض اليوم):','8');if(!h)return;await updateDoc(doc(db,'ads',a.id),{rank:(Math.max(0,...ADS.map(x=>x.rank||0))+1),hours:+h});alert('✅ دخل طابور عرض اليوم');loadAll();}
+async function toTicker(a){await addDoc(collection(db,'ticker'),{txt:'🔥 '+a.name+' — '+(a.cat||''),status:'شغال'});alert('✅ اتضاف للشريط');loadAll();}
+async function toDeal(a){const h=prompt('مدة العرض بالساعات:','8');if(!h)return;await updateDoc(doc(db,'ads',a.id),{rank:(Math.max(0,...ADS.map(x=>x.rank||0))+1),hours:+h});alert('✅ دخل طابور عرض اليوم');loadAll();}
 async function renewAd(a){const d=prompt('زود كام يوم؟','7');if(!d)return;await updateDoc(doc(db,'ads',a.id),{endsAt:(a.endsAt||Date.now())+(+d)*864e5,status:'شغال'});loadAll();}
 function render(){
-  $$('.tab').forEach(b=>b.classList.toggle('on',b.dataset.t===CUR));
+  try{
+  document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b.dataset.t===CUR));
   const v=$('#view');
   if(CUR==='req'){const list=REQ.filter(r=>r.status!=='approved');
-    v.innerHTML=`<div class="panel"><h2>📥 الطلبات المعلقة (${list.length})</h2><div class="grid">`+ (list.map(r=>`<div class="item"><span class="badge st-p">${esc(r.status||'معلق')}</span><h3>${esc(r.name)}</h3><div class="m">${esc(r.plan)} • ${esc(r.city)} • ${esc(r.total)} ج<br>📱 ${esc(r.wa)}${r.senderPhone?'<br>💳 المحوّل منه: '+esc(r.senderPhone):''}</div><div class="row"><button class="btn b-ok" data-a="ok" data-id="${r.id}">✅ نشر</button><button class="btn b-hold" data-a="hold" data-id="${r.id}">⏸</button><button class="btn b-no" data-a="rej" data-id="${r.id}">❌</button></div></div>`).join('')||'<p style="color:var(--mut)">مفيش طلبات معلقة ✅</p>')+`</div></div>`;
+    v.innerHTML=`<div class="panel"><h2>📥 الطلبات المعلقة (${list.length})</h2><div class="grid">`+(list.map(r=>`<div class="item"><span class="badge st-p">${esc(r.status||'معلق')}</span><h3>${esc(r.name)}</h3><div class="m">${esc(r.plan)} • ${esc(r.city)} • ${esc(r.total)} ج<br>📱 ${esc(r.wa)}${r.senderPhone?'<br>💳 المحوّل منه: '+esc(r.senderPhone):''}</div><div class="row"><button class="btn b-ok" data-a="ok" data-id="${r.id}">✅ نشر</button><button class="btn b-hold" data-a="hold" data-id="${r.id}">⏸</button><button class="btn b-no" data-a="rej" data-id="${r.id}">❌</button></div></div>`).join('')||'<p style="color:var(--mut)">مفيش طلبات معلقة ✅</p>')+`</div></div>`;
     v.onclick=e=>{const b=e.target.closest('[data-a]');if(!b)return;const r=REQ.find(x=>x.id===b.dataset.id);if(b.dataset.a==='ok')approve(r);if(b.dataset.a==='hold')setReq(r,'hold');if(b.dataset.a==='rej')setReq(r,'rejected');};
   }
-  else if(CUR==='ads'){v.innerHTML=`<div class="panel"><h2>📢 الإعلانات المنشورة (${ADS.length})</h2><div class="grid">`+ADS.map(a=>`<div class="item"><span class="badge ${a.status==='شغال'?'st-a':'st-r'}">${esc(a.status)}</span>${a.ver==='نعم'?'<span class="badge st-a">✔ موثوق</span>':''}<h3>${esc(a.name)}</h3><div class="m">${esc(a.plan)} • ${esc(a.city)}${a.endsAt?'<br>⏳ ينتهي: '+new Date(a.endsAt).toLocaleDateString('ar-EG'):''}</div><div class="row"><button class="btn b-ed" data-a="tg" data-id="${a.id}">${a.status==='شغال'?'إيقاف':'تفعيل'}</button><button class="btn b-ed" data-a="vf" data-id="${a.id}">✔ موثوق</button><button class="btn b-hold" data-a="dl" data-id="${a.id}">⏰ عرض اليوم</button><button class="btn b-ed" data-a="tk" data-id="${a.id}">📰 الشريط</button><button class="btn b-hold" data-a="sp" data-id="${a.id}">🎯 عائم</button><button class="btn b-ed" data-a="rn" data-id="${a.id}">🔄 تجديد</button><button class="btn b-no" data-a="del" data-id="${a.id}">🗑</button></div></div>`).join('')+`</div></div>`;
+  else if(CUR==='ads'){v.innerHTML=`<div class="panel"><h2>📢 الإعلانات (${ADS.length})</h2><div class="grid">`+ADS.map(a=>`<div class="item"><span class="badge ${a.status==='شغال'?'st-a':'st-r'}">${esc(a.status)}</span>${a.ver==='نعم'?'<span class="badge st-a">✔ موثوق</span>':''}<h3>${esc(a.name)}</h3><div class="m">${esc(a.plan)} • ${esc(a.city)}${a.endsAt?'<br>⏳ ينتهي: '+new Date(a.endsAt).toLocaleDateString('ar-EG'):''}</div><div class="row"><button class="btn b-ed" data-a="tg" data-id="${a.id}">${a.status==='شغال'?'إيقاف':'تفعيل'}</button><button class="btn b-ed" data-a="vf" data-id="${a.id}">✔ موثوق</button><button class="btn b-hold" data-a="dl" data-id="${a.id}">⏰ عرض اليوم</button><button class="btn b-ed" data-a="tk" data-id="${a.id}">📰 الشريط</button><button class="btn b-hold" data-a="sp" data-id="${a.id}">🎯 عائم</button><button class="btn b-ed" data-a="rn" data-id="${a.id}">🔄 تجديد</button><button class="btn b-no" data-a="del" data-id="${a.id}">🗑</button></div></div>`).join('')+`</div></div>`;
     v.onclick=e=>{const b=e.target.closest('[data-a]');if(!b)return;const a=ADS.find(x=>x.id===b.dataset.id);const m={tg:toggleAd,vf:verifyAd,dl:toDeal,tk:toTicker,sp:toSplash,rn:renewAd};if(b.dataset.a==='del')delAd(a.id);else m[b.dataset.a](a);};
   }
   else if(CUR==='splash'){const sp=S.splash||{};v.innerHTML=`<div class="panel"><h2>🎁 الإعلان العائم</h2><div class="fld"><label>لينك الصورة</label><input id="spImg" value="${esc(sp.img||'')}"></div><div class="fld"><label>لينك الضغط</label><input id="spLink" value="${esc(sp.link||'')}"></div><div class="f2"><div class="fld"><label>سعر 8 ساعات</label><input id="sp8" type="number" value="${sp.price8||50}"></div><div class="fld"><label>سعر اليوم</label><input id="spD" type="number" value="${sp.priceDay||100}"></div></div><div class="fld"><label><input type="checkbox" id="spOn" style="width:auto" ${sp.active?'checked':''}> مفعّل</label></div><button class="save" id="spSave">💾 حفظ</button></div>`;
-    $('#spSave').onclick=async()=>{await setDoc(doc(db,'settings','site'),{...S,splash:{active:$('#spOn').checked,img:$('#spImg').value,link:$('#spLink').value,price8:+$('#sp8').value,priceDay:+$('#spD').value,id:sp.id||('sp'+Date.now())}});alert('✅ تم الحفظ');loadAll();};
+    $('#spSave').onclick=async()=>{await setDoc(doc(db,'settings','site'),{...S,splash:{active:$('#spOn').checked,img:$('#spImg').value,link:$('#spLink').value,price8:+$('#sp8').value,priceDay:+$('#spD').value,id:(S.splash&&S.splash.id)||('sp'+Date.now())}});alert('✅ تم الحفظ');loadAll();};
   }
-  else if(CUR==='ticker'){v.innerHTML=`<div class="panel"><h2>📰 شريط الأخبار</h2><div class="fld"><input id="tkNew" placeholder="اكتب جملة جديدة…"></div><button class="save" id="tkAdd">➕ إضافة</button><div class="grid" style="margin-top:12px">`+TICK.map(t=>`<div class="item"><h3>${esc(t.txt)}</h3><div class="row"><button class="btn b-ed" data-a="tg" data-id="${t.id}">${t.status==='مخفي'?'إظهار':'إخفاء'}</button><button class="btn b-no" data-a="del" data-id="${t.id}">🗑</button></div></div>`).join('')+`</div></div>`;
+  else if(CUR==='ticker'){v.innerHTML=`<div class="panel"><h2>📰 الشريط</h2><div class="fld"><input id="tkNew" placeholder="اكتب جملة…"></div><button class="save" id="tkAdd">➕ إضافة</button><div class="grid" style="margin-top:12px">`+TICK.map(t=>`<div class="item"><h3>${esc(t.txt)}</h3><div class="row"><button class="btn b-ed" data-a="tg" data-id="${t.id}">${t.status==='مخفي'?'إظهار':'إخفاء'}</button><button class="btn b-no" data-a="del" data-id="${t.id}">🗑</button></div></div>`).join('')+`</div></div>`;
     $('#tkAdd').onclick=async()=>{if(!$('#tkNew').value)return;await addDoc(collection(db,'ticker'),{txt:$('#tkNew').value,status:'شغال'});loadAll();};
-    v.onclick=async e=>{const b=e.target.closest('[data-a]');if(!b)return;const t=TICK.find(x=>x.id===b.dataset.id);if(b.dataset.a==='del'){await deleteDoc(doc(db,'ticker',t.id));}else{await updateDoc(doc(db,'ticker',t.id),{status:t.status==='مخفي'?'شغال':'مخفي'});}loadAll();};
+    v.onclick=async e=>{const b=e.target.closest('[data-a]');if(!b)return;const t=TICK.find(x=>x.id===b.dataset.id);if(b.dataset.a==='del')await deleteDoc(doc(db,'ticker',t.id));else await updateDoc(doc(db,'ticker',t.id),{status:t.status==='مخفي'?'شغال':'مخفي'});loadAll();};
   }
-  else if(CUR==='stories'){v.innerHTML=`<div class="panel"><h2>🗣️ قصص النجاح</h2><div class="fld"><input id="stName" placeholder="الاسم"></div><div class="fld"><textarea id="stTxt" placeholder="نص القصة"></textarea></div><button class="save" id="stAdd">➕ إضافة</button><div class="grid" style="margin-top:12px">`+STOR.map(t=>`<div class="item"><h3>${esc(t.name)}</h3><div class="m">${esc(t.text)}</div><div class="row"><button class="btn b-ed" data-a="tg" data-id="${t.id}">${t.status==='مخفي'?'إظهار':'إخفاء'}</button><button class="btn b-no" data-a="del" data-id="${t.id}">🗑</button></div></div>`).join('')+`</div></div>`;
+  else if(CUR==='stories'){v.innerHTML=`<div class="panel"><h2>🗣️ القصص</h2><div class="fld"><input id="stName" placeholder="الاسم"></div><div class="fld"><textarea id="stTxt" placeholder="نص القصة"></textarea></div><button class="save" id="stAdd">➕ إضافة</button><div class="grid" style="margin-top:12px">`+STOR.map(t=>`<div class="item"><h3>${esc(t.name)}</h3><div class="m">${esc(t.text)}</div><div class="row"><button class="btn b-ed" data-a="tg" data-id="${t.id}">${t.status==='مخفي'?'إظهار':'إخفاء'}</button><button class="btn b-no" data-a="del" data-id="${t.id}">🗑</button></div></div>`).join('')+`</div></div>`;
     $('#stAdd').onclick=async()=>{if(!$('#stTxt').value)return;await addDoc(collection(db,'stories'),{name:$('#stName').value,text:$('#stTxt').value,status:'شغال'});loadAll();};
-    v.onclick=async e=>{const b=e.target.closest('[data-a]');if(!b)return;const t=STOR.find(x=>x.id===b.dataset.id);if(b.dataset.a==='del'){await deleteDoc(doc(db,'stories',t.id));}else{await updateDoc(doc(db,'stories',t.id),{status:t.status==='مخفي'?'شغال':'مخفي'});}loadAll();};
+    v.onclick=async e=>{const b=e.target.closest('[data-a]');if(!b)return;const t=STOR.find(x=>x.id===b.dataset.id);if(b.dataset.a==='del')await deleteDoc(doc(db,'stories',t.id));else await updateDoc(doc(db,'stories',t.id),{status:t.status==='مخفي'?'شغال':'مخفي'});loadAll();};
   }
   else if(CUR==='prices'){const P=S.prices||{bronze:{day:5,d7:30,d15:60,d30:100},gold:{day:10,d7:50,d15:100,d30:150},plat:{day:20,d7:100,d15:250,d30:500}};
     v.innerHTML=`<div class="panel"><h2>💎 الأسعار (بتتحدث على الموقع فورًا)</h2>`+['bronze','gold','plat'].map(k=>`<h3 style="margin:10px 0 6px">${k==='bronze'?'🥉 برونزي':k==='gold'?'👑 ذهبي':'💎 ماسي'}</h3><div class="f2"><div class="fld"><label>اليوم</label><input type="number" id="p_${k}_day" value="${P[k].day}"></div><div class="fld"><label>7 أيام</label><input type="number" id="p_${k}_d7" value="${P[k].d7}"></div><div class="fld"><label>15 يوم</label><input type="number" id="p_${k}_d15" value="${P[k].d15}"></div><div class="fld"><label>30 يوم</label><input type="number" id="p_${k}_d30" value="${P[k].d30}"></div></div>`).join('')+`<button class="save" id="pSave">💾 حفظ الأسعار</button></div>`;
@@ -117,8 +126,8 @@ function render(){
     $('#arAdd').onclick=async()=>{if(!$('#arGov').value||!$('#arArea').value)return;await addDoc(collection(db,'areas'),{gov:$('#arGov').value,area:$('#arArea').value});loadAll();};
     v.onclick=async e=>{const b=e.target.closest('[data-a]');if(!b)return;await deleteDoc(doc(db,'areas',b.dataset.id));loadAll();};
   }
+  }catch(e){showErr(e);}
 }
-$$('.tab').forEach(b=>b.onclick=()=>{CUR=b.dataset.t;render();});
 </script>
 </body>
 </html>
