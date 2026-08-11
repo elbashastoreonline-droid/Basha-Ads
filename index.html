@@ -236,6 +236,7 @@ footer a{color:#cfe3d7;text-decoration:none;display:block;padding:.22rem 0;font-
     <nav class="hnav">
       <button class="hbtn" id="themeBtn">🌙</button>
       <button class="hbtn gold" id="addBtnTop">🚀 أضف إعلانك</button>
+      <button class="hbtn" id="acctBtn">👤 دخول</button>
       <button class="hbtn" id="menuBtn">☰</button>
     </nav>
   </div></header>
@@ -408,10 +409,29 @@ footer a{color:#cfe3d7;text-decoration:none;display:block;padding:.22rem 0;font-
 </div></div>
 <div class="modal" id="detModal"><div class="ov" data-close></div><div class="mp" id="detBody"></div></div>
 <div class="modal" id="imgModal"><div class="ov" data-close></div><img id="imgBig" src=""><button class="mx imgx" data-close>✕</button></div>
+  <div class="modal" id="acctModal"><div class="ov" data-close></div><div class="mp">
+  <div class="mhead"><h3>👤 الحساب</h3><button class="mx" data-close>✕</button></div>
+  <div class="fld"><label>الاسم</label><input id="rgName" placeholder="اسمك"></div>
+  <div class="fld"><label>الإيميل *</label><input id="rgEmail" type="email" placeholder="you@mail.com"></div>
+  <div class="fld"><label>الباسورد *</label><input id="rgPass" type="password" placeholder="******"></div>
+  <div class="fld"><label>رقم الموبايل</label><input id="rgPhone" placeholder="01xxxxxxxxx"></div>
+  <button class="bigsend" id="doLogin">تسجيل دخول</button>
+  <button class="bigsend" id="doReg" style="background:var(--brand);margin-top:8px">إنشاء حساب جديد 🎁 (هديتك 50ج)</button>
+</div></div>
+<div class="modal" id="meModal"><div class="ov" data-close></div><div class="mp">
+  <div class="mhead"><h3>👤 حسابي</h3><button class="mx" data-close>✕</button></div>
+  <div class="paybox"><div class="prow"><span>💰 رصيد المحفظة</span><b id="meBal">0 ج</b></div>
+  <div class="prow"><span>📱 الموبايل</span><b id="mePhone">—</b></div></div>
+  <div class="fld"><label>الاسم</label><input id="meName"></div>
+  <button class="bigsend" id="meSave" style="margin-bottom:8px">💾 حفظ</button>
+  <h3 style="margin:12px 0 8px">📢 طلباتي وإعلاناتي</h3><div id="meAds"></div>
+  <button class="bigsend" id="meOut" style="background:var(--red);margin-top:12px">خروج</button>
+</div></div>
 <div class="toast" id="toast"></div>
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
 import{getFirestore,collection,getDocs,addDoc,doc,getDoc,serverTimestamp}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+  import{getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
 const db=getFirestore(initializeApp({apiKey:"AIzaSyAErZex3BsKMO9cHtalN_Nhb0D7A4tFWe4",authDomain:"daleelak-22dc6.firebaseapp.com",projectId:"daleelak-22dc6",storageBucket:"daleelak-22dc6.firebasestorage.app",messagingSenderId:"774332263419",appId:"1:774332263419:web:527fc4de3d7ed6ce1e395e"}));
 const CONFIG={USE_WHATSAPP_FORM:false};
 const SHEET_ID='1wgNuXx8KAYFjiRekzks3M4lgpOuBz6i3MHXsai2NIuY';
@@ -578,6 +598,28 @@ addEventListener('scroll',()=>$('#topBtn').classList.toggle('show',scrollY>500))
 $('#topBtn').addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}));
 if(localStorage.getItem('dlk_theme')==='dark')document.documentElement.dataset.theme='dark';
 $('#themeBtn').addEventListener('click',()=>{const d=document.documentElement.dataset.theme==='dark';document.documentElement.dataset.theme=d?'':'dark';localStorage.setItem('dlk_theme',d?'light':'dark');$('#themeBtn').textContent=d?'☀️':'🌙';});
+  /* ===== الحسابات ===== */
+const auth=getAuth(app);let ME=null;
+const U=uid=>doc(db,'users',uid);
+onAuthStateChanged(auth,async u=>{
+  if(u){try{let d=await getDoc(U(u.uid));
+    if(!d.exists()){await setDoc(U(u.uid),{name:'',phone:'',email:u.email||'',balance:50,favorites:[],createdAt:Date.now()});toast('🎁 مبروك! اتضافلك 50ج رصيد ترحيبي');d=await getDoc(U(u.uid));}
+    ME={id:u.uid,...d.data()};FAVS=new Set(ME.favorites||[]);applyFilters();
+    $('#acctBtn').textContent='👤 '+(ME.name||'حسابي');}catch(e){toast('⚠️ '+e.message);}
+  } else {ME=null;$('#acctBtn').textContent='👤 دخول';}
+});
+$('#acctBtn').onclick=()=>{ if(ME){openMe();} else {newCap();$('#acctModal').classList.add('open');} };
+$('#doLogin').onclick=async()=>{try{await signInWithEmailAndPassword(auth,$('#rgEmail').value.trim(),$('#rgPass').value);$('#acctModal').classList.remove('open');}catch(e){toast('⚠️ بيانات الدخول غلط');}};
+$('#doReg').onclick=async()=>{const n=$('#rgName').value.trim(),e=$('#rgEmail').value.trim(),p=$('#rgPass').value,ph=$('#rgPhone').value.trim();
+  if(!e||!p){toast('اكتب الإيميل والباسورد');return;}
+  try{const c=await createUserWithEmailAndPassword(auth,e,p);
+    await setDoc(U(c.user.uid),{name:n,phone:ph,email:e,balance:50,favorites:[],createdAt:Date.now()});
+    toast('🎁 مبروك! اتعمل حسابك واتضافلك 50ج');$('#acctModal').classList.remove('open');}catch(e){toast('⚠️ '+e.message);}};
+function openMe(){$('#meBal').textContent=(ME.balance||0)+' ج';$('#mePhone').textContent=ME.phone||'—';$('#meName').value=ME.name||'';renderMeAds();$('#meModal').classList.add('open');}
+$('#meSave').onclick=async()=>{await updateDoc(U(ME.id),{name:$('#meName').value,phone:$('#mePhone').value});ME.name=$('#meName').value;ME.phone=$('#mePhone').value;$('#acctBtn').textContent='👤 '+(ME.name||'حسابي');toast('✅ اتحفظ');};
+$('#meOut').onclick=()=>signOut(auth);
+async function renderMeAds(){const rq=(await getDocs(collection(db,'requests'))).docs.map(d=>({id:d.id,...d.data()})).filter(r=>r.ownerUid===ME.id);
+  $('#meAds').innerHTML=rq.length?rq.map(r=>`<div class="drow"><b>${esc(r.name)}</b><span>${esc(r.status||'معلق')}</span></div>`).join(''):'<p style="color:var(--mut);font-size:.8rem">لسه مفيش طلبات.</p>';}
 loadAll();
 </script>
 </body>
