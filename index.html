@@ -448,6 +448,7 @@ async function loadAll(){
   try{const st=await getDocs(collection(db,'stories'));STORIES=st.docs.map(d=>d.data()).filter(x=>x.text&&x.status!=='مخفي');}catch(e){}
   if(!STORIES.length){try{const j=await fetchSheet('قصص النجاح');const{col}=mapCols(j);const I={name:col(['اسم المعلن']),text:col(['نص القصة'],['النص'])};STORIES=j.table.rows.map(r=>{const g=k=>{if(I[k]<0)return'';const c=r.c[I[k]];return c?String(c.f??c.v??'').trim():''};return{name:g('name'),text:g('text')};}).filter(x=>x.text);}catch(e){}}
   try{const j=await fetchSheet('المناطق');const cols=j.table.cols.map(c=>(c.label||'').trim());AREAS={};cols.forEach((gov,ci)=>{if(!gov)return;const list=j.table.rows.map(r=>{const c=r.c[ci];return c?String(c.f??c.v??'').trim():''}).filter(Boolean);if(list.length)AREAS[gov]=list;});}catch(e){}
+  try{const fa=await getDocs(collection(db,'areas'));fa.docs.forEach(d=>{const r=d.data();(AREAS[r.gov]=AREAS[r.gov]||[]).push(r.area);});}catch(e){}
   buildGovs();buildTicker();buildCats();buildDeal();buildStats();applyFilters(true);renderStories();maybeSplash();
 }
 function applySettings(){$('#txtBadge').textContent=S.badge;$('#txtH1').textContent=S.h1;const h2=$('#txtH2');h2.textContent=S.h2;h2.className=S.hl?'hl':'';$('#txtAnn').textContent=S.announce;$('#couponCode').textContent=S.coupon;$('#payInsta').textContent=S.insta;$('#payVoda').textContent=S.voda;$('#pBronze').textContent=S.prices.bronze.day+' ج';$('#pGold').textContent=S.prices.gold.day+' ج';$('#pPlat').textContent=S.prices.plat.day+' ج';}
