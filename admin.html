@@ -1,318 +1,124 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>دليلك | لوحة التحكم</title>
-<link href="https://fonts.googleapis.com/css2?family=Lalezar&family=Almarai:wght@400;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0c1512;--card:#15221c;--card2:#1b2b23;--ink:#edf5ef;--mut:#8fa798;--brand:#2fbf8f;--gold:#f2b93c;--gold2:#ffd76a;--red:#ff6b6b;--line:#22362d;--dia:#7ec8e3}
+:root{--bg:#0c1512;--card:#15221c;--card2:#1b2b23;--ink:#edf5ef;--mut:#8fa798;--brand:#2fbf8f;--gold:#f2b93c;--red:#ff6b6b;--line:#22362d}
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Almarai',sans-serif}
-h1,h2,h3,.disp{font-family:'Lalezar',cursive;font-weight:400}
-body{background:var(--bg);color:var(--ink);min-height:100vh;padding:16px}
+body{background:var(--bg);color:var(--ink);padding:16px}
 button{cursor:pointer;border:none;font-family:inherit}
-input,select{font-family:inherit;background:var(--card2);border:1.5px solid var(--line);color:var(--ink);border-radius:10px;padding:.65rem .8rem;width:100%;font-size:.9rem}
-input:focus,select:focus{outline:none;border-color:var(--brand)}
-label{display:block;font-size:.72rem;color:var(--mut);font-weight:800;margin-bottom:4px}
-.wrap{max-width:1100px;margin:0 auto}
-#loginView{max-width:400px;margin:8vh auto;background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:28px;text-align:center}
-#loginView .logo{font-family:'Lalezar';font-size:2rem;color:var(--gold)}
-#loginView p{color:var(--mut);font-size:.82rem;font-weight:700;margin:6px 0 18px}
-#loginView input{margin-bottom:10px}
-.btn{display:block;width:100%;padding:.8rem;border-radius:11px;font-weight:800;font-size:.95rem;transition:.2s}
-.btn.gold{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#3a2a00}
-.btn.google{background:var(--card2);color:var(--ink);border:1.5px solid var(--line);margin-top:8px}
-.btn:hover{filter:brightness(1.1);transform:translateY(-1px)}
-header{display:flex;align-items:center;gap:12px;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:12px 16px;margin-bottom:16px}
-header .t{font-family:'Lalezar';font-size:1.4rem;color:var(--gold)}
-header .em{color:var(--mut);font-size:.75rem;font-weight:700}
-header .out{margin-inline-start:auto;background:var(--card2);border:1.5px solid var(--line);color:var(--red);border-radius:10px;padding:.5rem .9rem;font-weight:800;font-size:.8rem}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
-.st{background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:14px;text-align:center}
-.st b{font-family:'Lalezar';font-size:1.9rem;display:block;line-height:1.1}
-.st span{font-size:.75rem;font-weight:800;color:var(--mut)}
-.st.p b{color:var(--gold)}.st.h b{color:var(--dia)}.st.a b{color:var(--brand)}.st.r b{color:var(--red)}
-.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
-.tab{background:var(--card);border:1.5px solid var(--line);color:var(--mut);border-radius:99px;padding:.5rem 1.1rem;font-weight:800;font-size:.8rem;transition:.2s}
-.tab.on{background:var(--gold);color:#3a2a00;border-color:var(--gold)}
-.filters select{width:auto;margin-inline-start:auto}
-.reqs{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
-.req{background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:16px;cursor:pointer;transition:.2s;position:relative}
-.req:hover{transform:translateY(-3px);border-color:var(--brand)}
-.req h3{font-size:1.2rem;margin-bottom:4px}
-.req .meta{color:var(--mut);font-size:.76rem;font-weight:700;line-height:1.9}
-.req .tot{font-family:'Lalezar';font-size:1.3rem;color:var(--brand)}
-.badge{position:absolute;top:12px;inset-inline-end:12px;font-size:.68rem;font-weight:800;padding:.25rem .7rem;border-radius:99px}
-.badge.pending{background:color-mix(in srgb,var(--gold) 20%,transparent);color:var(--gold)}
-.badge.hold{background:color-mix(in srgb,var(--dia) 20%,transparent);color:var(--dia)}
-.badge.approved{background:color-mix(in srgb,var(--brand) 20%,transparent);color:var(--brand)}
-.badge.rejected{background:color-mix(in srgb,var(--red) 20%,transparent);color:var(--red)}
-.planb{display:inline-block;font-size:.68rem;font-weight:800;padding:.2rem .6rem;border-radius:99px;margin-bottom:6px}
-.planb.bronze{background:color-mix(in srgb,#cd7f32 25%,transparent);color:#d99a5b}
-.planb.gold{background:color-mix(in srgb,var(--gold) 25%,transparent);color:var(--gold)}
-.planb.plat{background:color-mix(in srgb,var(--dia) 25%,transparent);color:var(--dia)}
-.empty{grid-column:1/-1;text-align:center;color:var(--mut);font-weight:800;padding:40px;background:var(--card);border:1.5px dashed var(--line);border-radius:14px}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:50;padding:16px}
-.modal.open{display:flex}
-.mp{background:var(--card);border:1.5px solid var(--line);border-radius:18px;max-width:640px;width:100%;max-height:90vh;overflow-y:auto;padding:22px}
-.mp .mhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
-.mp .mhead h2{color:var(--gold);font-size:1.4rem}
-.mx{background:var(--card2);border:1.5px solid var(--line);color:var(--ink);border-radius:10px;width:36px;height:36px;font-size:1rem}
-.prev{background:var(--card2);border:1.5px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:14px}
-.prev img{width:100%;height:180px;object-fit:cover}
-.prev .pb{padding:14px}
-.prev h3{font-size:1.2rem}
-.prev .m{color:var(--mut);font-size:.78rem;font-weight:700}
-.noimg{padding:26px;text-align:center;color:var(--red);font-weight:800;font-size:.85rem;background:color-mix(in srgb,var(--red) 8%,transparent)}
-.rows{margin-bottom:12px}
-.row{display:flex;justify-content:space-between;gap:10px;padding:.5rem 0;border-bottom:1px dashed var(--line);font-size:.84rem;font-weight:700}
-.row b{color:var(--mut)}
-.row a{color:var(--dia);text-decoration:none;font-weight:800}
-.f2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
-.editbtn{width:100%;background:var(--card2);border:1.5px dashed var(--line);color:var(--dia);border-radius:11px;padding:.7rem;font-weight:800;font-size:.88rem;margin-bottom:10px;transition:.2s}
-.editbtn:hover{border-color:var(--dia)}
-.acts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-.acts.two{grid-template-columns:1fr 1fr}
-.acts button{padding:.8rem;border-radius:11px;font-weight:800;font-size:.9rem;transition:.2s}
-.acts .ok{background:var(--brand);color:#04241a}
-.acts .hd{background:color-mix(in srgb,var(--dia) 25%,transparent);color:var(--dia);border:1.5px solid var(--dia)}
-.acts .rj{background:color-mix(in srgb,var(--red) 20%,transparent);color:var(--red);border:1.5px solid var(--red)}
-.acts button:hover{filter:brightness(1.15)}
-.testbtn{background:var(--card2);border:1.5px dashed var(--line);color:var(--mut);border-radius:12px;padding:.7rem 1.2rem;font-weight:800;font-size:.8rem;margin-bottom:16px}
-.testbtn:hover{color:var(--gold);border-color:var(--gold)}
-.toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,80px);background:var(--ink);color:var(--bg);font-weight:800;padding:.7rem 1.4rem;border-radius:12px;transition:.3s;opacity:0;z-index:99}
-.toast.show{transform:translate(-50%,0);opacity:1}
-@media(max-width:700px){.stats{grid-template-columns:1fr 1fr}.acts{grid-template-columns:1fr}.f2{grid-template-columns:1fr}}
+input,select,textarea{background:var(--card2);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:.5rem;width:100%}
+h1,h2,h3{font-weight:800}
+.top{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.top h1{font-size:1.2rem;margin-left:auto}
+.tab{background:var(--card2);border:1px solid var(--line);color:var(--mut);border-radius:99px;padding:.5rem 1rem;font-weight:800;font-size:.8rem}
+.tab.on{background:var(--brand);color:#04241a}
+.logout{background:var(--red);color:#fff;border-radius:99px;padding:.5rem 1rem;font-weight:800}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.item{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}
+.item h3{font-size:.95rem;margin-bottom:6px}
+.item .m{color:var(--mut);font-size:.75rem;font-weight:700;margin-bottom:8px}
+.row{display:flex;gap:6px;flex-wrap:wrap}
+.btn{border-radius:8px;padding:.4rem .7rem;font-weight:800;font-size:.72rem}
+.b-ok{background:var(--brand);color:#04241a}.b-no{background:var(--red);color:#fff}
+.b-hold{background:var(--gold);color:#3a2a00}.b-ed{background:var(--card2);border:1px solid var(--line)}
+.badge{display:inline-block;font-size:.68rem;font-weight:800;border-radius:99px;padding:.15rem .6rem;margin-bottom:6px}
+.st-p{background:#3a2f10;color:var(--gold)}.st-a{background:#0d3a2c;color:var(--brand)}.st-r{background:#3a1414;color:var(--red)}.st-h{background:#332b0e;color:var(--gold)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:16px}
+.panel h2{font-size:1rem;margin-bottom:12px}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fld{margin-bottom:8px}.fld label{display:block;font-size:.72rem;font-weight:800;color:var(--mut);margin-bottom:3px}
+.save{background:var(--brand);color:#04241a;border-radius:10px;padding:.7rem 1.4rem;font-weight:800;width:100%}
+#login{max-width:380px;margin:10vh auto;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;text-align:center}
+#login button{background:var(--brand);color:#04241a;border-radius:10px;padding:.7rem 1.4rem;font-weight:800;width:100%}
+.hide{display:none}
 </style>
 </head>
 <body>
-
-<div id="loginView">
-  <div class="logo">🛡️ دليلك — لوحة التحكم</div>
-  <p>الدخول مسموح لحساب المدير فقط</p>
-  <input type="email" id="liEmail" placeholder="الإيميل">
-  <input type="password" id="liPass" placeholder="الباسورد">
-  <button class="btn gold" id="liBtn">تسجيل الدخول</button>
-  <button class="btn google" id="liGoogle">🔐 دخول بحساب جوجل</button>
+<div id="login"><h2>🔐 لوحة تحكم دليلك</h2><p style="color:var(--mut);font-size:.8rem;margin:10px 0">الدخول لحساب الإدارة فقط</p><button id="gLogin">دخول بحساب جوجل</button></div>
+<div id="app" class="hide">
+<div class="top">
+  <h1>🛡️ لوحة تحكم دليلك</h1>
+  <button class="tab on" data-t="req">📥 الطلبات</button>
+  <button class="tab" data-t="ads">📢 الإعلانات</button>
+  <button class="tab" data-t="splash">🎁 العائم</button>
+  <button class="tab" data-t="ticker">📰 الشريط</button>
+  <button class="tab" data-t="stories">🗣️ القصص</button>
+  <button class="tab" data-t="prices">💎 الأسعار</button>
+  <button class="tab" data-t="set">⚙️ إعدادات</button>
+  <button class="tab" data-t="areas">🗺️ المناطق</button>
+  <button class="logout" id="out">خروج</button>
 </div>
-
-<div id="appView" class="wrap" style="display:none">
-  <header>
-    <span style="font-size:1.6rem">🛡️</span>
-    <div><div class="t">لوحة تحكم دليلك</div><div class="em" id="adminEmail"></div></div>
-    <button class="out" id="outBtn">خروج ⎋</button>
-  </header>
-
-  <div class="stats">
-    <div class="st p"><b id="cPend">0</b><span>⏳ معلق</span></div>
-    <div class="st h"><b id="cHold">0</b><span>⏸️ مؤجل</span></div>
-    <div class="st a"><b id="cApp">0</b><span>✅ مكتمل</span></div>
-    <div class="st r"><b id="cRej">0</b><span>❌ مرفوض</span></div>
-  </div>
-
-  <button class="testbtn" id="testBtn">🧪 إضافة طلب تجريبي (لتجربة الدورة كاملة)</button>
-
-  <div class="filters">
-    <button class="tab on" data-st="pending">⏳ معلق</button>
-    <button class="tab" data-st="hold">⏸️ مؤجل</button>
-    <button class="tab" data-st="approved">✅ مكتمل</button>
-    <button class="tab" data-st="rejected">❌ مرفوض</button>
-    <button class="tab" data-st="all">الكل</button>
-    <select id="planFilter">
-      <option value="">كل الباقات</option>
-      <option value="bronze">🥉 برونزي</option>
-      <option value="gold">👑 ذهبي</option>
-      <option value="plat">💎 ماسي</option>
-    </select>
-  </div>
-
-  <div class="reqs" id="reqsBox"></div>
+<div id="view"></div>
 </div>
-
-<div class="modal" id="reqModal">
-  <div class="mp">
-    <div class="mhead"><h2 id="mTitle">معاينة الطلب</h2><button class="mx" id="mClose">✕</button></div>
-    <div class="prev" id="prevBox"></div>
-    <div class="rows" id="rowsBox"></div>
-    <button class="editbtn" id="btnEdit">✏️ تعديل البيانات</button>
-    <div class="acts" id="actsRow">
-      <button class="ok" id="actApprove">✅ تأكيد ونشر</button>
-      <button class="hd" id="actHold">⏸️ تأجيل</button>
-      <button class="rj" id="actReject">❌ رفض</button>
-    </div>
-    <div class="acts two" id="saveBar" style="display:none">
-      <button class="ok" id="btnSave">💾 حفظ التعديلات</button>
-      <button class="hd" id="btnCancelEdit">إلغاء</button>
-    </div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
-
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
-import { getFirestore, collection, onSnapshot, query, orderBy, addDoc, updateDoc, doc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyAErZex3BsKMO9cHtalN_Nhb0D7A4tFWe4",
-  authDomain: "daleelak-22dc6.firebaseapp.com",
-  projectId: "daleelak-22dc6",
-  storageBucket: "daleelak-22dc6.firebasestorage.app",
-  messagingSenderId: "774332263419",
-  appId: "1:774332263419:web:527fc4de3d7ed6ce1e395e"
-};
-const ADMIN_EMAIL = "daleelak317@gmail.com";
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-const $ = s => document.querySelector(s);
-const esc = s => String(s ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-function toast(m){ const t=$('#toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2400); }
-window.imgFail = el => { const d=document.createElement('div'); d.className='noimg'; d.textContent='⚠️ الصورة مش شغالة — كلم العميل أو عدّل اللينك من ✏️ تعديل'; el.replaceWith(d); };
-
-const PLAN = { bronze:{n:'🥉 برونزي',c:'bronze'}, gold:{n:'👑 ذهبي VIP',c:'gold'}, plat:{n:'💎 ماسي DIAMOND',c:'plat'} };
-const ST   = { pending:'معلق', hold:'مؤجل', approved:'مكتمل', rejected:'مرفوض' };
-let ALL = [], curTab='pending', curPlan='', curId=null, curReq=null, editing=false;
-
-onAuthStateChanged(auth, u => {
-  if (u && u.email === ADMIN_EMAIL) {
-    $('#loginView').style.display='none'; $('#appView').style.display='';
-    $('#adminEmail').textContent=u.email; listen();
-  } else {
-    if (u) signOut(auth);
-    $('#loginView').style.display=''; $('#appView').style.display='none';
+import{initializeApp}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+import{getAuth,signInWithPopup,GoogleAuthProvider,signOut,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
+import{getFirestore,collection,getDocs,addDoc,updateDoc,deleteDoc,doc,getDoc,setDoc,serverTimestamp}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+const app=initializeApp({apiKey:"AIzaSyAErZex3BsKMO9cHtalN_Nhb0D7A4tFWe4",authDomain:"daleelak-22dc6.firebaseapp.com",projectId:"daleelak-22dc6",storageBucket:"daleelak-22dc6.firebasestorage.app",messagingSenderId:"774332263419",appId:"1:774332263419:web:527fc4de3d7ed6ce1e395e"});
+const db=getFirestore(app),auth=getAuth(app);
+const ADMIN=['daleelak317@gmail.com'];
+let S={},REQ=[],ADS=[],TICK=[],STOR=[],AREAS=[],CUR='req';
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+onAuthStateChanged(auth,u=>{if(u&&ADMIN.includes(u.email)){$('#login').classList.add('hide');$('#app').classList.remove('hide');loadAll();}else{$('#login').classList.remove('hide');$('#app').classList.add('hide');}});
+$('#gLogin').onclick=()=>signInWithPopup(auth,new GoogleAuthProvider());
+$('#out').onclick=()=>signOut(auth);
+async function loadAll(){
+  const sd=await getDoc(doc(db,'settings','site'));S=sd.exists()?sd.data():{};
+  REQ=(await getDocs(collection(db,'requests'))).docs.map(d=>({id:d.id,...d.data()}));
+  ADS=(await getDocs(collection(db,'ads'))).docs.map(d=>({id:d.id,...d.data()}));
+  TICK=(await getDocs(collection(db,'ticker'))).docs.map(d=>({id:d.id,...d.data()}));
+  STOR=(await getDocs(collection(db,'stories'))).docs.map(d=>({id:d.id,...d.data()}));
+  AREAS=(await getDocs(collection(db,'areas'))).docs.map(d=>({id:d.id,...d.data()}));
+  render();
+}
+const durDays=r=>r.duration==='s7'?7:r.duration==='s15'?15:r.duration==='s30'?30:r.duration==='custom'?(+r.days||1):(+r.days||1);
+async function approve(r){const days=durDays(r);await addDoc(collection(db,'ads'),{name:r.name,desc:r.desc||'',cat:r.cat||'',img:r.img||'',wa:r.wa||'',phone:r.phone||'',plan:r.plan||'bronze',city:r.city||'',area:r.area||'',loc:r.loc||'',pb:r.pb||'',pa:r.pa||'',sold:r.sold||'',del:r.del||'',code:r.code||'',ver:'',type:r.type||'',status:'شغال',rank:0,hours:0,startAt:Date.now(),endsAt:Date.now()+days*864e5});await updateDoc(doc(db,'requests',r.id),{status:'approved'});loadAll();}
+async function setReq(r,st){await updateDoc(doc(db,'requests',r.id),{status:st});loadAll();}
+async function delAd(id){if(confirm('حذف الإعلان؟')){await deleteDoc(doc(db,'ads',id));loadAll();}}
+async function toggleAd(a){await updateDoc(doc(db,'ads',a.id),{status:a.status==='شغال'?'موقوف':'شغال'});loadAll();}
+async function verifyAd(a){await updateDoc(doc(db,'ads',a.id),{ver:a.ver==='نعم'?'':'نعم'});loadAll();}
+async function toSplash(a){await setDoc(doc(db,'settings','site'),{...S,splash:{active:true,img:a.img||'',link:a.loc||'#',id:'ad'+a.id,price8:50,priceDay:100}});alert('✅ بقى الإعلان العائم');loadAll();}
+async function toTicker(a){await addDoc(collection(db,'ticker'),{txt:'🔥 '+a.name+' — '+ (a.cat||''),status:'شغال'});alert('✅ اتضاف للشريط');loadAll();}
+async function toDeal(a){const h=prompt('مدة العرض بالساعات (عرض اليوم):','8');if(!h)return;await updateDoc(doc(db,'ads',a.id),{rank:(Math.max(0,...ADS.map(x=>x.rank||0))+1),hours:+h});alert('✅ دخل طابور عرض اليوم');loadAll();}
+async function renewAd(a){const d=prompt('زود كام يوم؟','7');if(!d)return;await updateDoc(doc(db,'ads',a.id),{endsAt:(a.endsAt||Date.now())+(+d)*864e5,status:'شغال'});loadAll();}
+function render(){
+  $$('.tab').forEach(b=>b.classList.toggle('on',b.dataset.t===CUR));
+  const v=$('#view');
+  if(CUR==='req'){const list=REQ.filter(r=>r.status!=='approved');
+    v.innerHTML=`<div class="panel"><h2>📥 الطلبات المعلقة (${list.length})</h2><div class="grid">`+ (list.map(r=>`<div class="item"><span class="badge st-p">${esc(r.status||'معلق')}</span><h3>${esc(r.name)}</h3><div class="m">${esc(r.plan)} • ${esc(r.city)} • ${esc(r.total)} ج<br>📱 ${esc(r.wa)}${r.senderPhone?'<br>💳 المحوّل منه: '+esc(r.senderPhone):''}</div><div class="row"><button class="btn b-ok" data-a="ok" data-id="${r.id}">✅ نشر</button><button class="btn b-hold" data-a="hold" data-id="${r.id}">⏸</button><button class="btn b-no" data-a="rej" data-id="${r.id}">❌</button></div></div>`).join('')||'<p style="color:var(--mut)">مفيش طلبات معلقة ✅</p>')+`</div></div>`;
+    v.onclick=e=>{const b=e.target.closest('[data-a]');if(!b)return;const r=REQ.find(x=>x.id===b.dataset.id);if(b.dataset.a==='ok')approve(r);if(b.dataset.a==='hold')setReq(r,'hold');if(b.dataset.a==='rej')setReq(r,'rejected');};
   }
-});
-$('#liBtn').onclick = async () => { try{ await signInWithEmailAndPassword(auth,$('#liEmail').value.trim(),$('#liPass').value);}catch(e){toast('❌ بيانات الدخول مش صحيحة');} };
-$('#liGoogle').onclick = async () => { try{ await signInWithPopup(auth,new GoogleAuthProvider());}catch(e){toast('❌ تأكد إن الدومين مضاف في Authorized domains');} };
-$('#outBtn').onclick = () => signOut(auth);
-
-function listen(){
-  onSnapshot(query(collection(db,'requests'), orderBy('createdAt','desc')), snap => {
-    ALL = snap.docs.map(d => ({ id:d.id, ...d.data() }));
-    renderStats(); renderList();
-    if (curId) { curReq = ALL.find(x=>x.id===curId)||null; if(curReq && $('#reqModal').classList.contains('open')) renderView(); }
-  }, err => { console.error(err); toast('⚠️ مشكلة في قراءة Firestore'); });
+  else if(CUR==='ads'){v.innerHTML=`<div class="panel"><h2>📢 الإعلانات المنشورة (${ADS.length})</h2><div class="grid">`+ADS.map(a=>`<div class="item"><span class="badge ${a.status==='شغال'?'st-a':'st-r'}">${esc(a.status)}</span>${a.ver==='نعم'?'<span class="badge st-a">✔ موثوق</span>':''}<h3>${esc(a.name)}</h3><div class="m">${esc(a.plan)} • ${esc(a.city)}${a.endsAt?'<br>⏳ ينتهي: '+new Date(a.endsAt).toLocaleDateString('ar-EG'):''}</div><div class="row"><button class="btn b-ed" data-a="tg" data-id="${a.id}">${a.status==='شغال'?'إيقاف':'تفعيل'}</button><button class="btn b-ed" data-a="vf" data-id="${a.id}">✔ موثوق</button><button class="btn b-hold" data-a="dl" data-id="${a.id}">⏰ عرض اليوم</button><button class="btn b-ed" data-a="tk" data-id="${a.id}">📰 الشريط</button><button class="btn b-hold" data-a="sp" data-id="${a.id}">🎯 عائم</button><button class="btn b-ed" data-a="rn" data-id="${a.id}">🔄 تجديد</button><button class="btn b-no" data-a="del" data-id="${a.id}">🗑</button></div></div>`).join('')+`</div></div>`;
+    v.onclick=e=>{const b=e.target.closest('[data-a]');if(!b)return;const a=ADS.find(x=>x.id===b.dataset.id);const m={tg:toggleAd,vf:verifyAd,dl:toDeal,tk:toTicker,sp:toSplash,rn:renewAd};if(b.dataset.a==='del')delAd(a.id);else m[b.dataset.a](a);};
+  }
+  else if(CUR==='splash'){const sp=S.splash||{};v.innerHTML=`<div class="panel"><h2>🎁 الإعلان العائم</h2><div class="fld"><label>لينك الصورة</label><input id="spImg" value="${esc(sp.img||'')}"></div><div class="fld"><label>لينك الضغط</label><input id="spLink" value="${esc(sp.link||'')}"></div><div class="f2"><div class="fld"><label>سعر 8 ساعات</label><input id="sp8" type="number" value="${sp.price8||50}"></div><div class="fld"><label>سعر اليوم</label><input id="spD" type="number" value="${sp.priceDay||100}"></div></div><div class="fld"><label><input type="checkbox" id="spOn" style="width:auto" ${sp.active?'checked':''}> مفعّل</label></div><button class="save" id="spSave">💾 حفظ</button></div>`;
+    $('#spSave').onclick=async()=>{await setDoc(doc(db,'settings','site'),{...S,splash:{active:$('#spOn').checked,img:$('#spImg').value,link:$('#spLink').value,price8:+$('#sp8').value,priceDay:+$('#spD').value,id:sp.id||('sp'+Date.now())}});alert('✅ تم الحفظ');loadAll();};
+  }
+  else if(CUR==='ticker'){v.innerHTML=`<div class="panel"><h2>📰 شريط الأخبار</h2><div class="fld"><input id="tkNew" placeholder="اكتب جملة جديدة…"></div><button class="save" id="tkAdd">➕ إضافة</button><div class="grid" style="margin-top:12px">`+TICK.map(t=>`<div class="item"><h3>${esc(t.txt)}</h3><div class="row"><button class="btn b-ed" data-a="tg" data-id="${t.id}">${t.status==='مخفي'?'إظهار':'إخفاء'}</button><button class="btn b-no" data-a="del" data-id="${t.id}">🗑</button></div></div>`).join('')+`</div></div>`;
+    $('#tkAdd').onclick=async()=>{if(!$('#tkNew').value)return;await addDoc(collection(db,'ticker'),{txt:$('#tkNew').value,status:'شغال'});loadAll();};
+    v.onclick=async e=>{const b=e.target.closest('[data-a]');if(!b)return;const t=TICK.find(x=>x.id===b.dataset.id);if(b.dataset.a==='del'){await deleteDoc(doc(db,'ticker',t.id));}else{await updateDoc(doc(db,'ticker',t.id),{status:t.status==='مخفي'?'شغال':'مخفي'});}loadAll();};
+  }
+  else if(CUR==='stories'){v.innerHTML=`<div class="panel"><h2>🗣️ قصص النجاح</h2><div class="fld"><input id="stName" placeholder="الاسم"></div><div class="fld"><textarea id="stTxt" placeholder="نص القصة"></textarea></div><button class="save" id="stAdd">➕ إضافة</button><div class="grid" style="margin-top:12px">`+STOR.map(t=>`<div class="item"><h3>${esc(t.name)}</h3><div class="m">${esc(t.text)}</div><div class="row"><button class="btn b-ed" data-a="tg" data-id="${t.id}">${t.status==='مخفي'?'إظهار':'إخفاء'}</button><button class="btn b-no" data-a="del" data-id="${t.id}">🗑</button></div></div>`).join('')+`</div></div>`;
+    $('#stAdd').onclick=async()=>{if(!$('#stTxt').value)return;await addDoc(collection(db,'stories'),{name:$('#stName').value,text:$('#stTxt').value,status:'شغال'});loadAll();};
+    v.onclick=async e=>{const b=e.target.closest('[data-a]');if(!b)return;const t=STOR.find(x=>x.id===b.dataset.id);if(b.dataset.a==='del'){await deleteDoc(doc(db,'stories',t.id));}else{await updateDoc(doc(db,'stories',t.id),{status:t.status==='مخفي'?'شغال':'مخفي'});}loadAll();};
+  }
+  else if(CUR==='prices'){const P=S.prices||{bronze:{day:5,d7:30,d15:60,d30:100},gold:{day:10,d7:50,d15:100,d30:150},plat:{day:20,d7:100,d15:250,d30:500}};
+    v.innerHTML=`<div class="panel"><h2>💎 الأسعار (بتتحدث على الموقع فورًا)</h2>`+['bronze','gold','plat'].map(k=>`<h3 style="margin:10px 0 6px">${k==='bronze'?'🥉 برونزي':k==='gold'?'👑 ذهبي':'💎 ماسي'}</h3><div class="f2"><div class="fld"><label>اليوم</label><input type="number" id="p_${k}_day" value="${P[k].day}"></div><div class="fld"><label>7 أيام</label><input type="number" id="p_${k}_d7" value="${P[k].d7}"></div><div class="fld"><label>15 يوم</label><input type="number" id="p_${k}_d15" value="${P[k].d15}"></div><div class="fld"><label>30 يوم</label><input type="number" id="p_${k}_d30" value="${P[k].d30}"></div></div>`).join('')+`<button class="save" id="pSave">💾 حفظ الأسعار</button></div>`;
+    $('#pSave').onclick=async()=>{const np={};['bronze','gold','plat'].forEach(k=>{np[k]={day:+$('#p_'+k+'_day').value,d7:+$('#p_'+k+'_d7').value,d15:+$('#p_'+k+'_d15').value,d30:+$('#p_'+k+'_d30').value};});await setDoc(doc(db,'settings','site'),{...S,prices:np});alert('✅ اتحدثت الأسعار على الموقع');loadAll();};
+  }
+  else if(CUR==='set'){v.innerHTML=`<div class="panel"><h2>⚙️ إعدادات الموقع</h2><div class="fld"><label>البادج</label><input id="sBadge" value="${esc(S.badge||'')}"></div><div class="fld"><label>العنوان الأول</label><input id="sH1" value="${esc(S.h1||'')}"></div><div class="fld"><label>العنوان الثاني</label><input id="sH2" value="${esc(S.h2||'')}"></div><div class="fld"><label>جملة الافتتاح</label><input id="sAnn" value="${esc(S.announce||'')}"></div><div class="fld"><label>كود الخصم</label><input id="sCoup" value="${esc(S.coupon||'')}"></div><div class="f2"><div class="fld"><label>واتساب الإدارة</label><input id="sWa" value="${esc(S.wa||'')}"></div><div class="fld"><label>إنستاباي</label><input id="sIn" value="${esc(S.insta||'')}"></div></div><div class="fld"><label>فودافون كاش</label><input id="sVo" value="${esc(S.voda||'')}"></div><button class="save" id="sSave">💾 حفظ</button></div>`;
+    $('#sSave').onclick=async()=>{await setDoc(doc(db,'settings','site'),{...S,badge:$('#sBadge').value,h1:$('#sH1').value,h2:$('#sH2').value,announce:$('#sAnn').value,coupon:$('#sCoup').value,wa:$('#sWa').value,insta:$('#sIn').value,voda:$('#sVo').value});alert('✅ اتحدث على الموقع');loadAll();};
+  }
+  else if(CUR==='areas'){v.innerHTML=`<div class="panel"><h2>🗺️ المناطق</h2><div class="f2"><div class="fld"><input id="arGov" placeholder="المحافظة"></div><div class="fld"><input id="arArea" placeholder="المنطقة"></div></div><button class="save" id="arAdd">➕ إضافة</button><div class="grid" style="margin-top:12px">`+AREAS.map(t=>`<div class="item"><h3>${esc(t.gov)} — ${esc(t.area)}</h3><div class="row"><button class="btn b-no" data-a="del" data-id="${t.id}">🗑</button></div></div>`).join('')+`</div></div>`;
+    $('#arAdd').onclick=async()=>{if(!$('#arGov').value||!$('#arArea').value)return;await addDoc(collection(db,'areas'),{gov:$('#arGov').value,area:$('#arArea').value});loadAll();};
+    v.onclick=async e=>{const b=e.target.closest('[data-a]');if(!b)return;await deleteDoc(doc(db,'areas',b.dataset.id));loadAll();};
+  }
 }
-function renderStats(){
-  const c=s=>ALL.filter(r=>r.status===s).length;
-  $('#cPend').textContent=c('pending'); $('#cHold').textContent=c('hold');
-  $('#cApp').textContent=c('approved'); $('#cRej').textContent=c('rejected');
-}
-function renderList(){
-  let list = ALL.filter(r => curTab==='all' ? true : r.status===curTab);
-  if (curPlan) list = list.filter(r=>r.plan===curPlan);
-  $('#reqsBox').innerHTML = list.length ? list.map(r => `
-    <div class="req" data-id="${r.id}">
-      <span class="badge ${r.status}">${ST[r.status]||r.status}</span>
-      <span class="planb ${PLAN[r.plan]?.c||'bronze'}">${PLAN[r.plan]?.n||esc(r.plan)}</span>
-      <h3>${esc(r.name)}</h3>
-      <div class="meta">📂 ${esc(r.cat||'—')} • 📍 ${esc(r.city||'—')}<br>📱 ${esc(r.wa||'—')}<br>🕐 ${r.createdAt?.toDate ? r.createdAt.toDate().toLocaleString('ar-EG') : ''}</div>
-      <div class="tot">${esc(r.total||0)} ج</div>
-    </div>`).join('')
-  : `<div class="empty">مفيش طلبات في التصنيف ده حاليًا 📭</div>`;
-}
-document.querySelectorAll('.tab').forEach(t => t.onclick = () => {
-  curTab=t.dataset.st;
-  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===t));
-  renderList();
-});
-$('#planFilter').onchange = e => { curPlan=e.target.value; renderList(); };
-
-$('#reqsBox').addEventListener('click', e => {
-  const card=e.target.closest('.req'); if(!card) return;
-  curReq = ALL.find(x=>x.id===card.dataset.id); if(!curReq) return;
-  curId = curReq.id; editing=false;
-  $('#reqModal').classList.add('open'); renderView();
-});
-$('#mClose').onclick = () => $('#reqModal').classList.remove('open');
-
-function renderView(){
-  if (editing) renderEdit(); else renderPreview();
-}
-function renderPreview(){
-  const r=curReq;
-  $('#mTitle').textContent='معاينة الطلب';
-  $('#prevBox').style.display=''; $('#prevBox').innerHTML = `
-    <img src="${esc(r.img)||''}" onerror="imgFail(this)">
-    <div class="pb"><h3>${esc(r.name)}</h3><div class="m">📂 ${esc(r.cat||'—')} • 📍 ${esc(r.city||'—')}${r.area?' — '+esc(r.area):''}<br>${esc(r.desc||'')}</div></div>`;
-  $('#rowsBox').innerHTML = `
-    <div class="row"><b>الباقة</b><span>${PLAN[r.plan]?.n||esc(r.plan)}</span></div>
-    <div class="row"><b>المدة / الإجمالي</b><span>${esc(r.duration||'—')} يوم / ${esc(r.total||0)} ج</span></div>
-    <div class="row"><b>واتساب / اتصال</b><span>${esc(r.wa||'—')} / ${esc(r.phone||'—')}</span></div>
-    <div class="row"><b>📤 الرقم المحوّل منه</b><span>${esc(r.senderPhone||'—')}</span></div>
-    <div class="row"><b>الأسعار</b><span>قبل: ${esc(r.pb||'—')} / بعد: ${esc(r.pa||'—')}</span></div>
-    <div class="row"><b>لوكيشن</b><span>${r.loc?`<a href="${esc(r.loc)}" target="_blank">فتح ↗</a>`:'—'}</span></div>
-    <div class="row"><b>سكرين الدفع</b><span>${r.payImg?`<a href="${esc(r.payImg)}" target="_blank">فتح ↗</a>`:'— مفيش'}</span></div>
-    <div class="row"><b>كود خصم</b><span>${esc(r.code||'—')}</span></div>`;
-  $('#btnEdit').style.display=''; $('#actsRow').style.display=''; $('#saveBar').style.display='none';
-}
-function renderEdit(){
-  const r=curReq;
-  $('#mTitle').textContent='✏️ تعديل الطلب';
-  $('#prevBox').style.display='none';
-  $('#rowsBox').innerHTML = `
-    <div class="f2">
-      <div><label>الاسم</label><input id="ed_name" value="${esc(r.name||'')}"></div>
-      <div><label>الباقة</label><select id="ed_plan">
-        <option value="bronze" ${r.plan==='bronze'?'selected':''}>🥉 برونزي</option>
-        <option value="gold" ${r.plan==='gold'?'selected':''}>👑 ذهبي</option>
-        <option value="plat" ${r.plan==='plat'?'selected':''}>💎 ماسي</option>
-      </select></div>
-      <div><label>لينك صورة الإعلان</label><input id="ed_img" value="${esc(r.img||'')}"></div>
-      <div><label>لينك سكرين الدفع</label><input id="ed_payImg" value="${esc(r.payImg||'')}"></div>
-      <div><label>واتساب</label><input id="ed_wa" value="${esc(r.wa||'')}"></div>
-      <div><label>اتصال</label><input id="ed_phone" value="${esc(r.phone||'')}"></div>
-      <div><label>📤 الرقم المحوّل منه</label><input id="ed_sender" value="${esc(r.senderPhone||'')}"></div>
-      <div><label>الفئة</label><input id="ed_cat" value="${esc(r.cat||'')}"></div>
-      <div><label>المحافظة</label><input id="ed_city" value="${esc(r.city||'')}"></div>
-      <div><label>المنطقة</label><input id="ed_area" value="${esc(r.area||'')}"></div>
-      <div><label>الإجمالي (ج)</label><input id="ed_total" type="number" value="${esc(r.total||0)}"></div>
-      <div><label>المدة (يوم)</label><input id="ed_duration" type="number" value="${esc(r.duration||7)}"></div>
-      <div><label>كود خصم</label><input id="ed_code" value="${esc(r.code||'')}"></div>
-      <div><label>سعر قبل</label><input id="ed_pb" value="${esc(r.pb||'')}"></div>
-      <div><label>سعر بعد</label><input id="ed_pa" value="${esc(r.pa||'')}"></div>
-    </div>
-    <div style="margin-bottom:8px"><label>الوصف</label><input id="ed_desc" value="${esc(r.desc||'')}"></div>
-    <div style="margin-bottom:8px"><label>لوكيشن</label><input id="ed_loc" value="${esc(r.loc||'')}"></div>`;
-  $('#btnEdit').style.display='none'; $('#actsRow').style.display='none'; $('#saveBar').style.display='';
-}
-$('#btnEdit').onclick = () => { editing=true; renderView(); };
-$('#btnCancelEdit').onclick = () => { editing=false; renderView(); };
-$('#btnSave').onclick = async () => {
-  const g=id=>$('#ed_'+id).value.trim();
-  await updateDoc(doc(db,'requests',curReq.id), {
-    name:g('name'), plan:$('#ed_plan').value, img:g('img'), payImg:g('payImg'), wa:g('wa'), phone:g('phone'), senderPhone:g('sender'),
-    cat:g('cat'), city:g('city'), area:g('area'), total:+$('#ed_total').value||0, duration:+$('#ed_duration').value||7,
-    code:g('code'), pb:g('pb'), pa:g('pa'), desc:g('desc'), loc:g('loc')
-  });
-  toast('💾 تم حفظ التعديلات'); editing=false; renderView();
-};
-
-async function setStatus(id,status){ await updateDoc(doc(db,'requests',id),{status}); $('#reqModal').classList.remove('open'); }
-$('#actApprove').onclick = async () => {
-  const r=curReq; if(!r) return;
-  const dur=+r.duration||7, now=Date.now();
-  const { id, status, createdAt, ...adData } = r;
-  await addDoc(collection(db,'ads'), { ...adData, status:'شغال', startAt:now, endsAt: now + dur*86400000, approvedAt: serverTimestamp() });
-  await setStatus(id,'approved');
-  toast('✅ تم النشر في مجموعة ads (لمدة '+dur+' يوم)');
-};
-$('#actHold').onclick  = () => setStatus(curId,'hold').then(()=>toast('⏸️ تم التأجيل'));
-$('#actReject').onclick= () => setStatus(curId,'rejected').then(()=>toast('❌ تم الرفض'));
-
-$('#testBtn').onclick = async () => {
-  await addDoc(collection(db,'requests'), {
-    name:'إعلان تجريبي — كافيه النجمة', type:'مكان', plan:'gold', duration:7, total:70,
-    cat:'🍔 مطاعم وكافيهات', city:'الإسكندرية', area:'سموحة',
-    desc:'خصم 20% على كل المشروبات الساخنة', wa:'01288023436', phone:'',
-    pb:'', pa:'', loc:'', code:'TEST10', img:'https://i.ibb.co/M5StFDSQ/file-00000000335471f48a03a0acb621d53c.png', payImg:'',
-    status:'pending', createdAt: serverTimestamp()
-  });
-  toast('🧪 اتضاف طلب تجريبي — شوفه في المعلق');
-};
+$$('.tab').forEach(b=>b.onclick=()=>{CUR=b.dataset.t;render();});
 </script>
 </body>
 </html>
