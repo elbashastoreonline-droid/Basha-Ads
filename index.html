@@ -467,8 +467,10 @@ const DEF={badge:"📍 دليل مصر المحلي للعروض والأماك�
 const CATS=['🛒 سوبر ماركت وبقالة','💊 صيدليات ومستلزمات طبية','💄 إكسسوارات وأدوات تجميل','🍔 مطاعم وكافيهات','👗 ملابس وأحذية','👶 مستلزمات أطفال','🎮 شحن ألعاب وخدمات','📱 إلكترونيات وموبايلات','🛠️ خدمات وصيانة','🏥 مستشفيات وعيادات وأطباء','🏢 عقارات وديكور','🚗 سيارات ومواصلات','🕌 دار تحفيظ قرآن','📌 أخرى'];
 const GOVS=['القاهرة','الجيزة','القليوبية','الإسكندرية','البحيرة','مطروح','الغربية','المنوفية','الدقهلية','الشرقية','كفر الشيخ','دمياط','بورسعيد','الإسماعيلية','السويس','الفيوم','بني سويف','المنيا','أسيوط','سوهاج','قنا','الأقصر','أسوان','البحر الأحمر','الوادي الجديد','شمال سيناء','جنوب سيناء'];
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+/* ✅ ربط آمن: أي عنصر مش موجود ميوقفش الموقع */
+function on(sel,ev,fn){const el=document.querySelector(sel);if(el)el.addEventListener(ev,fn);}
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(t._x);t._x=setTimeout(()=>t.classList.remove('show'),2600);}
+function toast(m){const t=$('#toast');if(!t)return;t.textContent=m;t.classList.add('show');clearTimeout(t._x);t._x=setTimeout(()=>t.classList.remove('show'),2600);}
 function copyTxt(t,m){if(navigator.clipboard){navigator.clipboard.writeText(t).then(()=>toast(m||'تم النسخ ✅'));}else{toast(m||'تم النسخ ✅');}}
 function waLink(n,t){n=(n||'').replace(/\D/g,'');if(n.startsWith('0'))n='2'+n;return'https://wa.me/'+n+(t?'?text='+encodeURIComponent(t):'');}
 function localPhone(n){n=(n||'').replace(/\D/g,'');if(n.startsWith('20'))n=n.slice(2);if(!n.startsWith('0')&&n.length>=9)n='0'+n;return n;}
@@ -481,6 +483,7 @@ const PLANKEY={'عادي':'bronze','VIP':'gold','بلاتيني':'plat'};
 async function fetchSheet(name){const url='https://docs.google.com/spreadsheets/d/'+SHEET_ID+'/gviz/tq?tqx=out:json'+(name?'&sheet='+encodeURIComponent(name):'')+'&t='+Date.now();const r=await fetch(url);const t=await r.text();return JSON.parse(t.substring(t.indexOf('(')+1,t.lastIndexOf(')')));}
 function mapCols(j){const cols=j.table.cols.map(c=>(c.label||'').trim());const n=s=>(s||'').trim();const E=a=>cols.findIndex(l=>(a||[]).some(x=>n(l)===x));const I=a=>cols.findIndex(l=>(a||[]).some(x=>n(l).includes(x)));return{col:(e,i)=>{const x=E(e);return x>=0?x:(i?I(i):-1)}};}
 function isOwner(a){return !!ME&&(a.ownerUid===ME.id||(ME.phone&&localPhone(a.wa)===localPhone(ME.phone)));}
+function decorate(a){a.isPlat=/بلاتيني|ماسي|diamond|plat/i.test(a.plan);a.isVip=/vip|ذهبي|gold|مميز/i.test(a.plan)||a.isPlat;a.isGold=a.isVip&&!a.isPlat;a.isBronze=!a.isVip;a.priceNum=parseFloat(a.pa)||0;a._rnd=Math.random();a.daysLeft=a.endDate?Math.ceil((a.endDate-Date.now())/864e5):null;return a;}
 async function loadAll(){
   try{const sd=await getDoc(doc(db,'settings','site'));if(sd.exists())S=Object.assign(JSON.parse(JSON.stringify(DEF)),sd.data());}catch(e){}
   applySettings();
@@ -502,33 +505,43 @@ async function loadAll(){
   try{const j=await fetchSheet('المناطق');const cols=j.table.cols.map(c=>(c.label||'').trim());cols.forEach((gov,ci)=>{if(!gov)return;const list=j.table.rows.map(r=>{const c=r.c[ci];return c?String(c.f??c.v??'').trim():''}).filter(Boolean);if(list.length)(AREAS[gov]=AREAS[gov]||[]).push(...list);});}catch(e){}
   buildGovs();buildTicker();buildCats();buildDeal();buildStats();applyFilters(true);renderStories();maybeSplash();
 }
-function decorate(a){a.isPlat=/بلاتيني|ماسي|diamond|plat/i.test(a.plan);a.isVip=/vip|ذهبي|gold|مميز/i.test(a.plan)||a.isPlat;a.isGold=a.isVip&&!a.isPlat;a.isBronze=!a.isVip;a.priceNum=parseFloat(a.pa)||0;a._rnd=Math.random();a.daysLeft=a.endDate?Math.ceil((a.endDate-Date.now())/864e5):null;return a;}
-function applySettings(){$('#txtBadge').textContent=S.badge;$('#txtH1').textContent=S.h1;const h2=$('#txtH2');h2.textContent=S.h2;h2.className=S.hl?'hl':'';$('#txtAnn').textContent=S.announce;$('#couponCode').textContent=S.coupon;$('#payInsta').textContent=S.insta;$('#payVoda').textContent=S.voda;$('#pBronze').textContent=S.prices.bronze.day+' ج';$('#pGold').textContent=S.prices.gold.day+' ج';$('#pPlat').textContent=S.prices.plat.day+' ج';}
-function buildGovs(){$('#fCity').innerHTML='<option value="">🌍 كل المحافظات</option>'+GOVS.map(g=>`<option>${esc(g)}</option>`).join('')+'<option value="__custom">✏️ أخرى (اكتبها)</option>';$('#adCity').innerHTML='<option value="">— اختر المحافظة —</option>'+GOVS.map(g=>`<option>${esc(g)}</option>`).join('')+'<option value="__custom">✏️ أخرى (اكتبها)</option>';}
+function applySettings(){const g=id=>document.getElementById(id);
+  const t=g('txtBadge');if(t)t.textContent=S.badge;const h1=g('txtH1');if(h1)h1.textContent=S.h1;const h2=g('txtH2');if(h2){h2.textContent=S.h2;h2.className=S.hl?'hl':'';}
+  const an=g('txtAnn');if(an)an.textContent=S.announce;const cp=g('couponCode');if(cp)cp.textContent=S.coupon;
+  const pi=g('payInsta');if(pi)pi.textContent=S.insta;const pv=g('payVoda');if(pv)pv.textContent=S.voda;
+  const pb=g('pBronze');if(pb)pb.textContent=S.prices.bronze.day+' ج';const pg=g('pGold');if(pg)pg.textContent=S.prices.gold.day+' ج';const pp=g('pPlat');if(pp)pp.textContent=S.prices.plat.day+' ج';}
+function buildGovs(){const fc=$('#fCity'),ac=$('#adCity');const opts=GOVS.map(g=>`<option>${esc(g)}</option>`).join('');
+  if(fc)fc.innerHTML='<option value="">🌍 كل المحافظات</option>'+opts+'<option value="__custom">✏️ أخرى (اكتبها)</option>';
+  if(ac)ac.innerHTML='<option value="">— اختر المحافظة —</option>'+opts+'<option value="__custom">✏️ أخرى (اكتبها)</option>';}
 function buildCats(){const set=[...CATS];ADS.forEach(a=>{if(a.cat&&!set.includes(a.cat))set.push(a.cat)});
-  $('#catsRow').innerHTML=`<button class="cat" data-cat="">🌍 الكل</button>`+set.map(c=>`<button class="cat" data-cat="${esc(c)}">${esc(c)}</button>`).join('');
-  $('#drawerCats').innerHTML=set.map(c=>`<a class="dlink" href="#" data-cat="${esc(c)}">${esc(c)}</a>`).join('');
-  $('#adCat').innerHTML=set.map(c=>`<option>${esc(c)}</option>`).join('')+'<option value="__custom">✏️ فئة جديدة (اكتبها)</option>';}
-function buildTicker(){const items=TICK.length?TICK:[{txt:S.announce}];const h=items.map(t=>`<span>${esc(t.txt)}</span>`).join('');const tr=$('#tickerTrack');tr.innerHTML=h+h;tr.style.animationDuration=Math.max(16,items.length*3.5)+'s';}
+  const cr=$('#catsRow');if(cr)cr.innerHTML=`<button class="cat" data-cat="">🌍 الكل</button>`+set.map(c=>`<button class="cat" data-cat="${esc(c)}">${esc(c)}</button>`).join('');
+  const dc=$('#drawerCats');if(dc)dc.innerHTML=set.map(c=>`<a class="dlink" href="#" data-cat="${esc(c)}">${esc(c)}</a>`).join('');
+  const ac=$('#adCat');if(ac)ac.innerHTML=set.map(c=>`<option>${esc(c)}</option>`).join('')+'<option value="__custom">✏️ فئة جديدة (اكتبها)</option>';}
+function buildTicker(){const items=TICK.length?TICK:[{txt:S.announce}];const h=items.map(t=>`<span>${esc(t.txt)}</span>`).join('');const tr=$('#tickerTrack');if(tr){tr.innerHTML=h+h;tr.style.animationDuration=Math.max(16,items.length*3.5)+'s';}}
 let dealList=[],dealCur=0,dealRemain=0;const EPOCH=new Date('2026-07-01T00:00:00Z').getTime();
 function buildDeal(){dealList=ADS.filter(a=>a.rank>0).sort((a,b)=>a.rank-b.rank);if(!dealList.length)dealList=ADS.filter(a=>a.isPlat).concat(ADS.filter(a=>a.isVip));
   const cycle=dealList.reduce((s,a)=>s+(a.hours||1),0)||1;const el=(Date.now()-EPOCH)/3600000;let pos=((el%cycle)+cycle)%cycle,acc=0;dealCur=0;
   for(let i=0;i<dealList.length;i++){const h=dealList[i].hours||1;if(pos<acc+h){dealCur=i;dealRemain=(acc+h)-pos;break;}acc+=h;}
-  $('#dealTabs').innerHTML=dealList.map((a,i)=>`<button class="${i===dealCur?'on':''}" data-i="${i}"></button>`).join('');showDeal(dealCur,false);}
-function showDeal(i,locked){const a=dealList[i];if(!a)return;$('#dealImg').src=a.img||'https://i.ibb.co/M5StFDSQ/file-00000000335471f48a03a0acb621d53c.png';$('#dealName').textContent=a.name||'عرض اليوم';$('#dealMeta').textContent=[a.cat,a.city].filter(Boolean).join(' • ')||' ';$('#dealBox').classList.toggle('locked',locked);$('#dealLock').style.display=locked?'flex':'none';$('#dealBtn').onclick=()=>window.open(waLink(a.wa,'السلام عليكم 👀 عن: '+a.name),'_blank');}
+  const dt=$('#dealTabs');if(dt)dt.innerHTML=dealList.map((a,i)=>`<button class="${i===dealCur?'on':''}" data-i="${i}"></button>`).join('');showDeal(dealCur,false);}
+function showDeal(i,locked){const a=dealList[i];if(!a)return;const di=$('#dealImg');if(di)di.src=a.img||'https://i.ibb.co/M5StFDSQ/file-00000000335471f48a03a0acb621d53c.png';
+  const dn=$('#dealName');if(dn)dn.textContent=a.name||'عرض اليوم';const dm=$('#dealMeta');if(dm)dm.textContent=[a.cat,a.city].filter(Boolean).join(' • ')||' ';
+  const dbx=$('#dealBox');if(dbx)dbx.classList.toggle('locked',locked);const dl=$('#dealLock');if(dl)dl.style.display=locked?'flex':'none';
+  const dbtn=$('#dealBtn');if(dbtn)dbtn.onclick=()=>window.open(waLink(a.wa,'السلام عليكم 👀 عن: '+a.name),'_blank');}
 function fmt(s){s=Math.max(0,Math.floor(s));return String(Math.floor(s/3600)).padStart(2,'0')+':'+String(Math.floor(s%3600/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');}
 function currentSplash(){return(S.splash&&S.splash.active&&S.splash.img)?S.splash:null;}
-function maybeSplash(){const sp=currentSplash();if(!sp){$('#splashBtn').style.display='none';return;}$('#splashBtn').style.display='';const id=sp.id||sp.img;if(localStorage.getItem('dlk_splash_hidden')===id)return;openSplash();}
-function openSplash(){const sp=currentSplash();if(!sp)return;$('#splashImg').src=sp.img;$('#splashNoMore').checked=false;$('#splash').dataset.id=sp.id||sp.img;$('#splash').classList.add('open');}
-$('#splashNoMore').addEventListener('change',e=>{if(e.target.checked)localStorage.setItem('dlk_splash_hidden',$('#splash').dataset.id);});
-$('#splashBtn').addEventListener('click',openSplash);
-$('#splashClose').addEventListener('click',e=>{e.stopPropagation();$('#splash').classList.remove('open');});
-/* الضغط على الإعلان العائم يفتح تفاصيله */
-$('#splashImg').addEventListener('click',()=>{const sp=currentSplash();if(!sp)return;$('#splash').classList.remove('open');
+function maybeSplash(){const sp=currentSplash();const sb=$('#splashBtn');if(!sp){if(sb)sb.style.display='none';return;}if(sb)sb.style.display='';const id=sp.id||sp.img;if(localStorage.getItem('dlk_splash_hidden')===id)return;openSplash();}
+function openSplash(){const sp=currentSplash();if(!sp)return;const si=$('#splashImg');if(si)si.src=sp.img;const nc=$('#splashNoMore');if(nc)nc.checked=false;const spx=$('#splash');if(spx){spx.dataset.id=sp.id||sp.img;spx.classList.add('open');}}
+on('#splashNoMore','change',e=>{if(e.target.checked){const spx=$('#splash');if(spx)localStorage.setItem('dlk_splash_hidden',spx.dataset.id);}});
+on('#splashBtn','click',openSplash);
+on('#splashClose','click',e=>{e.stopPropagation();const spx=$('#splash');if(spx)spx.classList.remove('open');});
+on('#splashImg','click',()=>{const sp=currentSplash();if(!sp)return;const spx=$('#splash');if(spx)spx.classList.remove('open');
   if(sp.adId){const a=ADS.find(x=>x.key===sp.adId);if(a){renderDetail(a);return;}}
   renderDetail({key:'splash',name:sp.name||'الإعلان المميز',img:sp.img,wa:sp.wa||S.wa,desc:sp.desc||'',cat:'',city:'',isVip:true,plan:'VIP'});});
-function buildStats(){$('#sbOrd').textContent=ADS.filter(a=>a.isBronze).length;$('#sbVip').textContent=ADS.filter(a=>a.isGold).length;$('#sbPlat').textContent=ADS.filter(a=>a.isPlat).length;const c={};ADS.forEach(a=>{if(a.city)c[a.city]=(c[a.city]||0)+1});$('#sbCov').textContent=Object.values(c).filter(n=>n>=1).length;}
-function renderStories(){$('#storyRow').innerHTML=STORIES.map(s=>`<div class="sc"><p>${esc(s.text)}</p><b>${esc(s.name||'')}</b></div>`).join('')+`<div class="sc sc-add" id="addStory"><b>✍️ أضف قصتك معنا</b><span style="font-size:.75rem;color:var(--mut)">دوس هنا وهتفتح واتساب برسالة جاهزة 🗣️</span></div>`;}
+function buildStats(){const g=id=>document.getElementById(id);
+  const o=g('sbOrd');if(o)o.textContent=ADS.filter(a=>a.isBronze).length;const v=g('sbVip');if(v)v.textContent=ADS.filter(a=>a.isGold).length;
+  const p=g('sbPlat');if(p)p.textContent=ADS.filter(a=>a.isPlat).length;const c={};ADS.forEach(a=>{if(a.city)c[a.city]=(c[a.city]||0)+1});
+  const cv=g('sbCov');if(cv)cv.textContent=Object.values(c).filter(n=>n>=1).length;}
+function renderStories(){const row=$('#storyRow');if(!row)return;row.innerHTML=STORIES.map(s=>`<div class="sc"><p>${esc(s.text)}</p><b>${esc(s.name||'')}</b></div>`).join('')+`<div class="sc sc-add" id="addStory"><b>✍️ أضف قصتك معنا</b><span style="font-size:.75rem;color:var(--mut)">دوس هنا وهتفتح واتساب برسالة جاهزة 🗣️</span></div>`;}
 function leftBadge(a){if(a.daysLeft==null)return'';const p=a.daysLeft>0?Math.min(100,Math.round(a.daysLeft/30*100)):100;const cls=a.daysLeft<=1?'danger':a.daysLeft<=4?'warn':'';return`<div class="leftbar"><span>⏳ باقي ${a.daysLeft} يوم</span><div class="bar"><i class="${cls}" style="width:${p}%"></i></div></div>`;}
 function filtered(){let l=[...ADS];if(state.q)l=l.filter(a=>[a.name,a.desc,a.cat,a.city].join(' ').includes(state.q));
   if(state.quick==='place')l=l.filter(a=>a.type!=='منتج');if(state.quick==='product')l=l.filter(a=>a.type==='منتج');if(state.quick==='fav')l=l.filter(a=>FAVS.has(a.key));
@@ -543,16 +556,27 @@ function cardHTML(a){const off=(a.pb&&a.pa&&+a.pb>+a.pa)?Math.round((1-a.pa/a.pb
   const lb=isOwner(a)?leftBadge(a):'';
   return`<article class="card ${cls}" data-id="${a.key}">${rib}<div class="im"><img loading="lazy" src="${esc(a.img)||'https://i.ibb.co/M5StFDSQ/file-00000000335471f48a03a0acb621d53c.png'}"><span class="chip">${esc(a.cat)||'📌'}</span>${/نعم|yes/i.test(a.ver)?'<span style="position:absolute;top:9px;inset-inline-end:9px;background:var(--brand);color:#fff;font-size:.68rem;font-weight:800;padding:.2rem .6rem;border-radius:99px">✔️ موثوق</span>':''}${lb}</div><div class="bd"><h3>${esc(a.name)}</h3><div class="cmeta">📍 ${esc(a.city||'')}${a.area?' — '+esc(a.area):''}</div>${a.pa?`<div class="price"><span class="now">${esc(a.pa)} ج</span>${a.pb?`<span class="old">${esc(a.pb)}</span>`:''}${off?`<span class="off">-${off}%</span>`:''}</div>`:''}<div class="acts"><button class="bwa2" data-act="wa">📱 واتساب</button><button class="icob" data-act="fav">${FAVS.has(a.key)?'❤️':'🤍'}</button><button class="icob" data-act="share">📤</button></div></div></article>`;}
 function applyFilters(reset){if(reset)VISIBLE=12;const l=filtered();const hp=!!state.plan;
-  $('#diamondHead').style.display=$('#diamondGrid').style.display=hp?'none':'';$('#goldHead').style.display=$('#goldGrid').style.display=hp?'none':'';$('#bronzeHead').style.display=$('#bronzeGrid').style.display=$('#bronzeMore').style.display=hp?'none':'';$('#planHead').style.display=$('#planGrid').style.display=$('#planMore').style.display=hp?'':'none';
-  if(!l.length){$('#emptyBox').style.display='block';['diamondGrid','goldGrid','bronzeGrid','planGrid'].forEach(i=>$('#'+i).innerHTML='');$('#bronzeMore').innerHTML='';$('#planMore').innerHTML='';return;}
-  $('#emptyBox').style.display='none';
-  if(hp){$('#planTitle').textContent=state.plan==='plat'?'💎 كل الماسي':state.plan==='gold'?'👑 كل الذهبي':'🥉 كل البرونزي';$('#planGrid').innerHTML=l.slice(0,VISIBLE).map(cardHTML).join('');$('#planMore').innerHTML=l.length>VISIBLE?`<button class="morebtn" id="planMoreBtn">اعرض المزيد ⬇️</button>`:'';$('#bronzeMore').innerHTML='';}
-  else{const d=l.filter(a=>a.isPlat),g=l.filter(a=>a.isGold),b=l.filter(a=>a.isBronze);
-    $('#diamondGrid').innerHTML=d.map(cardHTML).join('')||'<p class="empty">لا يوجد</p>';$('#goldGrid').innerHTML=g.map(cardHTML).join('')||'<p class="empty">لا يوجد</p>';$('#bronzeGrid').innerHTML=b.slice(0,VISIBLE).map(cardHTML).join('')||'<p class="empty">لا يوجد</p>';$('#bronzeMore').innerHTML=b.length>VISIBLE?`<button class="morebtn" id="bronzeMoreBtn">اعرض المزيد ⬇️</button>`:'';$('#planMore').innerHTML='';}}
+  const ids=['diamondHead','diamondGrid','goldHead','goldGrid','bronzeHead','bronzeGrid','bronzeMore','planHead','planGrid','planMore'];
+  const g=id=>document.getElementById(id);
+  ['diamondHead','diamondGrid'].forEach(i=>{const e=g(i);if(e)e.style.display=hp?'none':'';});
+  ['goldHead','goldGrid'].forEach(i=>{const e=g(i);if(e)e.style.display=hp?'none':'';});
+  ['bronzeHead','bronzeGrid','bronzeMore'].forEach(i=>{const e=g(i);if(e)e.style.display=hp?'none':'';});
+  ['planHead','planGrid','planMore'].forEach(i=>{const e=g(i);if(e)e.style.display=hp?'':'none';});
+  if(!l.length){const eb=g('emptyBox');if(eb)eb.style.display='block';['diamondGrid','goldGrid','bronzeGrid','planGrid'].forEach(i=>{const e=g(i);if(e)e.innerHTML='';});const bm=g('bronzeMore');if(bm)bm.innerHTML='';const pm=g('planMore');if(pm)pm.innerHTML='';return;}
+  const eb=g('emptyBox');if(eb)eb.style.display='none';
+  if(hp){const pt=g('planTitle');if(pt)pt.textContent=state.plan==='plat'?'💎 كل الماسي':state.plan==='gold'?'👑 كل الذهبي':'🥉 كل البرونزي';
+    const pg=g('planGrid');if(pg)pg.innerHTML=l.slice(0,VISIBLE).map(cardHTML).join('');
+    const pm=g('planMore');if(pm)pm.innerHTML=l.length>VISIBLE?`<button class="morebtn" id="planMoreBtn">اعرض المزيد ⬇️</button>`:'';const bm=g('bronzeMore');if(bm)bm.innerHTML='';}
+  else{const d=l.filter(a=>a.isPlat),go=l.filter(a=>a.isGold),b=l.filter(a=>a.isBronze);
+    const dg=g('diamondGrid');if(dg)dg.innerHTML=d.map(cardHTML).join('')||'<p class="empty">لا يوجد</p>';
+    const gg=g('goldGrid');if(gg)gg.innerHTML=go.map(cardHTML).join('')||'<p class="empty">لا يوجد</p>';
+    const bg=g('bronzeGrid');if(bg)bg.innerHTML=b.slice(0,VISIBLE).map(cardHTML).join('')||'<p class="empty">لا يوجد</p>';
+    const bm=g('bronzeMore');if(bm)bm.innerHTML=b.length>VISIBLE?`<button class="morebtn" id="bronzeMoreBtn">اعرض المزيد ⬇️</button>`:'';
+    const pm=g('planMore');if(pm)pm.innerHTML='';}}
 function filterByPlan(p){state.plan=p||'';applyFilters(true);}
-function resetFilters(){Object.assign(state,{q:'',quick:'all',cat:'',city:'',area:'',sort:'rand',plan:''});$('#q').value='';$('#fCity').value='';$('#fCityCustom').style.display='none';$('#fArea').value='';$('#fAreaCustom').style.display='none';applyFilters(true);}
-function renderDetail(a){const owner=isOwner(a);
-  $('#detBody').innerHTML=`<div class="mhead"><h3>${esc(a.name)}</h3><button class="mx" data-close>✕</button></div>
+function resetFilters(){Object.assign(state,{q:'',quick:'all',cat:'',city:'',area:'',sort:'rand',plan:''});const q=$('#q');if(q)q.value='';const fc=$('#fCity');if(fc)fc.value='';const fcc=$('#fCityCustom');if(fcc)fcc.style.display='none';const fa=$('#fArea');if(fa)fa.value='';const fac=$('#fAreaCustom');if(fac)fac.style.display='none';applyFilters(true);}
+function renderDetail(a){const owner=isOwner(a);const body=$('#detBody');if(!body)return;
+  body.innerHTML=`<div class="mhead"><h3>${esc(a.name)}</h3><button class="mx" data-close>✕</button></div>
   <img class="dimg" src="${esc(a.img)||'https://i.ibb.co/M5StFDSQ/file-00000000335471f48a03a0acb621d53c.png'}" id="detImg">
   <div class="dbadges"><span>${esc(a.cat)||'📌'}</span>${a.isPlat?'<span style="background:linear-gradient(135deg,var(--dia2),var(--dia3));color:var(--diaink)">💎 ماسي</span>':a.isGold?'<span style="background:linear-gradient(135deg,var(--gold2),var(--gold));color:#3a2a00">👑 ذهبي</span>':''}${/نعم|yes/i.test(a.ver)?'<span style="background:var(--brand);color:#fff">✔ موثوق</span>':''}${owner&&a.daysLeft!=null?`<span>⏳ باقي ${a.daysLeft} يوم</span>`:''}</div>
   ${a.desc?`<p style="font-weight:700;color:var(--mut)">${esc(a.desc)}</p>`:''}
@@ -561,91 +585,96 @@ function renderDetail(a){const owner=isOwner(a);
   ${owner&&a.startDate?`<div class="drow"><b>📅 البداية → النهاية</b><span>${a.startDate.toLocaleDateString('ar-EG')} → ${a.endDate?a.endDate.toLocaleDateString('ar-EG'):''}</span></div>`:''}
   <div class="dacts"><a class="da-wa" href="${waLink(a.wa,'السلام عليكم 👀 '+a.name)}" target="_blank">📱 واتساب</a>${a.phone?`<a class="da-tel" href="tel:${esc(a.phone)}">📞 اتصال</a>`:''}${(a.loc&&a.isVip)?`<a class="da-loc" href="${esc(a.loc)}" target="_blank">🗺️ لوكيشن</a>`:''}</div>
   <div class="dfoot"><button id="shareBtn">📤 مشاركة</button><button id="copyWaBtn">📋 نسخ واتساب: ${localPhone(a.wa)}</button></div>`;
-  $('#detImg').onclick=()=>{$('#imgBig').src=a.img||'https://i.ibb.co/M5StFDSQ/file-00000000335471f48a03a0acb621d53c.png';$('#imgModal').classList.add('open');};
-  $('#shareBtn').onclick=()=>{if(navigator.share)navigator.share({title:a.name,text:location.href});};
-  $('#copyWaBtn').onclick=()=>copyTxt(localPhone(a.wa),'تم نسخ رقم الواتساب 📋');
-  $('#detModal').classList.add('open');}
+  const di=$('#detImg');if(di)di.onclick=()=>{const ib=$('#imgBig');if(ib){ib.src=a.img||'https://i.ibb.co/M5StFDSQ/file-00000000335471f48a03a0acb621d53c.png';}const im=$('#imgModal');if(im)im.classList.add('open');};
+  const sb=$('#shareBtn');if(sb)sb.onclick=()=>{if(navigator.share)navigator.share({title:a.name,text:location.href});};
+  const cw=$('#copyWaBtn');if(cw)cw.onclick=()=>copyTxt(localPhone(a.wa),'تم نسخ رقم الواتساب 📋');
+  const dm=$('#detModal');if(dm)dm.classList.add('open');}
 function openDetail(key){const a=ADS.find(x=>x.key===key);if(a)renderDetail(a);}
-let capAns=0;function newCap(){const a=1+Math.floor(Math.random()*8),b=1+Math.floor(Math.random()*8);capAns=a+b;$('#capQ').textContent=a+' + '+b;$('#capA').value='';}
-function planKey(){return PLANKEY[$('#adPlan').value]||'bronze';}
-function calcTotal(){const P=S.prices[planKey()]||{day:5};const m=$('#adDurMode').value;let t=0,sv=false;
-  if(m==='day1')t=P.day;else if(m==='custom')t=(+$('#adDays').value||1)*P.day;else{t=P[{s7:'d7',s15:'d15',s30:'d30'}[m]]||P.day;sv=true;}
-  $('#adTotal').textContent=t;$('#daysWrap').style.display=m==='custom'?'':'none';$('#saveNote').style.display=(sv&&S.savings)?'':'none';
-  $('#planNote').textContent=(planKey()==='bronze'?'🥉 برونزي':planKey()==='gold'?'👑 ذهبي':'💎 ماسي')+': اليوم بـ '+P.day+'ج';}
+let capAns=0;function newCap(){const a=1+Math.floor(Math.random()*8),b=1+Math.floor(Math.random()*8);capAns=a+b;const cq=$('#capQ');if(cq)cq.textContent=a+' + '+b;const ca=$('#capA');if(ca)ca.value='';}
+function planKey(){const ap=$('#adPlan');return PLANKEY[ap?ap.value:'عادي']||'bronze';}
+function calcTotal(){const P=S.prices[planKey()]||{day:5};const dm=$('#adDurMode');const m=dm?dm.value:'day1';let t=0,sv=false;
+  if(m==='day1')t=P.day;else if(m==='custom')t=(+($('#adDays')?$('#adDays').value:1)||1)*P.day;else{t=P[{s7:'d7',s15:'d15',s30:'d30'}[m]]||P.day;sv=true;}
+  const at=$('#adTotal');if(at)at.textContent=t;const dw=$('#daysWrap');if(dw)dw.style.display=m==='custom'?'':'none';const sn=$('#saveNote');if(sn)sn.style.display=(sv&&S.savings)?'':'none';
+  const pn=$('#planNote');if(pn)pn.textContent=(planKey()==='bronze'?'🥉 برونزي':planKey()==='gold'?'👑 ذهبي':'💎 ماسي')+': اليوم بـ '+P.day+'ج';}
 const FORM_FIELDS=['adName','adType','adPlan','adDurMode','adDays','adCat','adCatCustom','adCity','adCityCustom','adArea','adAreaCustom','adSold','adPb','adPa','adDel','adDesc','adLoc','adWa','adPhone','adImg','adSender','adPayImg','adCode'];
 function saveForm(){const o={};FORM_FIELDS.forEach(id=>{const el=document.getElementById(id);if(el)o[id]=el.value;});localStorage.setItem('dlk_form',JSON.stringify(o));}
 function restoreForm(){let o={};try{o=JSON.parse(localStorage.getItem('dlk_form')||'{}');}catch(e){}
   FORM_FIELDS.forEach(id=>{const el=document.getElementById(id);if(el&&o[id]!=null)el.value=o[id];});
-  $('#prodSec').style.display=$('#adType').value==='منتج'?'':'none';
-  $('#adCatCustomWrap').style.display=$('#adCat').value==='__custom'?'':'none';
-  $('#adCityCustomWrap').style.display=$('#adCity').value==='__custom'?'':'none';
-  $('#adAreaCustomWrap').style.display=$('#adArea').value==='__custom'?'':'none';
-  $('#daysWrap').style.display=$('#adDurMode').value==='custom'?'':'none';
-  if($('#adCity').value&&$('#adCity').value!=='__custom'){$('#adArea').innerHTML='<option value="">— اختر المنطقة —</option>'+(AREAS[$('#adCity').value]||[]).map(a=>`<option>${esc(a)}</option>`).join('')+'<option value="__custom">✏️ أخرى (اكتبها)</option>';if(o.adArea)$('#adArea').value=o.adArea;}
+  const g=id=>document.getElementById(id);
+  const ps=g('prodSec');if(ps)ps.style.display=(g('adType')&&g('adType').value==='منتج')?'':'none';
+  const ccw=g('adCatCustomWrap');if(ccw)ccw.style.display=(g('adCat')&&g('adCat').value==='__custom')?'':'none';
+  const ctcw=g('adCityCustomWrap');if(ctcw)ctcw.style.display=(g('adCity')&&g('adCity').value==='__custom')?'':'none';
+  const arcw=g('adAreaCustomWrap');if(arcw)arcw.style.display=(g('adArea')&&g('adArea').value==='__custom')?'':'none';
+  const dw=g('daysWrap');if(dw)dw.style.display=(g('adDurMode')&&g('adDurMode').value==='custom')?'':'none';
+  const cv=g('adCity');if(cv&&cv.value&&cv.value!=='__custom'){const aa=g('adArea');if(aa)aa.innerHTML='<option value="">— اختر المنطقة —</option>'+(AREAS[cv.value]||[]).map(x=>`<option>${esc(x)}</option>`).join('')+'<option value="__custom">✏️ أخرى (اكتبها)</option>';if(o.adArea&&aa)aa.value=o.adArea;}
   calcTotal();}
-function clearForm(){FORM_FIELDS.forEach(id=>{const el=document.getElementById(id);if(el)el.value=(el.tagName==='SELECT'?el.options[0].value:'');});localStorage.removeItem('dlk_form');$('#prodSec').style.display='none';['adCatCustomWrap','adCityCustomWrap','adAreaCustomWrap','daysWrap'].forEach(i=>$('#'+i).style.display='none');calcTotal();}
-$('#addModal').addEventListener('input',saveForm);
-$('#addModal').addEventListener('change',saveForm);
-function openAdd(p){restoreForm();if(p)$('#adPlan').value=p;newCap();calcTotal();$('#addModal').classList.add('open');}
-/* ===== الحسابات ===== */
+function clearForm(){FORM_FIELDS.forEach(id=>{const el=document.getElementById(id);if(el)el.value=(el.tagName==='SELECT'?el.options[0].value:'');});localStorage.removeItem('dlk_form');
+  ['prodSec','adCatCustomWrap','adCityCustomWrap','adAreaCustomWrap','daysWrap'].forEach(i=>{const e=document.getElementById(i);if(e)e.style.display='none';});calcTotal();}
+on('#addModal','input',saveForm);
+on('#addModal','change',saveForm);
+function openAdd(p){restoreForm();if(p){const ap=$('#adPlan');if(ap)ap.value=p;}newCap();calcTotal();const am=$('#addModal');if(am)am.classList.add('open');}
 const U=uid=>doc(db,'users',uid);
 onAuthStateChanged(auth,async u=>{
+  if(u&&ADMIN_EMAILS.includes(u.email)){const li=$('#login');/* admin not here */}
   if(u){try{let d=await getDoc(U(u.uid));
     if(!d.exists()){await setDoc(U(u.uid),{name:'',phone:'',email:u.email||'',balance:50,favorites:[],createdAt:Date.now()});toast('🎁 مبروك! اتضافلك 50ج رصيد ترحيبي');d=await getDoc(U(u.uid));}
     ME={id:u.uid,...d.data()};FAVS=new Set(ME.favorites||[]);applyFilters();
-    const t='👤 '+(ME.name||'حسابي');$('#acctBtn').textContent=t;$('#drawerAcct').textContent=t;}catch(e){toast('⚠️ '+e.message);}
-  } else {ME=null;$('#acctBtn').textContent='👤 دخول';$('#drawerAcct').textContent='👤 تسجيل الدخول / حسابي';applyFilters();}
+    const t='👤 '+(ME.name||'حسابي');const ab=$('#acctBtn');if(ab)ab.textContent=t;const da=$('#drawerAcct');if(da)da.textContent=t;}catch(e){toast('⚠️ '+e.message);}
+  } else {ME=null;const ab=$('#acctBtn');if(ab)ab.textContent='👤 دخول';const da=$('#drawerAcct');if(da)da.textContent='👤 تسجيل الدخول / حسابي';applyFilters();}
 });
-function openAcct(){ if(ME){openMe();} else {newCap();$('#acctModal').classList.add('open');} }
-$('#drawerAcct').onclick=()=>{ $('#drawer').classList.remove('open'); openAcct(); };
-$('#acctBtn').onclick=()=>openAcct();
-$('#doLogin').onclick=async()=>{try{await signInWithEmailAndPassword(auth,$('#rgEmail').value.trim(),$('#rgPass').value);$('#acctModal').classList.remove('open');}catch(e){toast('⚠️ بيانات الدخول غلط');}};
-$('#doReg').onclick=async()=>{const n=$('#rgName').value.trim(),e=$('#rgEmail').value.trim(),p=$('#rgPass').value,ph=$('#rgPhone').value.trim();
+const ADMIN_EMAILS=['daleelak317@gmail.com'];
+function openAcct(){ if(ME){openMe();} else {newCap();const am=$('#acctModal');if(am)am.classList.add('open');} }
+on('#drawerAcct','click',()=>{const dr=$('#drawer');if(dr)dr.classList.remove('open');openAcct();});
+on('#acctBtn','click',()=>openAcct());
+on('#doLogin','click',async()=>{try{await signInWithEmailAndPassword(auth,($('#rgEmail')?$('#rgEmail').value:'').trim(),$('#rgPass')?$('#rgPass').value:'');const am=$('#acctModal');if(am)am.classList.remove('open');}catch(e){toast('⚠️ بيانات الدخول غلط');}});
+on('#doReg','click',async()=>{const n=($('#rgName')?$('#rgName').value:'').trim(),e=($('#rgEmail')?$('#rgEmail').value:'').trim(),p=$('#rgPass')?$('#rgPass').value:'',ph=($('#rgPhone')?$('#rgPhone').value:'').trim();
   if(!e||!p){toast('اكتب الإيميل والباسورد');return;}
   try{const c=await createUserWithEmailAndPassword(auth,e,p);
     await setDoc(U(c.user.uid),{name:n,phone:ph,email:e,balance:50,favorites:[],createdAt:Date.now()});
-    toast('🎁 مبروك! اتعمل حسابك واتضافلك 50ج');$('#acctModal').classList.remove('open');}catch(e){toast('⚠️ '+e.message);}};
-function openMe(){$('#meBal').textContent=(ME.balance||0)+' ج';$('#mePhone').textContent=ME.phone||'—';$('#meName').value=ME.name||'';renderMeAds();$('#meModal').classList.add('open');}
-$('#meSave').onclick=async()=>{await updateDoc(U(ME.id),{name:$('#meName').value,phone:$('#mePhone').value});ME.name=$('#meName').value;ME.phone=$('#mePhone').value;const t='👤 '+(ME.name||'حسابي');$('#acctBtn').textContent=t;$('#drawerAcct').textContent=t;toast('✅ اتحفظ');};
-$('#meOut').onclick=()=>signOut(auth);
+    toast('🎁 مبروك! اتعمل حسابك واتضافلك 50ج');const am=$('#acctModal');if(am)am.classList.remove('open');}catch(e){toast('⚠️ '+e.message);}});
+function openMe(){const mb=$('#meBal');if(mb)mb.textContent=(ME.balance||0)+' ج';const mp=$('#mePhone');if(mp)mp.textContent=ME.phone||'—';const mn=$('#meName');if(mn)mn.value=ME.name||'';renderMeAds();const mm=$('#meModal');if(mm)mm.classList.add('open');}
+on('#meSave','click',async()=>{await updateDoc(U(ME.id),{name:$('#meName').value,phone:$('#mePhone').value});ME.name=$('#meName').value;ME.phone=$('#mePhone').value;const t='👤 '+(ME.name||'حسابي');const ab=$('#acctBtn');if(ab)ab.textContent=t;const da=$('#drawerAcct');if(da)da.textContent=t;toast('✅ اتحفظ');});
+on('#meOut','click',()=>signOut(auth));
 async function renderMeAds(){const rq=(await getDocs(collection(db,'requests'))).docs.map(d=>({id:d.id,...d.data()})).filter(r=>r.ownerUid===ME.id);
-  $('#meAds').innerHTML=rq.length?rq.map(r=>`<div class="drow"><b>${esc(r.name)}</b><span>${esc(r.status||'معلق')}</span></div>`).join(''):'<p style="color:var(--mut);font-size:.8rem">لسه مفيش طلبات.</p>';}
-function buildAdMessage(){return '🚀 *طلب إعلان جديد — دليلك*\n━━━━━━━━━━\n📛 الاسم: '+$('#adName').value+'\n💎 الباقة: '+$('#adPlan').value+'\n⏱️ المدة: '+$('#adDurMode').value+'\n💰 الإجمالي: '+$('#adTotal').textContent+' ج\n📂 الفئة: '+($('#adCat').value==='__custom'?$('#adCatCustom').value:$('#adCat').value)+'\n📍 المحافظة: '+($('#adCity').value==='__custom'?$('#adCityCustom').value:$('#adCity').value)+' — '+($('#adArea').value==='__custom'?$('#adAreaCustom').value:$('#adArea').value)+'\n📝 الوصف: '+$('#adDesc').value+'\n📱 واتساب: '+$('#adWa').value+'\n🖼️ صورة: '+($('#adImg').value||'هبعتها واتساب')+'\n💳 المحوّل منه: '+$('#adSender').value;}
-$('#addBtnTop').addEventListener('click',()=>openAdd());
-$('#addBtnFab').addEventListener('click',()=>openAdd());
+  const ma=$('#meAds');if(ma)ma.innerHTML=rq.length?rq.map(r=>`<div class="drow"><b>${esc(r.name)}</b><span>${esc(r.status||'معلق')}</span></div>`).join(''):'<p style="color:var(--mut);font-size:.8rem">لسه مفيش طلبات.</p>';}
+function buildAdMessage(){const g=id=>{const e=document.getElementById(id);return e?e.value:'';};
+  const cat=g('adCat')==='__custom'?g('adCatCustom'):g('adCat');const city=g('adCity')==='__custom'?g('adCityCustom'):g('adCity');const area=g('adArea')==='__custom'?g('adAreaCustom'):g('adArea');
+  return '🚀 *طلب إعلان جديد — دليلك*\n━━━━━━━━━━\n📛 الاسم: '+g('adName')+'\n💎 الباقة: '+g('adPlan')+'\n⏱️ المدة: '+g('adDurMode')+'\n💰 الإجمالي: '+($('#adTotal')?$('#adTotal').textContent:0)+' ج\n📂 الفئة: '+cat+'\n📍 المحافظة: '+city+' — '+area+'\n📝 الوصف: '+g('adDesc')+'\n📱 واتساب: '+g('adWa')+'\n🖼️ صورة: '+(g('adImg')||'هبعتها واتساب')+'\n💳 المحوّل منه: '+g('adSender');}
+on('#addBtnTop','click',()=>openAdd());
+on('#addBtnFab','click',()=>openAdd());
 $$('[data-plan-open]').forEach(b=>b.addEventListener('click',()=>openAdd(b.dataset.planOpen)));
-$('#searchBtn').addEventListener('click',()=>applyFilters(true));
-$('#resetBtn').addEventListener('click',resetFilters);
-$('#couponBtn').addEventListener('click',()=>copyTxt(S.coupon,'تم نسخ الكود 🎁'));
-$('#copyInsta').addEventListener('click',()=>copyTxt(S.insta,'تم النسخ 🟣'));
-$('#copyVoda').addEventListener('click',()=>copyTxt(S.voda,'تم النسخ 🔴'));
-$('#imgHelpBtn').addEventListener('click',()=>{$('#imgHelp').style.display=$('#imgHelp').style.display==='none'?'':'none';});
-$('#payHelpBtn').addEventListener('click',()=>{$('#payHelp').style.display=$('#payHelp').style.display==='none'?'':'none';});
-$('#locHelpBtn').addEventListener('click',()=>{$('#locHelp').style.display=$('#locHelp').style.display==='none'?'':'none';});
-$('#capHelpBtn').addEventListener('click',()=>{$('#capHelp').style.display=$('#capHelp').style.display==='none'?'':'none';});
+on('#searchBtn','click',()=>applyFilters(true));
+on('#resetBtn','click',resetFilters);
+on('#couponBtn','click',()=>copyTxt(S.coupon,'تم نسخ الكود 🎁'));
+on('#copyInsta','click',()=>copyTxt(S.insta,'تم النسخ 🟣'));
+on('#copyVoda','click',()=>copyTxt(S.voda,'تم النسخ 🔴'));
+on('#imgHelpBtn','click',()=>{const e=$('#imgHelp');if(e)e.style.display=e.style.display==='none'?'':'none';});
+on('#payHelpBtn','click',()=>{const e=$('#payHelp');if(e)e.style.display=e.style.display==='none'?'':'none';});
+on('#locHelpBtn','click',()=>{const e=$('#locHelp');if(e)e.style.display=e.style.display==='none'?'':'none';});
+on('#capHelpBtn','click',()=>{const e=$('#capHelp');if(e)e.style.display=e.style.display==='none'?'':'none';});
 $$('.chbtn').forEach(b=>b.addEventListener('click',()=>window.open(waLink(S.wa,'عايز: '+b.dataset.ch),'_blank')));
 $$('.qab').forEach(b=>b.addEventListener('click',()=>b.parentElement.classList.toggle('open')));
 document.addEventListener('click',e=>{if(e.target.closest('#addStory'))window.open(waLink(S.wa,'السلام عليكم، عايز أضيف قصتي مع دليلك 🗣️\n👤 اسمي/نشاطي: \n✍️ قصتي: '),'_blank');});
-$('#adPlan').addEventListener('change',calcTotal);
-$('#adDurMode').addEventListener('change',calcTotal);
-$('#adDays').addEventListener('input',calcTotal);
-$('#adType').addEventListener('change',()=>{$('#prodSec').style.display=$('#adType').value==='منتج'?'':'none';saveForm();});
-$('#adCat').addEventListener('change',e=>{$('#adCatCustomWrap').style.display=e.target.value==='__custom'?'':'none';saveForm();});
-$('#adCity').addEventListener('change',e=>{const v=e.target.value;$('#adCityCustomWrap').style.display=v==='__custom'?'':'none';
-  if(v&&v!=='__custom'){$('#adArea').innerHTML='<option value="">— اختر المنطقة —</option>'+(AREAS[v]||[]).map(a=>`<option>${esc(a)}</option>`).join('')+'<option value="__custom">✏️ أخرى (اكتبها)</option>';}saveForm();});
-$('#adArea').addEventListener('change',e=>{$('#adAreaCustomWrap').style.display=e.target.value==='__custom'?'':'none';saveForm();});
-$('#fCity').addEventListener('change',e=>{const v=e.target.value;$('#fCityCustom').style.display=v==='__custom'?'':'none';state.city=(v==='__custom')?$('#fCityCustom').value.trim():v;$('#fArea').innerHTML='<option value="">📍 كل المناطق</option>'+(AREAS[state.city]||[]).map(a=>`<option>${esc(a)}</option>`).join('')+'<option value="__custom">✏️ أخرى (اكتبها)</option>';applyFilters(true);});
-$('#fCityCustom').addEventListener('input',e=>{state.city=e.target.value.trim();applyFilters(true);});
-$('#fArea').addEventListener('change',e=>{const v=e.target.value;$('#fAreaCustom').style.display=v==='__custom'?'':'none';state.area=(v==='__custom')?$('#fAreaCustom').value.trim():v;applyFilters(true);});
-$('#fAreaCustom').addEventListener('input',e=>{state.area=e.target.value.trim();applyFilters(true);});
-$('#fSort').addEventListener('change',e=>{state.sort=e.target.value;applyFilters(true);});
-$('#q').addEventListener('input',e=>{state.q=e.target.value;applyFilters(true);});
+on('#adPlan','change',calcTotal);
+on('#adDurMode','change',calcTotal);
+on('#adDays','input',calcTotal);
+on('#adType','change',()=>{const ps=$('#prodSec');if(ps)ps.style.display=($('#adType').value==='منتج')?'':'none';saveForm();});
+on('#adCat','change',e=>{const w=$('#adCatCustomWrap');if(w)w.style.display=e.target.value==='__custom'?'':'none';saveForm();});
+on('#adCity','change',e=>{const v=e.target.value;const w=$('#adCityCustomWrap');if(w)w.style.display=v==='__custom'?'':'none';
+  if(v&&v!=='__custom'){const aa=$('#adArea');if(aa)aa.innerHTML='<option value="">— اختر المنطقة —</option>'+(AREAS[v]||[]).map(x=>`<option>${esc(x)}</option>`).join('')+'<option value="__custom">✏️ أخرى (اكتبها)</option>';}saveForm();});
+on('#adArea','change',e=>{const w=$('#adAreaCustomWrap');if(w)w.style.display=e.target.value==='__custom'?'':'none';saveForm();});
+on('#fCity','change',e=>{const v=e.target.value;const fc=$('#fCityCustom');if(fc)fc.style.display=v==='__custom'?'':'none';state.city=(v==='__custom')?(fc?fc.value.trim():''):v;const fa=$('#fArea');if(fa)fa.innerHTML='<option value="">📍 كل المناطق</option>'+(AREAS[state.city]||[]).map(x=>`<option>${esc(x)}</option>`).join('')+'<option value="__custom">✏️ أخرى (اكتبها)</option>';applyFilters(true);});
+on('#fCityCustom','input',e=>{state.city=e.target.value.trim();applyFilters(true);});
+on('#fArea','change',e=>{const v=e.target.value;const fac=$('#fAreaCustom');if(fac)fac.style.display=v==='__custom'?'':'none';state.area=(v==='__custom')?(fac?fac.value.trim():''):v;applyFilters(true);});
+on('#fAreaCustom','input',e=>{state.area=e.target.value.trim();applyFilters(true);});
+on('#fSort','change',e=>{state.sort=e.target.value;applyFilters(true);});
+on('#q','input',e=>{state.q=e.target.value;applyFilters(true);});
 $$('.qp').forEach(p=>p.addEventListener('click',()=>{state.quick=p.dataset.quick;$$('.qp').forEach(x=>x.classList.toggle('on',x===p));applyFilters(true);}));
-$('#ticker').addEventListener('click',()=>$('#ticker').classList.toggle('paused'));
-$('#dealTabs').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const i=+b.dataset.i;showDeal(i,i!==dealCur);});
-setInterval(()=>{dealRemain=Math.max(0,dealRemain-1/3600);const s=dealRemain*3600;$('#cdH').textContent=String(Math.floor(s/3600)).padStart(2,'0');$('#cdM').textContent=String(Math.floor(s%3600/60)).padStart(2,'0');$('#cdS').textContent=String(Math.floor(s%60)).padStart(2,'0');if($('#dealBox').classList.contains('locked'))$('#lockCd').textContent='يبدأ بعد '+fmt(s);},1000);
-$('#menuBtn').addEventListener('click',()=>$('#drawer').classList.add('open'));
-document.addEventListener('click',e=>{const c=e.target.closest('[data-close]');if(c){const m=c.closest('.modal');if(m){m.classList.remove('open');}else{$('#drawer').classList.remove('open');}return;}
+on('#ticker','click',()=>{const t=$('#ticker');if(t)t.classList.toggle('paused');});
+on('#dealTabs','click',e=>{const b=e.target.closest('button');if(!b)return;const i=+b.dataset.i;showDeal(i,i!==dealCur);});
+setInterval(()=>{dealRemain=Math.max(0,dealRemain-1/3600);const s=dealRemain*3600;const h=$('#cdH');if(h)h.textContent=String(Math.floor(s/3600)).padStart(2,'0');const m=$('#cdM');if(m)m.textContent=String(Math.floor(s%3600/60)).padStart(2,'0');const c=$('#cdS');if(c)c.textContent=String(Math.floor(s%60)).padStart(2,'0');const dbx=$('#dealBox');if(dbx&&dbx.classList.contains('locked')){const lc=$('#lockCd');if(lc)lc.textContent='يبدأ بعد '+fmt(s);}},1000);
+on('#menuBtn','click',()=>{const d=$('#drawer');if(d)d.classList.add('open');});
+document.addEventListener('click',e=>{const c=e.target.closest('[data-close]');if(c){const m=c.closest('.modal');if(m){m.classList.remove('open');}else{const d=$('#drawer');if(d)d.classList.remove('open');}return;}
   if(e.target.closest('#bronzeMoreBtn')||e.target.closest('#planMoreBtn')){VISIBLE+=12;applyFilters();return;}
   const ab=e.target.closest('.allbtn');if(ab){filterByPlan(ab.dataset.plan);return;}
   const cc=e.target.closest('.cat,[data-cat]');if(cc&&!cc.classList.contains('chip')){state.cat=cc.dataset.cat||'';$$('.cat').forEach(x=>x.classList.toggle('on',x.dataset.cat===state.cat));applyFilters(true);return;}
@@ -655,22 +684,22 @@ document.addEventListener('click',e=>{const c=e.target.closest('[data-close]');i
     if(act.dataset.act==='share'){if(navigator.share)navigator.share({title:a.name,text:location.href});}
     if(act.dataset.act==='fav'){FAVS.has(a.key)?FAVS.delete(a.key):FAVS.add(a.key);localStorage.setItem('dlk_favs',JSON.stringify([...FAVS]));if(ME)updateDoc(U(ME.id),{favorites:[...FAVS]});applyFilters();}return;}
   if(card)openDetail(card.dataset.id);});
-$('#imgBig').addEventListener('click',()=>{$('#imgModal').classList.remove('open');});
-$('#sendAd').addEventListener('click',async()=>{if($('#adSite').value)return;if(($('#capA').value||'').trim()!=String(capAns)){toast('🛡️ جاوب سؤال الأمان');newCap();return;}
-  let cat=$('#adCat').value;if(cat==='__custom'){cat=$('#adCatCustom').value.trim();if(!cat){toast('✏️ اكتب اسم الفئة');return;}}
-  let city=$('#adCity').value;if(city==='__custom'){city=$('#adCityCustom').value.trim();if(!city){toast('✏️ اكتب محافظتك');return;}}
-  let area=$('#adArea').value;if(area==='__custom'){area=$('#adAreaCustom').value.trim();}
-  const name=$('#adName').value.trim(),wa=$('#adWa').value.trim();
+on('#imgBig','click',()=>{const im=$('#imgModal');if(im)im.classList.remove('open');});
+on('#sendAd','click',async()=>{const as=$('#adSite');if(as&&as.value)return;const ca=$('#capA');if(!ca||(ca.value||'').trim()!=String(capAns)){toast('🛡️ جاوب سؤال الأمان');newCap();return;}
+  let cat=$('#adCat').value;if(cat==='__custom'){cat=($('#adCatCustom')?$('#adCatCustom').value:'').trim();if(!cat){toast('✏️ اكتب اسم الفئة');return;}}
+  let city=$('#adCity').value;if(city==='__custom'){city=($('#adCityCustom')?$('#adCityCustom').value:'').trim();if(!city){toast('✏️ اكتب محافظتك');return;}}
+  let area=$('#adArea').value;if(area==='__custom'){area=($('#adAreaCustom')?$('#adAreaCustom').value:'').trim();}
+  const name=($('#adName')?$('#adName').value:'').trim(),wa=($('#adWa')?$('#adWa').value:'').trim();
   if(!name||!wa||!cat||!city){toast('املأ الحقول المطلوبة *');return;}
   const msg=buildAdMessage();
-  try{await addDoc(collection(db,'requests'),{ownerUid:ME?ME.id:'',name,type:$('#adType').value,plan:planKey(),duration:$('#adDurMode').value,days:$('#adDays').value||1,total:+$('#adTotal').textContent,cat,city,area:area||'',desc:$('#adDesc').value||'',loc:$('#adLoc').value||'',wa,phone:$('#adPhone').value||'',senderPhone:$('#adSender').value||'',img:$('#adImg').value||'',payImg:$('#adPayImg').value||'',pb:$('#adPb').value||'',pa:$('#adPa').value||'',sold:$('#adSold').value||'',del:$('#adDel').value||'',code:$('#adCode').value||'',status:'pending',createdAt:serverTimestamp()});
-    toast('✅ تم الإرسال للمراجعة');clearForm();$('#addModal').classList.remove('open');}catch(e){toast('⚠️ خطأ في الإرسال');}});
-$('#chargeHead').addEventListener('click',()=>$('#charge').classList.toggle('open'));
-$('#refreshBtn').addEventListener('click',()=>location.reload());
-addEventListener('scroll',()=>$('#topBtn').classList.toggle('show',scrollY>500));
-$('#topBtn').addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}));
+  try{await addDoc(collection(db,'requests'),{ownerUid:ME?ME.id:'',name,type:($('#adType')?$('#adType').value:'مكان'),plan:planKey(),duration:($('#adDurMode')?$('#adDurMode').value:'day1'),days:($('#adDays')?$('#adDays').value:1)||1,total:+($('#adTotal')?$('#adTotal').textContent:0),cat,city,area:area||'',desc:($('#adDesc')?$('#adDesc').value:''),loc:($('#adLoc')?$('#adLoc').value:''),wa,phone:($('#adPhone')?$('#adPhone').value:''),senderPhone:($('#adSender')?$('#adSender').value:''),img:($('#adImg')?$('#adImg').value:''),payImg:($('#adPayImg')?$('#adPayImg').value:''),pb:($('#adPb')?$('#adPb').value:''),pa:($('#adPa')?$('#adPa').value:''),sold:($('#adSold')?$('#adSold').value:''),del:($('#adDel')?$('#adDel').value:''),code:($('#adCode')?$('#adCode').value:''),status:'pending',createdAt:serverTimestamp()});
+    toast('✅ تم الإرسال للمراجعة');clearForm();const am=$('#addModal');if(am)am.classList.remove('open');}catch(e){toast('⚠️ خطأ في الإرسال');}});
+on('#chargeHead','click',()=>{const c=$('#charge');if(c)c.classList.toggle('open');});
+on('#refreshBtn','click',()=>location.reload());
+addEventListener('scroll',()=>{const t=$('#topBtn');if(t)t.classList.toggle('show',scrollY>500);});
+on('#topBtn','click',()=>scrollTo({top:0,behavior:'smooth'}));
 if(localStorage.getItem('dlk_theme')==='dark')document.documentElement.dataset.theme='dark';
-$('#themeBtn').addEventListener('click',()=>{const d=document.documentElement.dataset.theme==='dark';document.documentElement.dataset.theme=d?'':'dark';localStorage.setItem('dlk_theme',d?'light':'dark');$('#themeBtn').textContent=d?'☀️':'';});
+on('#themeBtn','click',()=>{const d=document.documentElement.dataset.theme==='dark';document.documentElement.dataset.theme=d?'':'dark';localStorage.setItem('dlk_theme',d?'light':'dark');const tb=$('#themeBtn');if(tb)tb.textContent=d?'☀️':'🌙';});
 loadAll();
 </script>
 </body>
