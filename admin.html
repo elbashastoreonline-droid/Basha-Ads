@@ -38,7 +38,7 @@ h1,h2,h3{font-weight:800}
 </style>
 </head>
 <body>
-<div id="login"><h2>🔐 لوحة تحكم دليلك</h2><p style="color:var(--mut);font-size:.8rem;margin:10px 0">الدخول لحساب الإدارة فقط</p><button id="gLogin">دخول بحساب جوجل</button></div>
+<div id="login"><h2>🔐 لوحة تحكم دليلك</h2><p style="color:var(--mut);font-size:.8rem;margin:10px 0">الدخول بحساب الإدارة: daleelak317@gmail.com</p><button id="gLogin">دخول بحساب جوجل</button></div>
 <div id="app" class="hide">
 <div class="top">
   <h1>🛡️ لوحة تحكم دليلك</h1>
@@ -56,7 +56,7 @@ h1,h2,h3{font-weight:800}
 </div>
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
-import{getAuth,signInWithPopup,GoogleAuthProvider,signOut,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
+import{getAuth,signInWithPopup,GoogleAuthProvider,signOut,onAuthStateChanged,updatePassword}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
 import{getFirestore,collection,getDocs,addDoc,updateDoc,deleteDoc,doc,getDoc,setDoc}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 const app=initializeApp({apiKey:"AIzaSyAErZex3BsKMO9cHtalN_Nhb0D7A4tFWe4",authDomain:"daleelak-22dc6.firebaseapp.com",projectId:"daleelak-22dc6",storageBucket:"daleelak-22dc6.firebasestorage.app",messagingSenderId:"774332263419",appId:"1:774332263419:web:527fc4de3d7ed6ce1e395e"});
 const db=getFirestore(app),auth=getAuth(app);
@@ -64,8 +64,7 @@ const ADMIN=['daleelak317@gmail.com'];
 let S={},REQ=[],ADS=[],TICK=[],STOR=[],AREAS=[],CUR='req';
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-function showErr(e){$('#view').innerHTML=`<div class="err">⚠️ حصل خطأ:\n${esc(String(e&&e.message?e.message:e))}\n\nتأكد إنك:\n1) نشرت قواعد Firestore (الخطوة تحت).\n2) داخل بحساب ${ADMIN[0]}.</div>`;}
-/* ربط أزرار التبويبات أول حاجة عشان تشتغل دايمًا */
+function showErr(e){$('#view').innerHTML=`<div class="err">⚠️ حصل خطأ:\n${esc(String(e&&e.message?e.message:e))}\n\nتأكد إنك:\n1) نشرت قواعد Firestore.\n2) داخل بحساب ${ADMIN[0]}.</div>`;}
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{CUR=b.dataset.t;render();});
 $('#out').onclick=()=>signOut(auth);
 $('#gLogin').onclick=()=>signInWithPopup(auth,new GoogleAuthProvider()).catch(showErr);
@@ -89,7 +88,7 @@ async function setReq(r,st){await updateDoc(doc(db,'requests',r.id),{status:st})
 async function delAd(id){if(confirm('حذف الإعلان؟')){await deleteDoc(doc(db,'ads',id));loadAll();}}
 async function toggleAd(a){await updateDoc(doc(db,'ads',a.id),{status:a.status==='شغال'?'موقوف':'شغال'});loadAll();}
 async function verifyAd(a){await updateDoc(doc(db,'ads',a.id),{ver:a.ver==='نعم'?'':'نعم'});loadAll();}
-async function toSplash(a){await setDoc(doc(db,'settings','site'),{...S,splash:{active:true,img:a.img||'',link:a.loc||'#',id:'ad'+a.id,price8:50,priceDay:100}});alert('✅ بقى الإعلان العائم');loadAll();}
+async function toSplash(a){await setDoc(doc(db,'settings','site'),{...S,splash:{active:true,img:a.img||'',link:a.loc||'#',adId:a.id,name:a.name,wa:a.wa,desc:a.desc,id:'ad'+a.id,price8:50,priceDay:100}});alert('✅ بقى الإعلان العائم');loadAll();}
 async function toTicker(a){await addDoc(collection(db,'ticker'),{txt:'🔥 '+a.name+' — '+(a.cat||''),status:'شغال'});alert('✅ اتضاف للشريط');loadAll();}
 async function toDeal(a){const h=prompt('مدة العرض بالساعات:','8');if(!h)return;await updateDoc(doc(db,'ads',a.id),{rank:(Math.max(0,...ADS.map(x=>x.rank||0))+1),hours:+h});alert('✅ دخل طابور عرض اليوم');loadAll();}
 async function renewAd(a){const d=prompt('زود كام يوم؟','7');if(!d)return;await updateDoc(doc(db,'ads',a.id),{endsAt:(a.endsAt||Date.now())+(+d)*864e5,status:'شغال'});loadAll();}
@@ -104,8 +103,17 @@ function render(){
   else if(CUR==='ads'){v.innerHTML=`<div class="panel"><h2>📢 الإعلانات (${ADS.length})</h2><div class="grid">`+ADS.map(a=>`<div class="item"><span class="badge ${a.status==='شغال'?'st-a':'st-r'}">${esc(a.status)}</span>${a.ver==='نعم'?'<span class="badge st-a">✔ موثوق</span>':''}<h3>${esc(a.name)}</h3><div class="m">${esc(a.plan)} • ${esc(a.city)}${a.endsAt?'<br>⏳ ينتهي: '+new Date(a.endsAt).toLocaleDateString('ar-EG'):''}</div><div class="row"><button class="btn b-ed" data-a="tg" data-id="${a.id}">${a.status==='شغال'?'إيقاف':'تفعيل'}</button><button class="btn b-ed" data-a="vf" data-id="${a.id}">✔ موثوق</button><button class="btn b-hold" data-a="dl" data-id="${a.id}">⏰ عرض اليوم</button><button class="btn b-ed" data-a="tk" data-id="${a.id}">📰 الشريط</button><button class="btn b-hold" data-a="sp" data-id="${a.id}">🎯 عائم</button><button class="btn b-ed" data-a="rn" data-id="${a.id}">🔄 تجديد</button><button class="btn b-no" data-a="del" data-id="${a.id}">🗑</button></div></div>`).join('')+`</div></div>`;
     v.onclick=e=>{const b=e.target.closest('[data-a]');if(!b)return;const a=ADS.find(x=>x.id===b.dataset.id);const m={tg:toggleAd,vf:verifyAd,dl:toDeal,tk:toTicker,sp:toSplash,rn:renewAd};if(b.dataset.a==='del')delAd(a.id);else m[b.dataset.a](a);};
   }
-  else if(CUR==='splash'){const sp=S.splash||{};v.innerHTML=`<div class="panel"><h2>🎁 الإعلان العائم</h2><div class="fld"><label>لينك الصورة</label><input id="spImg" value="${esc(sp.img||'')}"></div><div class="fld"><label>لينك الضغط</label><input id="spLink" value="${esc(sp.link||'')}"></div><div class="f2"><div class="fld"><label>سعر 8 ساعات</label><input id="sp8" type="number" value="${sp.price8||50}"></div><div class="fld"><label>سعر اليوم</label><input id="spD" type="number" value="${sp.priceDay||100}"></div></div><div class="fld"><label><input type="checkbox" id="spOn" style="width:auto" ${sp.active?'checked':''}> مفعّل</label></div><button class="save" id="spSave">💾 حفظ</button></div>`;
-    $('#spSave').onclick=async()=>{await setDoc(doc(db,'settings','site'),{...S,splash:{active:$('#spOn').checked,img:$('#spImg').value,link:$('#spLink').value,price8:+$('#sp8').value,priceDay:+$('#spD').value,id:(S.splash&&S.splash.id)||('sp'+Date.now())}});alert('✅ تم الحفظ');loadAll();};
+  else if(CUR==='splash'){const sp=S.splash||{};v.innerHTML=`<div class="panel"><h2>🎁 الإعلان العائم</h2>
+    <div class="fld"><label>اربطه بإعلان موجود (يفتح تفاصيله)</label><select id="spAd"><option value="">— بدون ربط —</option>${ADS.map(a=>`<option value="${a.id}" ${sp.adId===a.id?'selected':''}>${esc(a.name)}</option>`).join('')}</select></div>
+    <div class="fld"><label>اسم الإعلان</label><input id="spName" value="${esc(sp.name||'')}"></div>
+    <div class="fld"><label>لينك الصورة</label><input id="spImg" value="${esc(sp.img||'')}"></div>
+    <div class="fld"><label>واتساب</label><input id="spWa" value="${esc(sp.wa||'')}"></div>
+    <div class="fld"><label>وصف</label><input id="spDesc" value="${esc(sp.desc||'')}"></div>
+    <div class="fld"><label>لينك خارجي (اختياري)</label><input id="spLink" value="${esc(sp.link||'')}"></div>
+    <div class="f2"><div class="fld"><label>سعر 8 ساعات</label><input id="sp8" type="number" value="${sp.price8||50}"></div><div class="fld"><label>سعر اليوم</label><input id="spD" type="number" value="${sp.priceDay||100}"></div></div>
+    <div class="fld"><label><input type="checkbox" id="spOn" style="width:auto" ${sp.active?'checked':''}> مفعّل</label></div>
+    <button class="save" id="spSave">💾 حفظ</button></div>`;
+    $('#spSave').onclick=async()=>{await setDoc(doc(db,'settings','site'),{...S,splash:{active:$('#spOn').checked,img:$('#spImg').value,link:$('#spLink').value,adId:$('#spAd').value,name:$('#spName').value,wa:$('#spWa').value,desc:$('#spDesc').value,price8:+$('#sp8').value,priceDay:+$('#spD').value,id:(S.splash&&S.splash.id)||('sp'+Date.now())}});alert('✅ تم الحفظ');loadAll();};
   }
   else if(CUR==='ticker'){v.innerHTML=`<div class="panel"><h2>📰 الشريط</h2><div class="fld"><input id="tkNew" placeholder="اكتب جملة…"></div><button class="save" id="tkAdd">➕ إضافة</button><div class="grid" style="margin-top:12px">`+TICK.map(t=>`<div class="item"><h3>${esc(t.txt)}</h3><div class="row"><button class="btn b-ed" data-a="tg" data-id="${t.id}">${t.status==='مخفي'?'إظهار':'إخفاء'}</button><button class="btn b-no" data-a="del" data-id="${t.id}">🗑</button></div></div>`).join('')+`</div></div>`;
     $('#tkAdd').onclick=async()=>{if(!$('#tkNew').value)return;await addDoc(collection(db,'ticker'),{txt:$('#tkNew').value,status:'شغال'});loadAll();};
@@ -119,8 +127,25 @@ function render(){
     v.innerHTML=`<div class="panel"><h2>💎 الأسعار (بتتحدث على الموقع فورًا)</h2>`+['bronze','gold','plat'].map(k=>`<h3 style="margin:10px 0 6px">${k==='bronze'?'🥉 برونزي':k==='gold'?'👑 ذهبي':'💎 ماسي'}</h3><div class="f2"><div class="fld"><label>اليوم</label><input type="number" id="p_${k}_day" value="${P[k].day}"></div><div class="fld"><label>7 أيام</label><input type="number" id="p_${k}_d7" value="${P[k].d7}"></div><div class="fld"><label>15 يوم</label><input type="number" id="p_${k}_d15" value="${P[k].d15}"></div><div class="fld"><label>30 يوم</label><input type="number" id="p_${k}_d30" value="${P[k].d30}"></div></div>`).join('')+`<button class="save" id="pSave">💾 حفظ الأسعار</button></div>`;
     $('#pSave').onclick=async()=>{const np={};['bronze','gold','plat'].forEach(k=>{np[k]={day:+$('#p_'+k+'_day').value,d7:+$('#p_'+k+'_d7').value,d15:+$('#p_'+k+'_d15').value,d30:+$('#p_'+k+'_d30').value};});await setDoc(doc(db,'settings','site'),{...S,prices:np});alert('✅ اتحدثت الأسعار على الموقع');loadAll();};
   }
-  else if(CUR==='set'){v.innerHTML=`<div class="panel"><h2>⚙️ إعدادات الموقع</h2><div class="fld"><label>البادج</label><input id="sBadge" value="${esc(S.badge||'')}"></div><div class="fld"><label>العنوان الأول</label><input id="sH1" value="${esc(S.h1||'')}"></div><div class="fld"><label>العنوان الثاني</label><input id="sH2" value="${esc(S.h2||'')}"></div><div class="fld"><label>جملة الافتتاح</label><input id="sAnn" value="${esc(S.announce||'')}"></div><div class="fld"><label>كود الخصم</label><input id="sCoup" value="${esc(S.coupon||'')}"></div><div class="f2"><div class="fld"><label>واتساب الإدارة</label><input id="sWa" value="${esc(S.wa||'')}"></div><div class="fld"><label>إنستاباي</label><input id="sIn" value="${esc(S.insta||'')}"></div></div><div class="fld"><label>فودافون كاش</label><input id="sVo" value="${esc(S.voda||'')}"></div><button class="save" id="sSave">💾 حفظ</button></div>`;
+  else if(CUR==='set'){v.innerHTML=`<div class="panel"><h2>⚙️ إعدادات الموقع</h2>
+    <div class="fld"><label>البادج</label><input id="sBadge" value="${esc(S.badge||'')}"></div>
+    <div class="fld"><label>العنوان الأول</label><input id="sH1" value="${esc(S.h1||'')}"></div>
+    <div class="fld"><label>العنوان الثاني</label><input id="sH2" value="${esc(S.h2||'')}"></div>
+    <div class="fld"><label>جملة الافتتاح</label><input id="sAnn" value="${esc(S.announce||'')}"></div>
+    <div class="fld"><label>كود الخصم</label><input id="sCoup" value="${esc(S.coupon||'')}"></div>
+    <div class="f2"><div class="fld"><label>واتساب الإدارة</label><input id="sWa" value="${esc(S.wa||'')}"></div><div class="fld"><label>إنستاباي</label><input id="sIn" value="${esc(S.insta||'')}"></div></div>
+    <div class="fld"><label>فودافون كاش</label><input id="sVo" value="${esc(S.voda||'')}"></div>
+    <button class="save" id="sSave">💾 حفظ إعدادات الموقع</button>
+    <h2 style="margin-top:16px">🔑 تغيير كلمة المرور</h2>
+    <div class="fld"><label>كلمة مرور جديدة (6 أحرف على الأقل)</label><input id="newPass" type="password" placeholder="مثال: Daleelak@2026"></div>
+    <div class="fld"><label>تأكيد كلمة المرور</label><input id="confPass" type="password"></div>
+    <button class="save" id="chPass">🔑 تغيير كلمة المرور</button>
+    <p style="color:var(--mut);font-size:.72rem;margin-top:8px">بعد التغيير تقدر تدخل من أي جهاز بالإيميل daleelak317@gmail.com + كلمة المرور الجديدة.</p></div>`;
     $('#sSave').onclick=async()=>{await setDoc(doc(db,'settings','site'),{...S,badge:$('#sBadge').value,h1:$('#sH1').value,h2:$('#sH2').value,announce:$('#sAnn').value,coupon:$('#sCoup').value,wa:$('#sWa').value,insta:$('#sIn').value,voda:$('#sVo').value});alert('✅ اتحدث على الموقع');loadAll();};
+    $('#chPass').onclick=async()=>{const p=$('#newPass').value,c=$('#confPass').value;
+      if(!p||p.length<6){alert('الباسورد 6 أحرف على الأقل');return;}
+      if(p!==c){alert('التأكيد مش مطابق');return;}
+      try{await updatePassword(auth.currentUser,p);alert('✅ اتغيرت كلمة المرور — دخل بيها من أي جهاز');}catch(e){alert('⚠️ '+e.message);}};
   }
   else if(CUR==='areas'){v.innerHTML=`<div class="panel"><h2>🗺️ المناطق</h2><div class="f2"><div class="fld"><input id="arGov" placeholder="المحافظة"></div><div class="fld"><input id="arArea" placeholder="المنطقة"></div></div><button class="save" id="arAdd">➕ إضافة</button><div class="grid" style="margin-top:12px">`+AREAS.map(t=>`<div class="item"><h3>${esc(t.gov)} — ${esc(t.area)}</h3><div class="row"><button class="btn b-no" data-a="del" data-id="${t.id}">🗑</button></div></div>`).join('')+`</div></div>`;
     $('#arAdd').onclick=async()=>{if(!$('#arGov').value||!$('#arArea').value)return;await addDoc(collection(db,'areas'),{gov:$('#arGov').value,area:$('#arArea').value});loadAll();};
