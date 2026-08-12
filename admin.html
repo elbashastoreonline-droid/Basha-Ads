@@ -35,10 +35,16 @@ h1,h2,h3{font-weight:800}
 #login button{background:var(--brand);color:#04241a;border-radius:10px;padding:.7rem 1.4rem;font-weight:800;width:100%}
 .hide{display:none}
 .err{background:#3a1414;border:1px solid var(--red);color:#ffb4b4;border-radius:12px;padding:14px;font-size:.8rem;font-weight:700;margin-bottom:12px;white-space:pre-wrap}
+.modal{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center}
+.modal.open{display:flex}
+.modal .ov{position:absolute;inset:0;background:rgba(0,0,0,.6)}
+.modal .mp{position:relative;background:var(--bg);width:100%;max-width:560px;max-height:90vh;overflow-y:auto;border:1px solid var(--line);border-radius:16px;padding:20px}
+.mhead{display:flex;justify-content:space-between;margin-bottom:12px}
+.mx{width:34px;height:34px;border-radius:8px;border:1px solid var(--line);background:var(--card2)}
 </style>
 </head>
 <body>
-<div id="login"><h2>🔐 لوحة تحكم دليلك</h2><p style="color:var(--mut);font-size:.8rem;margin:10px 0">الدخول بحساب الإدارة: daleelak317@gmail.com</p><button id="gLogin">دخول بحساب جوجل</button></div>
+<div id="login"><h2>🔐 لوحة تحكم دليلك</h2><p style="color:var(--mut);font-size:.8rem;margin:10px 0">daleelak317@gmail.com</p><button id="gLogin">دخول بحساب جوجل</button></div>
 <div id="app" class="hide">
 <div class="top">
   <h1>🛡️ لوحة تحكم دليلك</h1>
@@ -54,6 +60,7 @@ h1,h2,h3{font-weight:800}
 </div>
 <div id="view"></div>
 </div>
+<div class="modal" id="editModal"><div class="ov" data-close></div><div class="mp" id="editBody"></div></div>
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
 import{getAuth,signInWithPopup,GoogleAuthProvider,signOut,onAuthStateChanged,updatePassword}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
@@ -61,17 +68,16 @@ import{getFirestore,collection,getDocs,addDoc,updateDoc,deleteDoc,doc,getDoc,set
 const app=initializeApp({apiKey:"AIzaSyAErZex3BsKMO9cHtalN_Nhb0D7A4tFWe4",authDomain:"daleelak-22dc6.firebaseapp.com",projectId:"daleelak-22dc6",storageBucket:"daleelak-22dc6.firebasestorage.app",messagingSenderId:"774332263419",appId:"1:774332263419:web:527fc4de3d7ed6ce1e395e"});
 const db=getFirestore(app),auth=getAuth(app);
 const ADMIN=['daleelak317@gmail.com'];
+const DEF={badge:"📍 دليل مصر المحلي للعروض والأماكن",h1:"كل اللي محتاجه…",h2:"هتلاقيه عندنا",hl:true,announce:"📢 مفاجأة الافتتاح: خصم خاص على إعلانات الـ VIP لفترة محدودة! | برعاية GAME BASHA 🎮",wa:"01288023436",insta:"01550720161",voda:"01288023436",coupon:"DALEELAK",prices:{bronze:{day:5,d7:30,d15:60,d30:100},gold:{day:10,d7:50,d15:100,d30:150},plat:{day:20,d7:100,d15:250,d30:500}}};
+const GOVS=['القاهرة','الجيزة','القليوبية','الإسكندرية','البحيرة','مطروح','الغربية','المنوفية','الدقهلية','الشرقية','كفر الشيخ','دمياط','بورسعيد','الإسماعيلية','السويس','الفيوم','بني سويف','المنيا','أسيوط','سوهاج','قنا','الأقصر','أسوان','البحر الأحمر','الوادي الجديد','شمال سيناء','جنوب سيناء'];
 let S={},REQ=[],ADS=[],TICK=[],STOR=[],AREAS=[],CUR='req';
-const $=s=>document.querySelector(s);
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-function showErr(e){$('#view').innerHTML=`<div class="err">⚠️ حصل خطأ:\n${esc(String(e&&e.message?e.message:e))}\n\nتأكد إنك:\n1) نشرت قواعد Firestore.\n2) داخل بحساب ${ADMIN[0]}.</div>`;}
+function showErr(e){$('#view').innerHTML=`<div class="err">⚠️ خطأ:\n${esc(String(e&&e.message?e.message:e))}</div>`;}
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{CUR=b.dataset.t;render();});
 $('#out').onclick=()=>signOut(auth);
 $('#gLogin').onclick=()=>signInWithPopup(auth,new GoogleAuthProvider()).catch(showErr);
-onAuthStateChanged(auth,u=>{
-  if(u&&ADMIN.includes(u.email)){$('#login').classList.add('hide');$('#app').classList.remove('hide');loadAll().catch(showErr);}
-  else{$('#login').classList.remove('hide');$('#app').classList.add('hide');}
-});
+onAuthStateChanged(auth,u=>{if(u&&ADMIN.includes(u.email)){$('#login').classList.add('hide');$('#app').classList.remove('hide');loadAll().catch(showErr);}else{$('#login').classList.remove('hide');$('#app').classList.add('hide');}});
 async function safe(p){try{return await p;}catch(e){console.warn(e);return null;}}
 async function loadAll(){
   const sd=await safe(getDoc(doc(db,'settings','site')));S=(sd&&sd.exists())?sd.data():{};
@@ -92,16 +98,41 @@ async function toSplash(a){await setDoc(doc(db,'settings','site'),{...S,splash:{
 async function toTicker(a){await addDoc(collection(db,'ticker'),{txt:'🔥 '+a.name+' — '+(a.cat||''),status:'شغال'});alert('✅ اتضاف للشريط');loadAll();}
 async function toDeal(a){const h=prompt('مدة العرض بالساعات:','8');if(!h)return;await updateDoc(doc(db,'ads',a.id),{rank:(Math.max(0,...ADS.map(x=>x.rank||0))+1),hours:+h});alert('✅ دخل طابور عرض اليوم');loadAll();}
 async function renewAd(a){const d=prompt('زود كام يوم؟','7');if(!d)return;await updateDoc(doc(db,'ads',a.id),{endsAt:(a.endsAt||Date.now())+(+d)*864e5,status:'شغال'});loadAll();}
+/* ===== تعديل عام ===== */
+const COLL={req:'requests',ads:'ads',ticker:'ticker',stories:'stories',areas:'areas'};
+function openEdit(kind,id){
+  const src=kind==='req'?REQ:kind==='ads'?ADS:kind==='ticker'?TICK:kind==='stories'?STOR:AREAS;
+  const it=src.find(x=>x.id===id);if(!it)return;
+  const F={
+    req:[['name','الاسم'],['plan','الباقة'],['total','الإجمالي','number'],['city','المحافظة'],['area','المنطقة'],['wa','واتساب'],['sender','المحوّل منه'],['img','لينك صورة'],['payImg','لينك سكرين'],['days','أيام','number'],['status','الحالة']],
+    ads:[['name','الاسم'],['cat','الفئة'],['city','المحافظة'],['area','المنطقة'],['plan','الباقة'],['pa','سعر بعد','number'],['pb','سعر قبل','number'],['desc','الوصف'],['img','لينك صورة'],['wa','واتساب'],['phone','اتصال'],['loc','لوكيشن'],['ver','موثوق'],['rank','ترتيب عرض اليوم','number'],['hours','ساعات العرض','number'],['status','الحالة']],
+    ticker:[['txt','الجملة'],['status','الحالة']],
+    stories:[['name','الاسم'],['text','القصة'],['status','الحالة']],
+    areas:[['gov','المحافظة'],['area','المنطقة']]
+  }[kind];
+  $('#editBody').innerHTML=`<div class="mhead"><h3>✏️ تعديل</h3><button class="mx" id="eClose">✕</button></div>`+F.map(f=>`<div class="fld"><label>${f[1]}</label><input data-k="${f[0]}" type="${f[2]||'text'}" value="${esc(it[f[0]]||'')}"></div>`).join('')+`<button class="save" id="eSave">💾 حفظ</button>`;
+  $('#editModal').classList.add('open');
+  $('#eClose').onclick=()=>$('#editModal').classList.remove('open');
+  $('#eSave').onclick=async()=>{const up={};$$('#editBody [data-k]').forEach(i=>{up[i.dataset.k]=i.type==='number'?+i.value:i.value;});await updateDoc(doc(db,COLL[kind],id),up);$('#editModal').classList.remove('open');loadAll();};
+}
+/* ===== تفويض النقر ===== */
+$('#view').addEventListener('click',async e=>{
+  const ed=e.target.closest('[data-e]');if(ed){openEdit(ed.dataset.e,ed.dataset.id);return;}
+  const b=e.target.closest('[data-a]');if(!b)return;const id=b.dataset.id,act=b.dataset.a;
+  if(CUR==='req'){const r=REQ.find(x=>x.id===id);if(act==='ok')approve(r);if(act==='hold')setReq(r,'hold');if(act==='rej')setReq(r,'rejected');}
+  else if(CUR==='ads'){const a=ADS.find(x=>x.id===id);const m={tg:toggleAd,vf:verifyAd,dl:toDeal,tk:toTicker,sp:toSplash,rn:renewAd};if(act==='del')delAd(id);else m[act](a);}
+  else if(CUR==='ticker'){const t=TICK.find(x=>x.id===id);if(act==='del')await deleteDoc(doc(db,'ticker',id));else await updateDoc(doc(db,'ticker',id),{status:t.status==='مخفي'?'شغال':'مخفي'});loadAll();}
+  else if(CUR==='stories'){const t=STOR.find(x=>x.id===id);if(act==='del')await deleteDoc(doc(db,'stories',id));else await updateDoc(doc(db,'stories',id),{status:t.status==='مخفي'?'شغال':'مخفي'});loadAll();}
+  else if(CUR==='areas'){if(act==='del'){await deleteDoc(doc(db,'areas',id));loadAll();}}
+});
 function render(){
   try{
   document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b.dataset.t===CUR));
   const v=$('#view');
   if(CUR==='req'){const list=REQ.filter(r=>r.status!=='approved');
-    v.innerHTML=`<div class="panel"><h2>📥 الطلبات المعلقة (${list.length})</h2><div class="grid">`+(list.map(r=>`<div class="item"><span class="badge st-p">${esc(r.status||'معلق')}</span><h3>${esc(r.name)}</h3><div class="m">${esc(r.plan)} • ${esc(r.city)} • ${esc(r.total)} ج<br>📱 ${esc(r.wa)}${r.senderPhone?'<br>💳 المحوّل منه: '+esc(r.senderPhone):''}</div><div class="row"><button class="btn b-ok" data-a="ok" data-id="${r.id}">✅ نشر</button><button class="btn b-hold" data-a="hold" data-id="${r.id}">⏸</button><button class="btn b-no" data-a="rej" data-id="${r.id}">❌</button></div></div>`).join('')||'<p style="color:var(--mut)">مفيش طلبات معلقة ✅</p>')+`</div></div>`;
-    v.onclick=e=>{const b=e.target.closest('[data-a]');if(!b)return;const r=REQ.find(x=>x.id===b.dataset.id);if(b.dataset.a==='ok')approve(r);if(b.dataset.a==='hold')setReq(r,'hold');if(b.dataset.a==='rej')setReq(r,'rejected');};
+    v.innerHTML=`<div class="panel"><h2>📥 الطلبات المعلقة (${list.length})</h2><div class="grid">`+(list.map(r=>`<div class="item"><span class="badge st-p">${esc(r.status||'معلق')}</span><h3>${esc(r.name)}</h3><div class="m">${esc(r.plan)} • ${esc(r.city)} • ${esc(r.total)} ج<br>📱 ${esc(r.wa)}${r.senderPhone?'<br>💳 المحوّل منه: '+esc(r.senderPhone):''}</div><div class="row"><button class="btn b-ok" data-a="ok" data-id="${r.id}">✅ نشر</button><button class="btn b-hold" data-a="hold" data-id="${r.id}">⏸</button><button class="btn b-no" data-a="rej" data-id="${r.id}">❌</button><button class="btn b-ed" data-e="req" data-id="${r.id}">✏️ تعديل</button></div></div>`).join('')||'<p style="color:var(--mut)">مفيش طلبات معلقة ✅</p>')+`</div></div>`;
   }
-  else if(CUR==='ads'){v.innerHTML=`<div class="panel"><h2>📢 الإعلانات (${ADS.length})</h2><div class="grid">`+ADS.map(a=>`<div class="item"><span class="badge ${a.status==='شغال'?'st-a':'st-r'}">${esc(a.status)}</span>${a.ver==='نعم'?'<span class="badge st-a">✔ موثوق</span>':''}<h3>${esc(a.name)}</h3><div class="m">${esc(a.plan)} • ${esc(a.city)}${a.endsAt?'<br>⏳ ينتهي: '+new Date(a.endsAt).toLocaleDateString('ar-EG'):''}</div><div class="row"><button class="btn b-ed" data-a="tg" data-id="${a.id}">${a.status==='شغال'?'إيقاف':'تفعيل'}</button><button class="btn b-ed" data-a="vf" data-id="${a.id}">✔ موثوق</button><button class="btn b-hold" data-a="dl" data-id="${a.id}">⏰ عرض اليوم</button><button class="btn b-ed" data-a="tk" data-id="${a.id}">📰 الشريط</button><button class="btn b-hold" data-a="sp" data-id="${a.id}">🎯 عائم</button><button class="btn b-ed" data-a="rn" data-id="${a.id}">🔄 تجديد</button><button class="btn b-no" data-a="del" data-id="${a.id}">🗑</button></div></div>`).join('')+`</div></div>`;
-    v.onclick=e=>{const b=e.target.closest('[data-a]');if(!b)return;const a=ADS.find(x=>x.id===b.dataset.id);const m={tg:toggleAd,vf:verifyAd,dl:toDeal,tk:toTicker,sp:toSplash,rn:renewAd};if(b.dataset.a==='del')delAd(a.id);else m[b.dataset.a](a);};
+  else if(CUR==='ads'){v.innerHTML=`<div class="panel"><h2>📢 الإعلانات (${ADS.length})</h2><div class="grid">`+ADS.map(a=>`<div class="item"><span class="badge ${a.status==='شغال'?'st-a':'st-r'}">${esc(a.status)}</span>${a.ver==='نعم'?'<span class="badge st-a">✔ موثوق</span>':''}<h3>${esc(a.name)}</h3><div class="m">${esc(a.plan)} • ${esc(a.city)}${a.endsAt?'<br>⏳ ينتهي: '+new Date(a.endsAt).toLocaleDateString('ar-EG'):''}</div><div class="row"><button class="btn b-ed" data-a="tg" data-id="${a.id}">${a.status==='شغال'?'إيقاف':'تفعيل'}</button><button class="btn b-ed" data-a="vf" data-id="${a.id}">✔ موثوق</button><button class="btn b-hold" data-a="dl" data-id="${a.id}">⏰ عرض اليوم</button><button class="btn b-ed" data-a="tk" data-id="${a.id}">📰 الشريط</button><button class="btn b-hold" data-a="sp" data-id="${a.id}">🎯 عائم</button><button class="btn b-ed" data-a="rn" data-id="${a.id}">🔄 تجديد</button><button class="btn b-ed" data-e="ads" data-id="${a.id}">✏️ تعديل</button><button class="btn b-no" data-a="del" data-id="${a.id}">🗑</button></div></div>`).join('')+`</div></div>`;
   }
   else if(CUR==='splash'){const sp=S.splash||{};v.innerHTML=`<div class="panel"><h2>🎁 الإعلان العائم</h2>
     <div class="fld"><label>اربطه بإعلان موجود (يفتح تفاصيله)</label><select id="spAd"><option value="">— بدون ربط —</option>${ADS.map(a=>`<option value="${a.id}" ${sp.adId===a.id?'selected':''}>${esc(a.name)}</option>`).join('')}</select></div>
@@ -115,41 +146,43 @@ function render(){
     <button class="save" id="spSave">💾 حفظ</button></div>`;
     $('#spSave').onclick=async()=>{await setDoc(doc(db,'settings','site'),{...S,splash:{active:$('#spOn').checked,img:$('#spImg').value,link:$('#spLink').value,adId:$('#spAd').value,name:$('#spName').value,wa:$('#spWa').value,desc:$('#spDesc').value,price8:+$('#sp8').value,priceDay:+$('#spD').value,id:(S.splash&&S.splash.id)||('sp'+Date.now())}});alert('✅ تم الحفظ');loadAll();};
   }
-  else if(CUR==='ticker'){v.innerHTML=`<div class="panel"><h2>📰 الشريط</h2><div class="fld"><input id="tkNew" placeholder="اكتب جملة…"></div><button class="save" id="tkAdd">➕ إضافة</button><div class="grid" style="margin-top:12px">`+TICK.map(t=>`<div class="item"><h3>${esc(t.txt)}</h3><div class="row"><button class="btn b-ed" data-a="tg" data-id="${t.id}">${t.status==='مخفي'?'إظهار':'إخفاء'}</button><button class="btn b-no" data-a="del" data-id="${t.id}">🗑</button></div></div>`).join('')+`</div></div>`;
+  else if(CUR==='ticker'){v.innerHTML=`<div class="panel"><h2>📰 الشريط</h2><div class="fld"><input id="tkNew" placeholder="اكتب جملة…"></div><button class="save" id="tkAdd">➕ إضافة</button><div class="grid" style="margin-top:12px">`+TICK.map(t=>`<div class="item"><h3>${esc(t.txt)}</h3><div class="row"><button class="btn b-ed" data-e="ticker" data-id="${t.id}">✏️ تعديل</button><button class="btn b-ed" data-a="tg" data-id="${t.id}">${t.status==='مخفي'?'إظهار':'إخفاء'}</button><button class="btn b-no" data-a="del" data-id="${t.id}">🗑</button></div></div>`).join('')+`</div></div>`;
     $('#tkAdd').onclick=async()=>{if(!$('#tkNew').value)return;await addDoc(collection(db,'ticker'),{txt:$('#tkNew').value,status:'شغال'});loadAll();};
-    v.onclick=async e=>{const b=e.target.closest('[data-a]');if(!b)return;const t=TICK.find(x=>x.id===b.dataset.id);if(b.dataset.a==='del')await deleteDoc(doc(db,'ticker',t.id));else await updateDoc(doc(db,'ticker',t.id),{status:t.status==='مخفي'?'شغال':'مخفي'});loadAll();};
   }
-  else if(CUR==='stories'){v.innerHTML=`<div class="panel"><h2>🗣️ القصص</h2><div class="fld"><input id="stName" placeholder="الاسم"></div><div class="fld"><textarea id="stTxt" placeholder="نص القصة"></textarea></div><button class="save" id="stAdd">➕ إضافة</button><div class="grid" style="margin-top:12px">`+STOR.map(t=>`<div class="item"><h3>${esc(t.name)}</h3><div class="m">${esc(t.text)}</div><div class="row"><button class="btn b-ed" data-a="tg" data-id="${t.id}">${t.status==='مخفي'?'إظهار':'إخفاء'}</button><button class="btn b-no" data-a="del" data-id="${t.id}">🗑</button></div></div>`).join('')+`</div></div>`;
+  else if(CUR==='stories'){v.innerHTML=`<div class="panel"><h2>🗣️ القصص</h2><div class="f2"><div class="fld"><input id="stName" placeholder="الاسم"></div><div class="fld"><input id="stTxt" placeholder="نص القصة"></div></div><button class="save" id="stAdd">➕ إضافة</button><div class="grid" style="margin-top:12px">`+STOR.map(t=>`<div class="item"><h3>${esc(t.name)}</h3><div class="m">${esc(t.text)}</div><div class="row"><button class="btn b-ed" data-e="stories" data-id="${t.id}">✏️ تعديل</button><button class="btn b-ed" data-a="tg" data-id="${t.id}">${t.status==='مخفي'?'إظهار':'إخفاء'}</button><button class="btn b-no" data-a="del" data-id="${t.id}">🗑</button></div></div>`).join('')+`</div></div>`;
     $('#stAdd').onclick=async()=>{if(!$('#stTxt').value)return;await addDoc(collection(db,'stories'),{name:$('#stName').value,text:$('#stTxt').value,status:'شغال'});loadAll();};
-    v.onclick=async e=>{const b=e.target.closest('[data-a]');if(!b)return;const t=STOR.find(x=>x.id===b.dataset.id);if(b.dataset.a==='del')await deleteDoc(doc(db,'stories',t.id));else await updateDoc(doc(db,'stories',t.id),{status:t.status==='مخفي'?'شغال':'مخفي'});loadAll();};
   }
-  else if(CUR==='prices'){const P=S.prices||{bronze:{day:5,d7:30,d15:60,d30:100},gold:{day:10,d7:50,d15:100,d30:150},plat:{day:20,d7:100,d15:250,d30:500}};
+  else if(CUR==='prices'){const P=S.prices||DEF.prices;
     v.innerHTML=`<div class="panel"><h2>💎 الأسعار (بتتحدث على الموقع فورًا)</h2>`+['bronze','gold','plat'].map(k=>`<h3 style="margin:10px 0 6px">${k==='bronze'?'🥉 برونزي':k==='gold'?'👑 ذهبي':'💎 ماسي'}</h3><div class="f2"><div class="fld"><label>اليوم</label><input type="number" id="p_${k}_day" value="${P[k].day}"></div><div class="fld"><label>7 أيام</label><input type="number" id="p_${k}_d7" value="${P[k].d7}"></div><div class="fld"><label>15 يوم</label><input type="number" id="p_${k}_d15" value="${P[k].d15}"></div><div class="fld"><label>30 يوم</label><input type="number" id="p_${k}_d30" value="${P[k].d30}"></div></div>`).join('')+`<button class="save" id="pSave">💾 حفظ الأسعار</button></div>`;
     $('#pSave').onclick=async()=>{const np={};['bronze','gold','plat'].forEach(k=>{np[k]={day:+$('#p_'+k+'_day').value,d7:+$('#p_'+k+'_d7').value,d15:+$('#p_'+k+'_d15').value,d30:+$('#p_'+k+'_d30').value};});await setDoc(doc(db,'settings','site'),{...S,prices:np});alert('✅ اتحدثت الأسعار على الموقع');loadAll();};
   }
-  else if(CUR==='set'){v.innerHTML=`<div class="panel"><h2>⚙️ إعدادات الموقع</h2>
-    <div class="fld"><label>البادج</label><input id="sBadge" value="${esc(S.badge||'')}"></div>
-    <div class="fld"><label>العنوان الأول</label><input id="sH1" value="${esc(S.h1||'')}"></div>
-    <div class="fld"><label>العنوان الثاني</label><input id="sH2" value="${esc(S.h2||'')}"></div>
-    <div class="fld"><label>جملة الافتتاح</label><input id="sAnn" value="${esc(S.announce||'')}"></div>
-    <div class="fld"><label>كود الخصم</label><input id="sCoup" value="${esc(S.coupon||'')}"></div>
-    <div class="f2"><div class="fld"><label>واتساب الإدارة</label><input id="sWa" value="${esc(S.wa||'')}"></div><div class="fld"><label>إنستاباي</label><input id="sIn" value="${esc(S.insta||'')}"></div></div>
-    <div class="fld"><label>فودافون كاش</label><input id="sVo" value="${esc(S.voda||'')}"></div>
+  else if(CUR==='set'){v.innerHTML=`<div class="panel"><h2>⚙️ إعدادات الموقع (معبيّة بالافتراضي — عدّل اللي عايزه بس)</h2>
+    <div class="fld"><label>البادج</label><input id="sBadge" value="${esc(S.badge||DEF.badge)}"></div>
+    <div class="fld"><label>العنوان الأول</label><input id="sH1" value="${esc(S.h1||DEF.h1)}"></div>
+    <div class="fld"><label>العنوان الثاني</label><input id="sH2" value="${esc(S.h2||DEF.h2)}"></div>
+    <div class="fld"><label>جملة الافتتاح</label><input id="sAnn" value="${esc(S.announce||DEF.announce)}"></div>
+    <div class="fld"><label>كود الخصم</label><input id="sCoup" value="${esc(S.coupon||DEF.coupon)}"></div>
+    <div class="f2"><div class="fld"><label>واتساب الإدارة</label><input id="sWa" value="${esc(S.wa||DEF.wa)}"></div><div class="fld"><label>إنستاباي</label><input id="sIn" value="${esc(S.insta||DEF.insta)}"></div></div>
+    <div class="fld"><label>فودافون كاش</label><input id="sVo" value="${esc(S.voda||DEF.voda)}"></div>
     <button class="save" id="sSave">💾 حفظ إعدادات الموقع</button>
     <h2 style="margin-top:16px">🔑 تغيير كلمة المرور</h2>
     <div class="fld"><label>كلمة مرور جديدة (6 أحرف على الأقل)</label><input id="newPass" type="password" placeholder="مثال: Daleelak@2026"></div>
     <div class="fld"><label>تأكيد كلمة المرور</label><input id="confPass" type="password"></div>
-    <button class="save" id="chPass">🔑 تغيير كلمة المرور</button>
-    <p style="color:var(--mut);font-size:.72rem;margin-top:8px">بعد التغيير تقدر تدخل من أي جهاز بالإيميل daleelak317@gmail.com + كلمة المرور الجديدة.</p></div>`;
+    <button class="save" id="chPass">🔑 تغيير كلمة المرور</button></div>`;
     $('#sSave').onclick=async()=>{await setDoc(doc(db,'settings','site'),{...S,badge:$('#sBadge').value,h1:$('#sH1').value,h2:$('#sH2').value,announce:$('#sAnn').value,coupon:$('#sCoup').value,wa:$('#sWa').value,insta:$('#sIn').value,voda:$('#sVo').value});alert('✅ اتحدث على الموقع');loadAll();};
-    $('#chPass').onclick=async()=>{const p=$('#newPass').value,c=$('#confPass').value;
-      if(!p||p.length<6){alert('الباسورد 6 أحرف على الأقل');return;}
-      if(p!==c){alert('التأكيد مش مطابق');return;}
-      try{await updatePassword(auth.currentUser,p);alert('✅ اتغيرت كلمة المرور — دخل بيها من أي جهاز');}catch(e){alert('⚠️ '+e.message);}};
+    $('#chPass').onclick=async()=>{const p=$('#newPass').value,c=$('#confPass').value;if(!p||p.length<6){alert('الباسورد 6 أحرف على الأقل');return;}if(p!==c){alert('التأكيد مش مطابق');return;}try{await updatePassword(auth.currentUser,p);alert('✅ اتغيرت كلمة المرور');}catch(e){alert('⚠️ '+e.message);}};
   }
-  else if(CUR==='areas'){v.innerHTML=`<div class="panel"><h2>🗺️ المناطق</h2><div class="f2"><div class="fld"><input id="arGov" placeholder="المحافظة"></div><div class="fld"><input id="arArea" placeholder="المنطقة"></div></div><button class="save" id="arAdd">➕ إضافة</button><div class="grid" style="margin-top:12px">`+AREAS.map(t=>`<div class="item"><h3>${esc(t.gov)} — ${esc(t.area)}</h3><div class="row"><button class="btn b-no" data-a="del" data-id="${t.id}">🗑</button></div></div>`).join('')+`</div></div>`;
-    $('#arAdd').onclick=async()=>{if(!$('#arGov').value||!$('#arArea').value)return;await addDoc(collection(db,'areas'),{gov:$('#arGov').value,area:$('#arArea').value});loadAll();};
-    v.onclick=async e=>{const b=e.target.closest('[data-a]');if(!b)return;await deleteDoc(doc(db,'areas',b.dataset.id));loadAll();};
+  else if(CUR==='areas'){const govKeys=[...new Set([...GOVS,...Object.keys(AREAS)])];
+    v.innerHTML=`<div class="panel"><h2>🗺️ المناطق</h2>
+    <div class="f2"><div class="fld"><label>المحافظة</label><select id="arGov">${govKeys.map(g=>`<option>${esc(g)}</option>`).join('')}<option value="__custom">✏️ أخرى (اكتبها)</option></select></div>
+    <div class="fld"><label>المنطقة</label><input id="arArea" placeholder="اكتب المنطقة"></div></div>
+    <div class="fld" id="arGovCWrap" style="display:none"><label>✏️ اكتب المحافظة</label><input id="arGovC"></div>
+    <div class="fld"><label>المناطق الموجوده في المحافظة المختارة</label><div id="arHint" style="color:var(--mut);font-size:.75rem;font-weight:700"></div></div>
+    <button class="save" id="arAdd">➕ إضافة</button>
+    <div class="grid" style="margin-top:12px">`+AREAS.map(t=>`<div class="item"><h3>${esc(t.gov)} — ${esc(t.area)}</h3><div class="row"><button class="btn b-ed" data-e="areas" data-id="${t.id}">✏️ تعديل</button><button class="btn b-no" data-a="del" data-id="${t.id}">🗑</button></div></div>`).join('')+`</div></div>`;
+    const hint=()=>{let g=$('#arGov').value;if(g==='__custom')g=$('#arGovC').value.trim();$('#arGovCWrap').style.display=$('#arGov').value==='__custom'?'':'none';$('#arHint').textContent=(AREAS[g]||[]).length?(AREAS[g].join('، ')):'(لسه مفيش مناطق ليها)';};
+    $('#arGov').onchange=hint;$('#arGovC').oninput=hint;hint();
+    $('#arAdd').onclick=async()=>{let gov=$('#arGov').value;if(gov==='__custom')gov=$('#arGovC').value.trim();const area=$('#arArea').value.trim();if(!gov||!area){alert('اكمل البيانات');return;}if((AREAS[gov]||[]).includes(area)){alert('⚠️ المنطقة دي موجوده بالفعل في '+gov);return;}await addDoc(collection(db,'areas'),{gov,area});loadAll();};
   }
   }catch(e){showErr(e);}
 }
