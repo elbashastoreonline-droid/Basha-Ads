@@ -383,38 +383,44 @@ footer a{color:#cfe3d7;text-decoration:none;display:block;padding:.22rem 0;font-
   <input class="hp" id="adSite">
   <div class="f2">
     <div class="fld"><label>نوع الإعلان</label><select id="adType"><option value="مكان">🏢 مكان</option><option value="منتج">🛍️ منتج</option></select></div>
-    <div class="fld"><label>الاسم *</label><input id="adName" placeholder="مثال: صيدلية النور"></div>
+    <div class="fld"><label>الباقة</label><select id="adPlan"><option value="عادي">🥉 برونزي</option><option value="VIP">👑 ذهبي</option><option value="بلاتيني">💎 ماسي</option></select></div>
   </div>
-  <div class="fld"><label>الباقة</label><select id="adPlan"><option value="عادي">🥉 برونزي</option><option value="VIP">👑 ذهبي VIP</option><option value="بلاتيني">💎 ماسي DIAMOND</option></select></div>
   <div class="plannote" id="planNote"></div>
   <div class="f2">
-    <div class="fld"><label>طريقة التسعير</label><select id="adDurMode"><option value="day1">يوم واحد</option><option value="custom">عدد أيام مخصص</option><option value="s7">🔥 توفير 7 أيام</option><option value="s15">🔥 توفير 15 يوم</option><option value="s30">🔥 توفير 30 يوم</option></select></div>
-    <div class="fld" id="daysWrap" style="display:none"><label>عدد الأيام</label><input id="adDays" type="number" min="1" value="1" placeholder="مثال: 10"></div>
+    <div class="fld"><label>الاسم *</label><input id="adName" placeholder="مثال: صيدلية النور"></div>
+    <div class="fld"><label>طريقة التسعير</label><select id="adDurMode"><option value="day1">يوم واحد</option><option value="custom">أيام مخصصة</option><option value="s7">🔥 7 أيام</option><option value="s15">🔥 15 يوم</option><option value="s30">🔥 30 يوم</option></select></div>
   </div>
+  <div class="fld" id="daysWrap" style="display:none"><label>عدد الأيام</label><input id="adDays" type="number" min="1" value="1" placeholder="مثال: 10"></div>
   <div class="savenote" id="saveNote" style="display:none">🎉 سعر عرض التوفير — لفترة محدودة!</div>
   <div class="f2">
     <div class="fld"><label>الفئة *</label><select id="adCat"></select></div>
-    <div class="fld"><label>المحافظة *</label><select id="adCity"></select></div>
+    <div class="fld"><label>كود خصم</label><input id="adCode" placeholder="DALEELAK10"></div>
   </div>
-  <div class="fld" id="adCatCustomWrap" style="display:none"><label>✏️ اكتب الفئة الجديدة</label><input id="adCatCustom" placeholder="مثال: 🐾 مستلزمات حيوانات"></div>
+  <div class="fld" id="adCatCustomWrap" style="display:none"><label>✏️ اكتب الفئة</label><input id="adCatCustom" placeholder="مثال: 🐾 مستلزمات حيوانات"></div>
+  <div class="f2">
+    <div class="fld"><label>المحافظة *</label><select id="adCity"></select></div>
+    <div class="fld"><label>المنطقة</label><select id="adArea"></select></div>
+  </div>
   <div class="fld" id="adCityCustomWrap" style="display:none"><label>✏️ اكتب محافظتك</label><input id="adCityCustom" placeholder="مثال: الإسكندرية"></div>
-  <div class="fld"><label>المنطقة</label><select id="adArea"></select></div>
   <div class="fld" id="adAreaCustomWrap" style="display:none"><label>✏️ اكتب منطقتك</label><input id="adAreaCustom" placeholder="مثال: سموحة"></div>
   <div id="prodSec" style="display:none">
-    <div class="f2"><div class="fld"><label>سعر قبل (ج)</label><input id="adPb" type="number" placeholder="مثال: 300"></div><div class="fld"><label>سعر بعد (ج)</label><input id="adPa" type="number" placeholder="مثال: 270"></div></div>
-    <div class="fld"><label>يُباع في</label><input id="adSold" placeholder="مثال: صيدلية د/سمر"></div>
-    <div class="fld"><label>التوصيل</label><select id="adDel"><option value="">غير محدد</option><option>🚚 دليفري</option><option>📦 شحن محافظات</option><option>🏪 استلام من الفرع</option></select></div>
+    <div class="f2"><div class="fld"><label>سعر قبل (ج)</label><input id="adPb" type="number" placeholder="300"></div><div class="fld"><label>سعر بعد (ج)</label><input id="adPa" type="number" placeholder="270"></div></div>
+    <div class="f2"><div class="fld"><label>يُباع في</label><input id="adSold" placeholder="صيدلية د/سمر"></div><div class="fld"><label>التوصيل</label><select id="adDel"><option value="">غير محدد</option><option>🚚 دليفري</option><option>📦 شحن محافظات</option><option>🏪 استلام</option></select></div></div>
   </div>
   <div class="fld"><label>الوصف</label><textarea id="adDesc" rows="2" placeholder="مثال: خصم 10% وتوصيل مجاني…"></textarea></div>
   <div class="fld"><label>إضافة موقع (لوكيشن) <button type="button" class="helpbtn" id="locHelpBtn">؟</button></label><input id="adLoc" placeholder="https://maps.app.goo.gl/…"></div>
   <div class="helpbox" id="locHelp" style="display:none">🗺️ <b>إزاي تجيب اللوكيشن؟</b><br>1) افتح جوجل ماب وابحث عن مكانك.<br>2) دوس "مشاركة" ثم "نسخ الرابط".<br>3) الصقه في خانة اللوكيشن. ✅</div>
-  <div class="f2"><div class="fld"><label>واتساب *</label><input id="adWa" inputmode="numeric" pattern="[0-9]*" placeholder="01xxxxxxxxx"></div><div class="fld"><label>اتصال</label><input id="adPhone" inputmode="numeric" pattern="[0-9]*" placeholder="01xxxxxxxxx"></div></div>
+  <div class="f2">
+    <div class="fld"><label>واتساب *</label><input id="adWa" inputmode="numeric" pattern="[0-9]*" placeholder="01xxxxxxxxx"></div>
+    <div class="fld"><label>اتصال</label><input id="adPhone" inputmode="numeric" pattern="[0-9]*" placeholder="01xxxxxxxxx"></div>
+  </div>
   <div class="fld"><label>لينك صورة الإعلان (اختياري) <button type="button" class="helpbtn" id="imgHelpBtn">؟</button></label><input id="adImg" placeholder="https://i.ibb.co/…"></div>
   <div class="helpbox" id="imgHelp" style="display:none">📌 <b>إزاي ترفع صورتك؟</b><br>1) دوس "فتح ibb.co" وارفع صورتك. <a class="linkbtn" href="https://ibb.co" target="_blank">🌐 فتح ibb.co</a><br>2) انسخ الـ Direct link والصقه فوق.<br>💡 مش عارف؟ سيبها فاضية وابعتها واتساب وهنرفعها عنك. ✅<br><a class="wabtn" href="https://wa.me/201288023436?text=السلام عليكم، عايز أضيف صورة لإعلاني 📸" target="_blank">📱 تواصل واتساب لإضافة الصورة</a></div>
-  <div class="fld"><label>الرقم المحوّل منه</label><input id="adSender" inputmode="numeric" pattern="[0-9]*" placeholder="01xxxxxxxxx"></div>
-  <div class="fld"><label>لينك سكرين الدفع (اختياري) <button type="button" class="helpbtn" id="payHelpBtn">؟</button></label><input id="adPayImg" placeholder="https://i.ibb.co/…"></div>
+  <div class="f2">
+    <div class="fld"><label>الرقم المحوّل منه</label><input id="adSender" inputmode="numeric" pattern="[0-9]*" placeholder="01xxxxxxxxx"></div>
+    <div class="fld"><label>لينك سكرين الدفع</label><input id="adPayImg" placeholder="https://i.ibb.co/…"></div>
+  </div>
   <div class="helpbox" id="payHelp" style="display:none">📌 ارفع سكرين الدفع على ibb.co والصق اللينك. <a class="linkbtn" href="https://ibb.co" target="_blank">🌐 فتح ibb.co</a><br>أو ابعت السكرين واتساب: <a class="wabtn" href="https://wa.me/201288023436?text=السلام عليكم، ده سكرين إثبات الدفع 💳" target="_blank">📱 إرسال سكرين الدفع</a></div>
-  <div class="fld"><label>كود خصم (إن وجد)</label><input id="adCode" placeholder="مثال: DALEELAK10"></div>
   <div class="total">الإجمالي: <span id="adTotal">0</span> جنيه</div>
   <div class="paybox">الدفع:
     <div class="prow"><span>🟣 إنستاباي: <b id="payInsta">01550720161</b></span><button id="copyInsta">نسخ</button></div>
