@@ -438,11 +438,14 @@ footer a{color:#cfe3d7;text-decoration:none;display:block;padding:.22rem 0;font-
 <div class="modal" id="acctModal"><div class="ov" data-close></div><div class="mp">
   <div class="mhead"><h3>👤 الحساب</h3><button class="mx" data-close>✕</button></div>
   <div class="note">🎁 <b>مميزات التسجيل:</b> رصيد ترحيبي 50ج • مفضلة متزامنة على أي جهاز • متابعة طلباتك وحالة إعلاناتك • تجديد إعلانك من حسابك • تقييم الأماكن • تاريخ إعلاناتك يظهرلك إنت بس.</div>
+  <button class="bigsend" id="doGoogle" style="background:#fff;color:#1a1a1a;border:1.5px solid var(--line)"><svg width="18" height="18" viewBox="0 0 48 48" style="vertical-align:-3px"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> المتابعة بحساب جوجل</button>
+  <div style="text-align:center;color:var(--mut);font-size:.75rem;font-weight:800;margin:10px 0">— أو بالإيميل والباسورد —</div>
   <div class="fld"><label>الاسم</label><input id="rgName" placeholder="اسمك"></div>
   <div class="fld"><label>الإيميل *</label><input id="rgEmail" type="email" placeholder="you@mail.com"></div>
   <div class="fld"><label>الباسورد *</label><input id="rgPass" type="password" placeholder="******"></div>
   <div class="fld"><label>رقم الموبايل</label><input id="rgPhone" inputmode="numeric" pattern="[0-9]*" placeholder="01xxxxxxxxx"></div>
   <button class="bigsend" id="doLogin">تسجيل دخول</button>
+  <button class="bigsend" id="doForgot" style="background:var(--bg2);color:var(--ink);border:1.5px solid var(--line);margin-top:8px">🔑 نسيت الباسورد؟ ابعتلي لينك استرداد</button>
   <button class="bigsend" id="doReg" style="background:var(--brand);margin-top:8px">إنشاء حساب جديد 🎁 (هديتك 50ج)</button>
 </div></div>
 <div class="modal" id="meModal"><div class="ov" data-close></div><div class="mp">
@@ -459,8 +462,7 @@ footer a{color:#cfe3d7;text-decoration:none;display:block;padding:.22rem 0;font-
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
 import{getFirestore,collection,getDocs,addDoc,updateDoc,doc,getDoc,setDoc,serverTimestamp}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
-import{getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
-const app=initializeApp({apiKey:"AIzaSyAErZex3BsKMO9cHtalN_Nhb0D7A4tFWe4",authDomain:"daleelak-22dc6.firebaseapp.com",projectId:"daleelak-22dc6",storageBucket:"daleelak-22dc6.firebasestorage.app",messagingSenderId:"774332263419",appId:"1:774332263419:web:527fc4de3d7ed6ce1e395e"});
+import{getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,signInWithPopup,GoogleAuthProvider,sendPasswordResetEmail,signOut,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";const app=initializeApp({apiKey:"AIzaSyAErZex3BsKMO9cHtalN_Nhb0D7A4tFWe4",authDomain:"daleelak-22dc6.firebaseapp.com",projectId:"daleelak-22dc6",storageBucket:"daleelak-22dc6.firebasestorage.app",messagingSenderId:"774332263419",appId:"1:774332263419:web:527fc4de3d7ed6ce1e395e"});
 const db=getFirestore(app),auth=getAuth(app);
 const SHEET_ID='1wgNuXx8KAYFjiRekzks3M4lgpOuBz6i3MHXsai2NIuY';
 const DEF={badge:"📍 دليل مصر المحلي للعروض والأماكن",h1:"كل اللي محتاجه…",h2:"هتلاقيه عندنا",hl:true,announce:"📢 مفاجأة الافتتاح: خصم خاص على إعلانات الـ VIP لفترة محدودة! | برعاية GAME BASHA 🎮",wa:"01288023436",insta:"01550720161",voda:"01288023436",coupon:"DALEELAK",savings:true,splash:{active:false,img:"",link:"",id:"sp1"},prices:{bronze:{day:5,d7:30,d15:60,d30:100},gold:{day:10,d7:50,d15:100,d30:150},plat:{day:20,d7:100,d15:250,d30:500}}};
@@ -626,6 +628,8 @@ const ADMIN_EMAILS=['daleelak317@gmail.com'];
 function openAcct(){ if(ME){openMe();} else {newCap();const am=$('#acctModal');if(am)am.classList.add('open');} }
 on('#drawerAcct','click',()=>{const dr=$('#drawer');if(dr)dr.classList.remove('open');openAcct();});
 on('#acctBtn','click',()=>openAcct());
+on('#doGoogle','click',async()=>{try{await signInWithPopup(auth,new GoogleAuthProvider());$('#acctModal').classList.remove('open');}catch(e){toast('⚠️ جوجل: '+(e.message||e));}});
+on('#doForgot','click',async()=>{const em=($('#rgEmail').value||'').trim();if(!em){toast('اكتب إيميلك الأول');return;}try{await sendPasswordResetEmail(auth,em);toast('📩 اتبعتلك لينك الاسترداد على إيميلك');}catch(e){toast('⚠️ '+(e.message||e));}});
 on('#doLogin','click',async()=>{try{await signInWithEmailAndPassword(auth,($('#rgEmail')?$('#rgEmail').value:'').trim(),$('#rgPass')?$('#rgPass').value:'');const am=$('#acctModal');if(am)am.classList.remove('open');}catch(e){toast('⚠️ بيانات الدخول غلط');}});
 on('#doReg','click',async()=>{const n=($('#rgName')?$('#rgName').value:'').trim(),e=($('#rgEmail')?$('#rgEmail').value:'').trim(),p=$('#rgPass')?$('#rgPass').value:'',ph=($('#rgPhone')?$('#rgPhone').value:'').trim();
   if(!e||!p){toast('اكتب الإيميل والباسورد');return;}
