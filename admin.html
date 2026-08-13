@@ -80,7 +80,7 @@ const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&
 function showErr(e){$('#view').innerHTML=`<div class="err">⚠️ خطأ:\n${esc(String(e&&e.message?e.message:e))}</div>`;}
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{CUR=b.dataset.t;render();});
 $('#out').onclick=()=>signOut(auth);
-$('#gLogin').onclick=()=>signInWithPopup(auth,new GoogleAuthProvider()).catch(showErr);
+$('#gLogin').onclick=async()=>{try{await signInWithPopup(auth,new GoogleAuthProvider());}catch(e){alert('⚠️ '+ (e.message||e));}};
 onAuthStateChanged(auth,u=>{if(u&&ADMIN.includes(u.email)){$('#login').classList.add('hide');$('#app').classList.remove('hide');loadAll().catch(showErr);}else{$('#login').classList.remove('hide');$('#app').classList.add('hide');}});
 async function safe(p){try{return await p;}catch(e){console.warn(e);return null;}}
 async function loadAll(){
