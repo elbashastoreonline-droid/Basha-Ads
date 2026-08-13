@@ -33,6 +33,8 @@ h1,h2,h3{font-weight:800}
 .save{background:var(--brand);color:#04241a;border-radius:10px;padding:.7rem 1.4rem;font-weight:800;width:100%}
 #login{max-width:380px;margin:10vh auto;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;text-align:center}
 #login button{background:var(--brand);color:#04241a;border-radius:10px;padding:.7rem 1.4rem;font-weight:800;width:100%}
+#login input{margin-top:8px;text-align:center}
+#login .or{margin-top:12px;color:var(--mut);font-size:.75rem;font-weight:700}
 .hide{display:none}
 .err{background:#3a1414;border:1px solid var(--red);color:#ffb4b4;border-radius:12px;padding:14px;font-size:.8rem;font-weight:700;margin-bottom:12px;white-space:pre-wrap}
 .modal{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center}
@@ -46,7 +48,13 @@ h1,h2,h3{font-weight:800}
 </style>
 </head>
 <body>
-<div id="login"><h2>🔐 لوحة تحكم دليلك</h2><p style="color:var(--mut);font-size:.8rem;margin:10px 0">daleelak317@gmail.com</p><button id="gLogin">دخول بحساب جوجل</button></div>
+<div id="login"><h2>🔐 لوحة تحكم دليلك</h2><p style="color:var(--mut);font-size:.8rem;margin:10px 0">daleelak317@gmail.com</p>
+<button id="gLogin">دخول بحساب جوجل</button>
+<div class="or">— أو بالإيميل والباسورد —</div>
+<input id="liEmail" type="email" placeholder="الإيميل">
+<input id="liPass" type="password" placeholder="الباسورد">
+<button id="pLogin">دخول بالباسورد</button>
+</div>
 <div id="app" class="hide">
 <div class="top">
   <h1>🛡️ لوحة تحكم دليلك</h1>
@@ -67,7 +75,7 @@ h1,h2,h3{font-weight:800}
 <div class="modal" id="userModal"><div class="ov" data-close></div><div class="mp" id="userBody"></div></div>
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
-import{getAuth,signInWithPopup,GoogleAuthProvider,signOut,onAuthStateChanged,updatePassword}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
+import{getAuth,signInWithPopup,signInWithEmailAndPassword,GoogleAuthProvider,signOut,onAuthStateChanged,updatePassword}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
 import{getFirestore,collection,getDocs,addDoc,updateDoc,deleteDoc,doc,getDoc,setDoc}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 const app=initializeApp({apiKey:"AIzaSyAErZex3BsKMO9cHtalN_Nhb0D7A4tFWe4",authDomain:"daleelak-22dc6.firebaseapp.com",projectId:"daleelak-22dc6",storageBucket:"daleelak-22dc6.firebasestorage.app",messagingSenderId:"774332263419",appId:"1:774332263419:web:527fc4de3d7ed6ce1e395e"});
 const db=getFirestore(app),auth=getAuth(app);
@@ -77,10 +85,11 @@ const GOVS=['القاهرة','الجيزة','القليوبية','الإسكند
 let S={},REQ=[],ADS=[],TICK=[],STOR=[],AREAS=[],USERS=[],TRANS=[],CUR='req';
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-function showErr(e){$('#view').innerHTML=`<div class="err">⚠️ خطأ:\n${esc(String(e&&e.message?e.message:e))}</div>`;}
+function showErr(e){const v=$('#view');if(v)v.innerHTML=`<div class="err">⚠️ خطأ:\n${esc(String(e&&e.message?e.message:e))}</div>`;}
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{CUR=b.dataset.t;render();});
 $('#out').onclick=()=>signOut(auth);
-$('#gLogin').onclick=async()=>{try{await signInWithPopup(auth,new GoogleAuthProvider());}catch(e){alert('⚠️ '+(e.message||e));}};
+$('#gLogin').onclick=async()=>{try{await signInWithPopup(auth,new GoogleAuthProvider());}catch(e){alert('⚠️ جوجل: '+(e.message||e));}};
+$('#pLogin').onclick=async()=>{try{await signInWithEmailAndPassword(auth,($('#liEmail').value||'').trim(),$('#liPass').value);}catch(e){alert('⚠️ باسورد: '+(e.message||e));}};
 onAuthStateChanged(auth,u=>{if(u&&ADMIN.includes(u.email)){$('#login').classList.add('hide');$('#app').classList.remove('hide');loadAll().catch(showErr);}else{$('#login').classList.remove('hide');$('#app').classList.add('hide');}});
 async function safe(p){try{return await p;}catch(e){console.warn(e);return null;}}
 async function loadAll(){
@@ -106,7 +115,6 @@ async function toSplash(a){await setDoc(doc(db,'settings','site'),{...S,splash:{
 async function toTicker(a){await addDoc(collection(db,'ticker'),{txt:'🔥 '+a.name+' — '+(a.cat||''),status:'شغال'});alert('✅ اتضاف للشريط');loadAll();}
 async function toDeal(a){const h=prompt('مدة العرض بالساعات:','8');if(!h)return;await updateDoc(doc(db,'ads',a.id),{rank:(Math.max(0,...ADS.map(x=>x.rank||0))+1),hours:+h});alert('✅ دخل طابور عرض اليوم');loadAll();}
 async function renewAd(a){const d=prompt('زود كام يوم؟','7');if(!d)return;await updateDoc(doc(db,'ads',a.id),{endsAt:(a.endsAt||Date.now())+(+d)*864e5,status:'شغال'});loadAll();}
-/* ===== تعديل عام ===== */
 const COLL={req:'requests',ads:'ads',ticker:'ticker',stories:'stories',areas:'areas'};
 function openEdit(kind,id){
   const src=kind==='req'?REQ:kind==='ads'?ADS:kind==='ticker'?TICK:kind==='stories'?STOR:AREAS;
@@ -123,7 +131,6 @@ function openEdit(kind,id){
   $('#eClose').onclick=()=>$('#editModal').classList.remove('open');
   $('#eSave').onclick=async()=>{const up={};$$('#editBody [data-k]').forEach(i=>{up[i.dataset.k]=i.type==='number'?+i.value:i.value;});await updateDoc(doc(db,COLL[kind],id),up);$('#editModal').classList.remove('open');loadAll();};
 }
-/* ===== ملف عميل (سجل + تعديل رصيد) ===== */
 function openUser(uid){
   const u=USERS.find(x=>x.id===uid);if(!u)return;
   const tx=TRANS.filter(t=>t.uid===uid).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
@@ -134,17 +141,16 @@ function openUser(uid){
    <div class="fld"><label>ملاحظة</label><input id="uNote" placeholder="سبب التعديل"></div>
    <button class="save" id="uSave">💾 حفظ الرصيد</button></div>
    <h3 style="margin:12px 0 8px">📒 سجل الحركات</h3>`+
-   (tx.length?tx.map(t=>`<div class="tx"><span>${esc(t.note||t.type)} </span><span class="${(t.type==='add'||t.type==='gift'||t.type==='refund')?'add':'sub'}">${(t.type==='add'||t.type==='gift'||t.type==='refund')?'+':'−'}${t.amount} ج</span></div>`).join(''):'<p style="color:var(--mut);font-size:.75rem">لسه مفيش حركات.</p>');
+   (tx.length?tx.map(t=>`<div class="tx"><span>${esc(t.note||t.type)}</span><span class="${(t.type==='add'||t.type==='gift'||t.type==='refund')?'add':'sub'}">${(t.type==='add'||t.type==='gift'||t.type==='refund')?'+':'−'}${t.amount} ج</span></div>`).join(''):'<p style="color:var(--mut);font-size:.75rem">لسه مفيش حركات.</p>');
   $('#userModal').classList.add('open');
   $('#uClose').onclick=()=>$('#userModal').classList.remove('open');
   $('#uSave').onclick=async()=>{const add=+$('#uAdd').value||0,sub=+$('#uSub').value||0,set=$('#uSet').value,note=$('#uNote').value||'تعديل يدوي';
-    let nb=u.balance||0;let type='edit';
-    if(set!==''){nb=+set;type='edit';}else{nb=nb+add-sub;type=add>0?'add':'deduct';}
-    await updateDoc(doc(db,'users',uid),{balance:nb});await addTx(uid,type,Math.abs(add||sub||nb),note,nb);
+    let nb=u.balance||0,typ='edit';
+    if(set!==''){nb=+set;}else{nb=nb+add-sub;typ=add>0?'add':'deduct';}
+    await updateDoc(doc(db,'users',uid),{balance:nb});await addTx(uid,typ,Math.abs(add||sub||nb),note,nb);
     $('#userModal').classList.remove('open');loadAll();};
 }
-/* ===== هدايا ===== */
-async function sendGift(list,amount,label){for(const u of list){const nb=(u.balance||0)+amount;await updateDoc(doc(db,'users',u.id),{balance:nb,plan:u.plan||''});await addTx(u.id,'gift',amount,label,nb);}alert('✅ وصلت الهدية لـ '+list.length+' مستخدم');loadAll();}
+async function sendGift(list,amount,label){for(const u of list){const nb=(u.balance||0)+amount;await updateDoc(doc(db,'users',u.id),{balance:nb});await addTx(u.id,'gift',amount,label,nb);}alert('✅ وصلت الهدية لـ '+list.length+' مستخدم');loadAll();}
 function render(){
   try{
   document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b.dataset.t===CUR));
@@ -155,17 +161,17 @@ function render(){
   else if(CUR==='ads'){v.innerHTML=`<div class="panel"><h2>📢 الإعلانات (${ADS.length})</h2><div class="grid">`+ADS.map(a=>`<div class="item"><span class="badge ${a.status==='شغال'?'st-a':'st-r'}">${esc(a.status)}</span>${a.ver==='نعم'?'<span class="badge st-a">✔ موثوق</span>':''}<h3>${esc(a.name)}</h3><div class="m">${esc(a.plan)} • ${esc(a.city)}${a.endsAt?'<br>⏳ ينتهي: '+new Date(a.endsAt).toLocaleDateString('ar-EG'):''}</div><div class="row"><button class="btn b-ed" data-a="tg" data-id="${a.id}">${a.status==='شغال'?'إيقاف':'تفعيل'}</button><button class="btn b-ed" data-a="vf" data-id="${a.id}">✔</button><button class="btn b-hold" data-a="dl" data-id="${a.id}">⏰</button><button class="btn b-ed" data-a="tk" data-id="${a.id}">📰</button><button class="btn b-hold" data-a="sp" data-id="${a.id}">🎯</button><button class="btn b-ed" data-a="rn" data-id="${a.id}">🔄</button><button class="btn b-ed" data-e="ads" data-id="${a.id}">✏️</button><button class="btn b-no" data-a="del" data-id="${a.id}">🗑</button></div></div>`).join('')+`</div></div>`;
   }
   else if(CUR==='wallets'){v.innerHTML=`<div class="panel"><h2>🎁 إرسال هدية رصيد</h2>
-    <div class="f2"><div class="fld"><label>الهدف</label><select id="gTarget"><option value="all"> كل المستخدمين</option><option value="plat">💎 فئة الماسي</option><option value="gold">👑 فئة الذهبي</option><option value="bronze">🥉 فئة البرونزي</option><option value="sel">👥 أشخاص محددين</option></select></div>
+    <div class="f2"><div class="fld"><label>الهدف</label><select id="gTarget"><option value="all">كل المستخدمين</option><option value="plat">💎 فئة الماسي</option><option value="gold">👑 فئة الذهبي</option><option value="bronze">🥉 فئة البرونزي</option><option value="sel">👥 أشخاص محددين</option></select></div>
     <div class="fld"><label>المبلغ (ج)</label><input id="gAmount" type="number" placeholder="مثال: 20"></div></div>
     <div class="fld" id="gSelWrap" style="display:none"><label>اختار الأشخاص</label><div id="gSel" style="max-height:150px;overflow-y:auto">${USERS.map(u=>`<label style="display:block;font-size:.75rem;font-weight:700"><input type="checkbox" value="${u.id}" style="width:auto"> ${esc(u.name||u.email||'—')} (${u.balance||0}ج)</label>`).join('')}</div></div>
-    <div class="fld"><label>ملاحظة الهدية</label><input id="gNote" placeholder="مثال: مكافأة عيد"></div>
+    <div class="fld"><label>ملاحظة الهدية</label><input id="gNote" placeholder="مثال: مكافأة"></div>
     <button class="save" id="gSend">🎁 إرسال الهدية</button></div>
     <div class="panel"><h2>💰 المحافظ (${USERS.length})</h2><div class="grid">`+USERS.map(u=>`<div class="item"><h3>${esc(u.name||u.email||'مستخدم')}</h3><div class="m">📱 ${esc(u.phone||'—')} • 🏷️ ${esc(u.plan||'—')}<br>💰 الرصيد: <b style="color:var(--gold)">${u.balance||0} ج</b></div><div class="row"><button class="btn b-ed" data-u="${u.id}">👁 سجل + تعديل</button><button class="btn b-hold" data-g="${u.id}">🎁 هدية</button></div></div>`).join('')||'<p style="color:var(--mut)">لسه مفيش مستخدمين مسجلين.</p>')+`</div></div>`;
     $('#gTarget').onchange=e=>{$('#gSelWrap').style.display=e.target.value==='sel'?'':'none';};
     $('#gSend').onclick=async()=>{const amt=+$('#gAmount').value||0;if(!amt){alert('اكتب المبلغ');return;}const t=$('#gTarget').value;const note=$('#gNote').value||'هدية';
-      let list=USERS;if(t==='plat')list=USERS.filter(u=>u.plan==='plat'||u.plan==='بلاتيني');else if(t==='gold')list=USERS.filter(u=>u.plan==='gold'||u.plan==='VIP');else if(t==='bronze')list=USERS.filter(u=>u.plan==='bronze'||u.plan==='عادي');else if(t==='sel'){const ids=[...$$('#gSel input:checked')].map(i=>i.value);list=USERS.filter(u=>ids.includes(u.id));}
+      let list=USERS;if(t==='plat')list=USERS.filter(u=>/plat|بلاتيني|ماسي/.test(u.plan||''));else if(t==='gold')list=USERS.filter(u=>/gold|VIP|ذهبي/.test(u.plan||''));else if(t==='bronze')list=USERS.filter(u=>/bronze|عادي|برونزي/.test(u.plan||''));else if(t==='sel'){const ids=[...$$('#gSel input:checked')].map(i=>i.value);list=USERS.filter(u=>ids.includes(u.id));}
       if(!list.length){alert('مفيش مستخدمين في الهدف ده');return;}sendGift(list,amt,note);};
-    v.onclick=e=>{const u=e.target.closest('[data-u]');if(u){openUser(u.dataset.u);return;}const g=e.target.closest('[data-g]');if(g){$('#gTarget').value='sel';$('#gSelWrap').style.display='';const cb=$(`#gSel input[value="${g.dataset.g}"]`);if(cb)cb.checked=true;toast('اختار المبلغ ودوس إرسال');}};
+    v.onclick=e=>{const u=e.target.closest('[data-u]');if(u){openUser(u.dataset.u);return;}const g=e.target.closest('[data-g]');if(g){$('#gTarget').value='sel';$('#gSelWrap').style.display='';const cb=document.querySelector(`#gSel input[value="${g.dataset.g}"]`);if(cb)cb.checked=true;toast&&toast('اختار المبلغ ودوس إرسال');}};
   }
   else if(CUR==='splash'){const sp=S.splash||{};v.innerHTML=`<div class="panel"><h2>🎁 الإعلان العائم</h2>
     <div class="fld"><label>اربطه بإعلان موجود</label><select id="spAd"><option value="">— بدون ربط —</option>${ADS.map(a=>`<option value="${a.id}" ${sp.adId===a.id?'selected':''}>${esc(a.name)}</option>`).join('')}</select></div>
@@ -175,12 +181,12 @@ function render(){
     <div class="f2"><div class="fld"><label>سعر 8 ساعات</label><input id="sp8" type="number" value="${sp.price8||50}"></div><div class="fld"><label>سعر اليوم</label><input id="spD" type="number" value="${sp.priceDay||100}"></div></div>
     <div class="fld"><label><input type="checkbox" id="spOn" style="width:auto" ${sp.active?'checked':''}> مفعّل</label></div>
     <button class="save" id="spSave">💾 حفظ</button></div>`;
-    $('#spSave').onclick=async()=>{await setDoc(doc(db,'settings','site'),{...S,splash:{active:$('#spOn').checked,img:$('#spImg').value,link:$('#spLink')?$('#spLink').value:'',adId:$('#spAd').value,name:$('#spName').value,wa:$('#spWa').value,price8:+$('#sp8').value,priceDay:+$('#spD').value,id:(S.splash&&S.splash.id)||('sp'+Date.now())}});alert('✅ تم الحفظ');loadAll();};
+    $('#spSave').onclick=async()=>{await setDoc(doc(db,'settings','site'),{...S,splash:{active:$('#spOn').checked,img:$('#spImg').value,adId:$('#spAd').value,name:$('#spName').value,wa:$('#spWa').value,price8:+$('#sp8').value,priceDay:+$('#spD').value,id:(S.splash&&S.splash.id)||('sp'+Date.now())}});alert('✅ تم الحفظ');loadAll();};
   }
   else if(CUR==='ticker'){v.innerHTML=`<div class="panel"><h2>📰 الشريط</h2><div class="fld"><input id="tkNew" placeholder="اكتب جملة…"></div><button class="save" id="tkAdd">➕ إضافة</button><div class="grid" style="margin-top:12px">`+TICK.map(t=>`<div class="item"><h3>${esc(t.txt)}</h3><div class="row"><button class="btn b-ed" data-e="ticker" data-id="${t.id}">✏️</button><button class="btn b-ed" data-a="tg" data-id="${t.id}">${t.status==='مخفي'?'إظهار':'إخفاء'}</button><button class="btn b-no" data-a="del" data-id="${t.id}">🗑</button></div></div>`).join('')+`</div></div>`;
     $('#tkAdd').onclick=async()=>{if(!$('#tkNew').value)return;await addDoc(collection(db,'ticker'),{txt:$('#tkNew').value,status:'شغال'});loadAll();};
   }
-  else if(CUR==='stories'){v.innerHTML=`<div class="panel"><h2>🗣️ القصص</h2><div class="f2"><div class="fld"><input id="stName" placeholder="الاسم"></div><div class="fld"><input id="stTxt" placeholder="نص القصة"></div></div><button class="save" id="stAdd">➕ إضافة</button><div class="grid" style="margin-top:12px">`+STOR.map(t=>`<div class="item"><h3>${esc(t.name)}</h3><div class="m">${esc(t.text)}</div><div class="row"><button class="btn b-ed" data-e="stories" data-id="${t.id}">📝</button><button class="btn b-ed" data-a="tg" data-id="${t.id}">${t.status==='مخفي'?'إظهار':'إخفاء'}</button><button class="btn b-no" data-a="del" data-id="${t.id}">🗑</button></div></div>`).join('')+`</div></div>`;
+  else if(CUR==='stories'){v.innerHTML=`<div class="panel"><h2>🗣️ القصص</h2><div class="f2"><div class="fld"><input id="stName" placeholder="الاسم"></div><div class="fld"><input id="stTxt" placeholder="نص القصة"></div></div><button class="save" id="stAdd">➕ إضافة</button><div class="grid" style="margin-top:12px">`+STOR.map(t=>`<div class="item"><h3>${esc(t.name)}</h3><div class="m">${esc(t.text)}</div><div class="row"><button class="btn b-ed" data-e="stories" data-id="${t.id}">✏️</button><button class="btn b-ed" data-a="tg" data-id="${t.id}">${t.status==='مخفي'?'إظهار':'إخفاء'}</button><button class="btn b-no" data-a="del" data-id="${t.id}">🗑</button></div></div>`).join('')+`</div></div>`;
     $('#stAdd').onclick=async()=>{if(!$('#stTxt').value)return;await addDoc(collection(db,'stories'),{name:$('#stName').value,text:$('#stTxt').value,status:'شغال'});loadAll();};
   }
   else if(CUR==='prices'){const P=S.prices||DEF.prices;
@@ -201,7 +207,7 @@ function render(){
     <div class="fld"><label>تأكيد</label><input id="confPass" type="password"></div>
     <button class="save" id="chPass">🔑 تغيير كلمة المرور</button></div>`;
     $('#sSave').onclick=async()=>{await setDoc(doc(db,'settings','site'),{...S,badge:$('#sBadge').value,h1:$('#sH1').value,h2:$('#sH2').value,announce:$('#sAnn').value,coupon:$('#sCoup').value,wa:$('#sWa').value,insta:$('#sIn').value,voda:$('#sVo').value});alert('✅ اتحدث على الموقع');loadAll();};
-    $('#chPass').onclick=async()=>{const p=$('#newPass').value,c=$('#confPass').value;if(!p||p.length<6){alert('6 أحرف على الأقل');return;}if(p!==c){alert('مش مطابق');return;}try{await updatePassword(auth.currentUser,p);alert('✅ اتغيرت');}catch(e){alert('⚠️ '+e.message);}};
+    $('#chPass').onclick=async()=>{const p=$('#newPass').value,c=$('#confPass').value;if(!p||p.length<6){alert('6 أحرف على الأقل');return;}if(p!==c){alert('مش مطابق');return;}try{await updatePassword(auth.currentUser,p);alert('✅ اتغيرت — تقدر تدخل بيها من شاشة اللوجين');}catch(e){alert('⚠️ '+e.message);}};
   }
   else if(CUR==='areas'){const govKeys=[...new Set([...GOVS,...Object.keys(AREAS)])];
     v.innerHTML=`<div class="panel"><h2>🗺️ المناطق</h2>
@@ -215,7 +221,6 @@ function render(){
     $('#arGov').onchange=hint;$('#arGovC').oninput=hint;hint();
     $('#arAdd').onclick=async()=>{let gov=$('#arGov').value;if(gov==='__custom')gov=$('#arGovC').value.trim();const area=$('#arArea').value.trim();if(!gov||!area){alert('اكمل البيانات');return;}if((AREAS[gov]||[]).includes(area)){alert('موجوده بالفعل');return;}await addDoc(collection(db,'areas'),{gov,area});loadAll();};
   }
-  /* تفويض النقر العام */
   v.onclick=async e=>{
     const ed=e.target.closest('[data-e]');if(ed){openEdit(ed.dataset.e,ed.dataset.id);return;}
     const b=e.target.closest('[data-a]');if(!b)return;const id=b.dataset.id,act=b.dataset.a;
