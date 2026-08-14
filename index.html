@@ -580,8 +580,7 @@ function restoreForm(){let o={};try{o=JSON.parse(localStorage.getItem('dlk_form'
 function clearForm(){FORM_FIELDS.forEach(id=>{const el=document.getElementById(id);if(el)el.value=(el.tagName==='SELECT'?el.options[0].value:'');});localStorage.removeItem('dlk_form');['prodSec','adCatCustomWrap','adCityCustomWrap','adAreaCustomWrap','daysWrap'].forEach(i=>{const e=document.getElementById(i);if(e)e.style.display='none';});calcTotal();}
 on('#addModal','input',saveForm);
 on('#addModal','change',saveForm);
-calcTotal();const am=$('#addModal');if(am)am.classList.add('open');}
-const U=uid=>doc(db,'users',uid);
+function openAdd(p){restoreForm();if(p){const ap=$('#adPlan');if(ap)ap.value=p;}newCap();calcTotal();const am=$('#addModal');if(am)am.classList.add('open');}const U=uid=>doc(db,'users',uid);
 function myPlan(){if(!ME)return'—';const my=ADS.filter(a=>a.ownerUid===ME.id&&a.status==='شغال');if(my.some(a=>a.isPlat))return'💎 ماسي';if(my.some(a=>a.isGold))return'👑 ذهبي';return'🥉 برونزي';}
 function updateBalChip(){const c=$('#balChip');if(!c)return;if(ME){c.style.display='';c.textContent='💰 '+(ME.balance||0)+'ج';}else c.style.display='none';}
 onAuthStateChanged(auth,async u=>{
