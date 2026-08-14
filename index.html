@@ -620,20 +620,20 @@ async function openMe(){const mb=$('#meBody');if(!mb)return;
   mb.innerHTML=`<div class="mhead"><h3>👤 حسابي</h3><button class="mx" data-close>✕</button></div>
   <div class="me-sec"><h4>💰 المحفظة</h4><div class="drow"><b>الرصيد الحالي</b><span style="color:var(--brand);font-family:'Lalezar';font-size:1.2rem">${ME.balance||0} ج</span></div><div class="drow"><b>باقتك الحالية</b><span>${myPlan()}</span></div><button class="hbtn" id="meHist" style="margin-top:6px">📒 سجل الحركات كله</button></div>
   <div class="me-sec"><h4>⚙️ بياناتي</h4><div class="fld"><label>الاسم</label><input id="meName" value="${esc(ME.name||'')}"></div><div class="fld"><label>الموبايل</label><input id="mePhone" inputmode="numeric" value="${esc(ME.phone||'')}"></div><button class="bigsend" id="meSave">💾 حفظ البيانات</button><div class="fld" style="margin-top:8px"><label>باسورد جديد (اختياري)</label><input id="mePass" type="password" placeholder="سيبه فاضي لو مش عايز تغير"></div><button class="bigsend" id="mePassSave" style="background:var(--brand)">🔑 تغيير الباسورد</button></div>
+  <div class="me-sec"><h4>📒 سجل الحركات</h4>${txs.length?txs.map(t=>`<div class="drow"><b>${esc(t.note||t.type)}</b><span style="color:${(t.type==='add'||t.type==='gift'||t.type==='refund')?'var(--brand)':'var(--red)'}">${(t.type==='add'||t.type==='gift'||t.type==='refund')?'+':'−'}${t.amount} ج</span></div>`).join(''):'<p style="color:var(--mut);font-size:.8rem">لسه مفيش حركات.</p>'}</div>
   <div class="me-sec"><h4>📢 طلباتي</h4>${reqs.length?reqs.map(r=>`<div class="drow"><b>${esc(r.name)}</b><span>${esc(r.status||'معلق')} <button class="hbtn" data-wa="${esc(r.name)}|${esc(r.status||'')}" style="padding:.2rem .5rem;font-size:.7rem">📱 استفسار</button></span></div>`).join(''):'<p style="color:var(--mut);font-size:.8rem">لسه مفيش طلبات.</p>'}</div>
   <div class="me-sec"><h4>📢 إعلاناتي الشغالة</h4>${myAds.length?myAds.map(a=>`<div class="drow"><b>${esc(a.name)}</b><span>${a.daysLeft!=null?'باقي '+a.daysLeft+' يوم':''} <button class="hbtn" data-renew="${a.id}" style="padding:.2rem .5rem;font-size:.7rem">🔄 تجديد</button></span></div>`).join(''):'<p style="color:var(--mut);font-size:.8rem">لسه مفيش إعلانات.</p>'}</div>
-  <div class="me-sec"><h4>📒 سجل الحركات</h4>${txs.length?txs.map(t=>`<div class="drow"><b>${esc(t.note||t.type)}</b><span style="color:${(t.type==='add'||t.type==='gift'||t.type==='refund')?'var(--brand)':'var(--red)'}">${(t.type==='add'||t.type==='gift'||t.type==='refund')?'+':'−'}${t.amount} ج</span></div>`).join(''):'<p style="color:var(--mut);font-size:.8rem">لسه مفيش حركات.</p>'}</div>
   <div class="me-sec"><h4>🛍️ اطلب خدمة (خصم من الرصيد)</h4><div class="svc-row"><button id="svcVerify">✔ موثوق (${svc.verify||20}ج)</button><button id="svcTicker">📰 شريط (${svc.tickerDay||5}ج)</button><button id="svcFloat">🎁 عائم (${svc.float8||50}ج)</button><button id="svcDeal">⏰ عرض اليوم (${svc.dealHour||10}ج/س)</button></div></div>`;
   $('#meModal').classList.add('open');
-  on('#meSave','click',async()=>{await updateDoc(U(ME.id),{name:$('#meName').value,phone:$('#mePhone').value});ME.name=$('#meName').value;ME.phone=$('#mePhone').value;const t='👤 '+(ME.name||'حسابي');const ab=$('#acctBtn');
-if(ab){ab.textContent='👤';ab.title=(ME.name||'حسابي');}  on('#mePassSave','click',async()=>{const p=$('#mePass').value;if(!p||p.length<6){toast('6 أحرف على الأقل');return;}try{await updatePassword(auth.currentUser,p);toast('✅ اتغير الباسورد');}catch(e){toast('⚠️ '+e.message);}});
+  on('#meSave','click',async()=>{await updateDoc(U(ME.id),{name:$('#meName').value,phone:$('#mePhone').value});ME.name=$('#meName').value;ME.phone=$('#mePhone').value;const ab=$('#acctBtn');if(ab){ab.textContent='👤';ab.title=(ME.name||'حسابي');}toast('✅ اتحفظ');});
+  on('#mePassSave','click',async()=>{const p=$('#mePass').value;if(!p||p.length<6){toast('6 أحرف على الأقل');return;}try{await updatePassword(auth.currentUser,p);toast('✅ اتغير الباسورد');}catch(e){toast('⚠️ '+e.message);}});
+  on('#meHist','click',()=>openHist());
   $$('#meBody [data-wa]').forEach(b=>b.onclick=()=>{const p=b.dataset.wa.split('|');window.open(waLink(S.wa,'السلام عليكم، حابب أستفسر عن طلب "'+p[0]+'" (حالته: '+(p[1]||'')+')'),'_blank');});
   $$('#meBody [data-renew]').forEach(b=>b.onclick=async()=>{const a=ADS.find(x=>x.id===b.dataset.renew);if(!a)return;const cost=((S.prices[a.plan]||{day:5}).day)*7;if(!(await spend(cost,'تجديد إعلان: '+a.name)))return;await updateDoc(doc(db,'ads',a.id),{endsAt:(a.endsAt||Date.now())+7*864e5,status:'شغال'});toast('✅ تم التجديد 7 أيام');openMe();});
-on('#meHist','click',()=>openHist());
-on('#svcVerify','click',()=>openSvc('verify'));
-on('#svcTicker','click',()=>openSvc('ticker'));
-on('#svcFloat','click',()=>openSvc('float'));
-on('#svcDeal','click',()=>openSvc('deal'));
+  on('#svcVerify','click',()=>openSvc('verify'));
+  on('#svcTicker','click',()=>openSvc('ticker'));
+  on('#svcFloat','click',()=>openSvc('float'));
+  on('#svcDeal','click',()=>openSvc('deal'));
 }
 on('#sendAd','click',async()=>{const as=$('#adSite');if(as&&as.value)return;const ca=$('#capA');if(!ca||(ca.value||'').trim()!=String(capAns)){toast('🛡️ جاوب سؤال الأمان');newCap();return;}
   let cat=$('#adCat')?$('#adCat').value:'';if(cat==='__custom'){cat=($('#adCatCustom')?$('#adCatCustom').value:'').trim();if(!cat){toast('✏️ اكتب اسم الفئة');return;}}
