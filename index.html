@@ -619,8 +619,7 @@ async function openMe(){const mb=$('#meBody');if(!mb)return;
   on('#svcVerify','click',async()=>{if(!(await spend(svc.verify||20,'طلب شارة موثوق')))return;await addDoc(collection(db,'requests'),{ownerUid:ME.id,name:'طلب شارة موثوق ✔',type:'خدمة',status:'pending',total:svc.verify||20,paidWallet:true,createdAt:serverTimestamp()});toast('✅ تم الطلب');});
   on('#svcTicker','click',async()=>{if(!(await spend(svc.tickerDay||5,'اشتراك شريط الأخبار')))return;await addDoc(collection(db,'requests'),{ownerUid:ME.id,name:'اشتراك شريط الأخبار 📰',type:'خدمة',status:'pending',total:svc.tickerDay||5,paidWallet:true,createdAt:serverTimestamp()});toast('✅ تم');});
   on('#svcFloat','click',async()=>{if(!(await spend(svc.float8||50,'إعلان عائم')))return;await addDoc(collection(db,'requests'),{ownerUid:ME.id,name:'إعلان عائم 🎁',type:'خدمة',status:'pending',total:svc.float8||50,paidWallet:true,createdAt:serverTimestamp()});toast('✅ تم');});
-  خدمة',status:'pending',total:cost,paidWallet:true,createdAt:serverTimestamp()});toast('✅ تم');});
-}
+on('#svcDeal','click',async()=>{const h=prompt('كام ساعة؟','4');if(!h)return;const cost=(svc.dealHour||10)*+h;if(!(await spend(cost,'عرض اليوم '+h+' ساعات')))return;await addDoc(collection(db,'requests'),{ownerUid:ME.id,name:'عرض اليوم ⏰ ('+h+'س)',type:'خدمة',status:'pending',total:cost,paidWallet:true,createdAt:serverTimestamp()});toast('✅ تم');});}
 on('#sendAd','click',async()=>{const as=$('#adSite');if(as&&as.value)return;const ca=$('#capA');if(!ca||(ca.value||'').trim()!=String(capAns)){toast('🛡️ جاوب سؤال الأمان');newCap();return;}
   let cat=$('#adCat')?$('#adCat').value:'';if(cat==='__custom'){cat=($('#adCatCustom')?$('#adCatCustom').value:'').trim();if(!cat){toast('✏️ اكتب اسم الفئة');return;}}
   let city=$('#adCity')?$('#adCity').value:'';if(city==='__custom'){city=($('#adCityCustom')?$('#adCityCustom').value:'').trim();if(!city){toast('✏️ اكتب محافظتك');return;}}
@@ -682,8 +681,7 @@ on('#refreshBtn','click',()=>location.reload());
 addEventListener('scroll',()=>{const t=$('#topBtn');if(t)t.classList.toggle('show',scrollY>500);});
 on('#topBtn','click',()=>scrollTo({top:0,behavior:'smooth'}));
 if(localStorage.getItem('dlk_theme')==='dark')document.documentElement.dataset.theme='dark';
-on('#themeBtn','click',()=>{const d=document.documentElement.dataset.theme==='dark';document.documentElement.dataset.theme=d?'':'dark';localStorage.setItem('dlk_theme',d?'light':'dark');const tb=$('#themeBtn');if(tb)tb.textContent=d?'☀️':'🌙';});
-loadAll();
+on('#themeBtn','click',()=>{const d=document.documentElement.dataset.theme==='dark';document.documentElement.dataset.theme=d?'':'dark';localStorage.setItem('dlk_theme',d?'light':'dark');const tb=$('#themeBtn');if(tb)tb.textContent=d?'☀️':'';});loadAll();
 </script>
 </body>
 </html>
