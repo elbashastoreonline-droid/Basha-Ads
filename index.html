@@ -597,6 +597,7 @@ on('#doReg','click',async()=>{const n=($('#rgName')?$('#rgName').value:'').trim(
 on('#doGoogle','click',async()=>{try{await signInWithPopup(auth,new GoogleAuthProvider());const am=$('#acctModal');if(am)am.classList.remove('open');}catch(e){toast('⚠️ جوجل: '+(e.message||e));}});
 on('#doForgot','click',async()=>{const em=($('#rgEmail')?$('#rgEmail').value:'').trim();if(!em){toast('اكتب إيميلك الأول');return;}try{await sendPasswordResetEmail(auth,em);toast('📩 اتبعتلك لينك الاسترداد على إيميلك');}catch(e){toast('⚠️ '+(e.message||e));}});
 async function addTx(uid,type,amount,note,bal){await addDoc(collection(db,'transactions'),{uid,type,amount,note,balanceAfter:bal,createdAt:Date.now()});}
+async function addTx(uid,type,amount,note,bal){try{await addDoc(collection(db,'transactions'),{uid,type,amount,note,balanceAfter:bal,createdAt:Date.now()});}catch(e){}}
 async function spend(amount,note){if(!ME)return false;if((ME.balance||0)<amount){toast('⚠️ رصيدك مش كفاية — اشحن من الإدارة');return false;}const nb=(ME.balance||0)-amount;await updateDoc(U(ME.id),{balance:nb});ME.balance=nb;await addTx(ME.id,'deduct',amount,note,nb);updateBalChip();toast('✅ اتخصم '+amount+'ج — باقي '+nb+'ج');return true;}
 async function openHist(){if(!ME)return;let txs=[];try{const t=await getDocs(collection(db,'transactions'));txs=t.docs.map(d=>({id:d.id,...d.data()})).filter(x=>x.uid===ME.id).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));}catch(e){}
 $('#histBody').innerHTML=txs.length?txs.map(t=>`<div class="drow"><b>${esc(t.note||t.type)}</b><span style="color:${(t.type==='add'||t.type==='gift'||t.type==='refund')?'var(--brand)':'var(--red)'}">${(t.type==='add'||t.type==='gift'||t.type==='refund')?'+':'−'}${t.amount} ج</span></div>`).join(''):'<p class="empty">لسه مفيش حركات.</p>';
@@ -615,21 +616,23 @@ function openSvc(type){const svc=S.svc||{};const list=myActiveAds();const adOpts
   const hrs=$('#svcHours');if(hrs)hrs.oninput=()=>{const t=(svc.dealHour||10)*(+hrs.value||1);svcPending.total=t;$('#svcTotal').textContent=t;};
   $('#svcModal').classList.add('open');}
 on('#svcConfirm','click',async()=>{if(!svcPending)return;const t=svcPending.type;let total=svcPending.total;let adId='',adName='',txt='';
-  if(t!=='ticker'){const ad=$('#svcAd');if(!ad||!ad.value){toast('مفيش إعلان شغال — أضف إعلان الأول');return;}adId=ad.value;adName=(ADS.find(x=>x.id===adId)||{}).name||'إعلان';}
-  if(t==='ticker'){txt=($('#svcTxt')?$('#svcTxt').value:'').trim();if(!txt){toast('اكتب الجملة الأول');return;}}
-  if(t==='float'){const d=$('#svcDur')?$('#svcDur').value:'8';total=d==='8'?(S.svc.float8||50):(S.svc.floatDay||100);}
-  if(t==='deal'){const h=+($('#svcHours')?$('#svcHours').value:4)||4;total=(S.svc.dealHour||10)*h;}
-  if(!ME){toast('سجل دخول الأول');return;}
-  if(!confirm('⚠️ هيتخصم '+total+'ج من رصيدك الآن. متأكد؟'))return;
-  if((ME.balance||0)<total){toast('⚠️ رصيدك مش كفاية');return;}
-  const nb=(ME.balance||0)-total;await updateDoc(U(ME.id),{balance:nb});ME.balance=nb;
-  await addTx(ME.id,'deduct',total,'خدمة: '+$('#svcTitle').textContent,nb);updateBalChip();
-  let name='',extra={};
-  if(t==='verify'){name='طلب شارة موثوق ✔ — '+adName;extra={adId};}
-  if(t==='ticker'){name='اشتراك شريط الأخبار 📰';extra={txt};}
-  if(t==='float'){name='إعلان عائم 🎁 — '+adName;extra={adId,dur:($('#svcDur')?$('#svcDur').value:'8')};}
-  else if(t==='deal'){name='عرض اليوم ⏰ — '+adName;extra={adId,hours:+($('#svcHours')?$('#svcHours').value:4)||4};}
-await addDoc(collection(db,'requests'),{ownerUid:ME.id,name,type:'خدمة',status:'pending',total,paidWallet:true,...extra,createdAt:serverTimestamp()});
+if(t!=='ticker'){const ad=$('#svcAd');if(!ad||!ad.value){toast('مفيش إعلان شغال — أضف إعلان الأول');return;}adId=ad.value;adName=(ADS.find(x=>x.id===adId)||{}).name||'إعلان';}
+if(t==='ticker'){txt=($('#svcTxt')?$('#svcTxt').value:'').trim();if(!txt){toast('اكتب الجملة الأول');return;}}
+if(t==='float'){const d=$('#svcDur')?$('#svcDur').value:'8';total=d==='8'?(S.svc.float8||50):(S.svc.floatDay||100);}
+if(t==='deal'){const h=+($('#svcHours')?$('#svcHours').value:4)||4;total=(S.svc.dealHour||10)*h;}
+if(!ME){toast('سجل دخول الأول');return;}
+if(!confirm('⚠️ هيتخصم '+total+'ج من رصيدك الآن. متأكد؟'))return;
+if((ME.balance||0)<total){toast('⚠️ رصيدك مش كفاية');return;}
+const nb=(ME.balance||0)-total;ME.balance=nb;
+try{await updateDoc(U(ME.id),{balance:nb});}catch(e){}
+updateBalChip();
+try{await addTx(ME.id,'deduct',total,'خدمة: '+$('#svcTitle').textContent,nb);}catch(e){}
+let name='',extra={};
+if(t==='verify'){name='طلب شارة موثوق ✔ — '+adName;extra={adId};}
+if(t==='ticker'){name='اشتراك شريط الأخبار 📰';extra={txt};}
+if(t==='float'){name='إعلان عائم 🎁 — '+adName;extra={adId,dur:($('#svcDur')?$('#svcDur').value:'8')};}
+else if(t==='deal'){name='عرض اليوم ⏰ — '+adName;extra={adId,hours:+($('#svcHours')?$('#svcHours').value:4)||4};}
+try{await addDoc(collection(db,'requests'),{ownerUid:ME.id,name,type
   svcPending=null;$('#svcModal').classList.remove('open');toast('✅ تم الخصم '+total+'ج والطلب اتبعت للمراجعة');
   if($('#meModal').classList.contains('open'))openMe();});async function openMe(){const mb=$('#meBody');if(!mb)return;
   let reqs=[];try{const r=await getDocs(collection(db,'requests'));reqs=r.docs.map(d=>({id:d.id,...d.data()})).filter(x=>x.ownerUid===ME.id);}catch(e){}
