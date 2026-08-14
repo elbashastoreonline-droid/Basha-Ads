@@ -568,8 +568,10 @@ onAuthStateChanged(auth,async u=>{
   if(u){try{let d=await getDoc(U(u.uid));
     if(!d.exists()){await setDoc(U(u.uid),{name:'',phone:'',email:u.email||'',balance:50,favorites:[],plan:'',createdAt:Date.now()});toast('🎁 مبروك! اتضافلك 50ج رصيد ترحيبي');d=await getDoc(U(u.uid));}
     ME={id:u.uid,...d.data()};FAVS=new Set(ME.favorites||[]);applyFilters();
-    const t='👤 '+(ME.name||'حسابي');const ab=$('#acctBtn');if(ab){ab.textContent='👤';ab.title=(ME.name||'حسابي');}  } else {ME=null;const ab=$('#acctBtn');
-if(ab){ab.textContent='👤';ab.title='تسجيل الدخول';}});
+    const ab=$('#acctBtn');if(ab){ab.textContent='👤';ab.title=(ME.name||'حسابي');}
+    const da=$('#drawerAcct');if(da)da.textContent='👤 '+(ME.name||'حسابي');updateBalChip();}catch(e){toast('⚠️ '+e.message);}
+  } else {ME=null;const ab=$('#acctBtn');if(ab){ab.textContent='👤';ab.title='تسجيل الدخول';}const da=$('#drawerAcct');if(da)da.textContent='👤 تسجيل الدخول / حسابي';updateBalChip();applyFilters();}
+});
 function openAcct(){if(ME){openMe();}else{newCap();const am=$('#acctModal');if(am)am.classList.add('open');}}
 on('#drawerAcct','click',()=>{const dr=$('#drawer');if(dr)dr.classList.remove('open');openAcct();});
 on('#acctBtn','click',()=>openAcct());
