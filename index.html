@@ -614,20 +614,26 @@ function openSvc(type){const svc=S.svc||{};const list=myActiveAds();const adOpts
   const dur=$('#svcDur');if(dur)dur.onchange=()=>{const t=dur.value==='8'?(svc.float8||50):(svc.floatDay||100);svcPending.total=t;$('#svcTotal').textContent=t;};
   const hrs=$('#svcHours');if(hrs)hrs.oninput=()=>{const t=(svc.dealHour||10)*(+hrs.value||1);svcPending.total=t;$('#svcTotal').textContent=t;};
   $('#svcModal').classList.add('open');}
-let svcBusy=false;
-on('#svcConfirm','click',async()=>{if(svcBusy||!svcPending)return;const t=svcPending.type,total=svcPending.total;let adId='',adName='',txt='';
-  if(t!=='ticker'){const ad=$('#svcAd');if(!ad||!ad.value){toast('مفيش إعلان شغال — أضف إعلان الأول');return;}adId=ad.value;adName=(ADS.find(x=>x.id===adId)||{}).name||'إعلان';}
-  if(t==='ticker'){txt=($('#svcTxt')?$('#svcTxt').value:'').trim();if(!txt){toast('اكتب الجملة الأول');return;}}
-  if(!confirm('⚠️ تأكيد الدفع: هيتخصم '+total+'ج من رصيدك الآن. متأكد؟'))return;
-  svcBusy=true;$('#svcConfirm').disabled=true;
-  if(!(await spend(total,'خدمة: '+$('#svcTitle').textContent))){svcBusy=false;$('#svcConfirm').disabled=false;return;}
-  let name='',extra={};
-  if(t==='verify'){name='طلب شارة موثوق ✔ — '+adName;extra={adId};}
-  if(t==='ticker'){name='اشتراك شريط الأخبار 📰';extra={txt};}
-  if(t==='float'){const d=$('#svcDur').value;name='إعلان عائم 🎁 ('+(d==='8'?'8 ساعات':'يوم كامل')+') — '+adName;extra={adId,dur:d};}
-  if(t==='deal'){const h=+$('#svcHours').value||1;name='عرض اليوم ⏰ ('+h+'س) — '+adName;extra={adId,hours:h};}
-  try{await addDoc(collection(db,'requests'),{ownerUid:ME.id,name,type:'خدمة',status:'pending',total,paidWallet:true,...extra,createdAt:serverTimestamp()});}catch(e){}
-  $('#svcModal').classList.remove('open');updateBalChip();svcBusy=false;$('#svcConfirm').disabled=false;toast('✅ تم الخصم والطلب — هيتفعّل بعد المراجعة');if($('#meModal').classList.contains('open'))openMe();});
+on('#svcConfirm','click',async()=>{if(!svcPending)return;const t=svcPending.type;let total=svcPending.total;let adId='',adName='',txt='';
+if(t!=='ticker'){const ad=$('#svcAd');if(!ad||!ad.value){toast('مفيش إعلان شغال — أضف إعلان الأول');return;}adId=ad.value;adName=(ADS.find(x=>x.id===adId)||{}).name||'إعلان';}
+if(t==='ticker'){txt=($('#svcTxt')?$('#svcTxt').value:'').trim();if(!txt){toast('اكتب الجملة الأول');return;}}
+if(t==='float'){const d=$('#svcDur')?$('#svcDur').value:'8';total=d==='8'?(S.svc.float8||50):(S.svc.floatDay||100);}
+if(t==='deal'){const h=+($('#svcHours')?$('#svcHours').value:4)||4;total=(S.svc.dealHour||10)*h;}
+if(!confirm('⚠️ هيتخصم '+total+'ج من رصيدك الآن. متأكد؟'))return;
+if(!ME){toast('سجل دخول الأول');return;}
+if((ME.balance||0)<total){toast('⚠️ رصيدك مش كفاية');return;}
+const nb=(ME.balance||0)-total;await updateDoc(U(ME.id),{balance:nb});ME.balance=nb;
+await addTx(ME.id,'deduct',total,'خدمة: '+$('#svcTitle').textContent,nb);
+updateBalChip();
+let name='',extra={};
+if(t==='verify'){name='طلب شارة موثوق ✔ — '+adName;extra={adId};}
+if(t==='ticker'){name='اشتراك شريط الأخبار 📰';extra={txt};}
+if(t==='float'){name='إعلان عائم 🎁 — '+adName;extra={adId,dur:($('#svcDur')?$('#svcDur').value:'8')};}
+if(t==='deal'){name='عرض اليوم ⏰ — '+adName;extra={adId,hours:+($('#svcHours')?$('#svcHours').value:4)||4};}
+await addDoc(collection(db,'requests'),{ownerUid:ME.id,name,type:'خدمة',status:'pending',total,paidWallet:true,...extra,createdAt:serverTimestamp()});
+$('#svcModal').classList.remove('open');
+toast('✅ تم الخصم '+total+'ج والطلب اتبعت للمراجعة');
+if($('#meModal').classList.contains('open'))openMe();});
 async function openMe(){const mb=$('#meBody');if(!mb)return;
   let reqs=[];try{const r=await getDocs(collection(db,'requests'));reqs=r.docs.map(d=>({id:d.id,...d.data()})).filter(x=>x.ownerUid===ME.id);}catch(e){}
   const myAds=ADS.filter(a=>a.ownerUid===ME.id);const svc=S.svc||{};
