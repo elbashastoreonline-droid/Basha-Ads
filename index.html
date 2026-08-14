@@ -512,8 +512,7 @@ on('#splashNoMore','change',e=>{if(e.target.checked){const spx=$('#splash');if(s
 on('#splashBtn','click',openSplash);
 on('#splashClose','click',e=>{e.stopPropagation();const spx=$('#splash');if(spx)spx.classList.remove('open');});
 on('#splashLink','click',()=>{const spx=$('#splash');if(spx)spx.classList.remove('open');});
-const cv=g('sbCov');if(cv)cv.textContent=Object.values(c).filter(n=>n>=1).length;}
-function leftBadge(a){if(a.daysLeft==null)return'';const p=a.daysLeft>0?Math.min(100,Math.round(a.daysLeft/30*100)):100;const cls=a.daysLeft<=1?'danger':a.daysLeft<=4?'warn':'';return`<div class="leftbar"><span>⏳ باقي ${a.daysLeft} يوم</span><div class="bar"><i class="${cls}" style="width:${p}%"></i></div></div>`;}
+function buildStats(){const g=id=>document.getElementById(id);const o=g('sbOrd');if(o)o.textContent=ADS.filter(a=>a.isBronze).length;const v=g('sbVip');if(v)v.textContent=ADS.filter(a=>a.isGold).length;const p=g('sbPlat');if(p)p.textContent=ADS.filter(a=>a.isPlat).length;const c={};ADS.forEach(a=>{if(a.city)c[a.city]=(c[a.city]||0)+1});const cv=g('sbCov');if(cv)cv.textContent=Object.values(c).filter(n=>n>=1).length;}function leftBadge(a){if(a.daysLeft==null)return'';const p=a.daysLeft>0?Math.min(100,Math.round(a.daysLeft/30*100)):100;const cls=a.daysLeft<=1?'danger':a.daysLeft<=4?'warn':'';return`<div class="leftbar"><span>⏳ باقي ${a.daysLeft} يوم</span><div class="bar"><i class="${cls}" style="width:${p}%"></i></div></div>`;}
 function filtered(){let l=[...ADS];if(state.q)l=l.filter(a=>[a.name,a.desc,a.cat,a.city].join(' ').includes(state.q));
   if(state.quick==='place')l=l.filter(a=>a.type!=='منتج');if(state.quick==='product')l=l.filter(a=>a.type==='منتج');if(state.quick==='fav')l=l.filter(a=>FAVS.has(a.key));
   if(state.cat)l=l.filter(a=>a.cat===state.cat);if(state.city)l=l.filter(a=>a.city===state.city);if(state.area)l=l.filter(a=>(a.area||'').includes(state.area));
