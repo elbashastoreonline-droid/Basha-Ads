@@ -609,31 +609,27 @@ function openSvc(type){const svc=S.svc||{};const list=myActiveAds();const adOpts
   if(type==='verify'){title='✔ شارة موثوق';total=svc.verify||20;body=noAd;}
   else if(type==='ticker'){title='📰 شريط الأخبار';total=svc.tickerDay||5;body=`<div class="fld"><label>اكتب الجملة اللي هتظهر في الشريط</label><input id="svcTxt" placeholder="مثال: 🔥 خصم 20% في كافيه النجمة"></div>`;}
   else if(type==='float'){title='🎁 إعلان عائم';total=svc.float8||50;body=noAd+`<div class="fld"><label>المدة</label><select id="svcDur"><option value="8">8 ساعات (${svc.float8||50}ج)</option><option value="day">يوم كامل (${svc.floatDay||100}ج)</option></select></div>`;}
-  else if(type==='deal'){title='⏰ عرض اليوم';total=(svc.dealHour||10)*4;body=noAd+`<div class="fld"><label>عدد الساعات</label><input id="svcHours" type="number" min="1" value="4"></div>`;}
+  else{title='⏰ عرض اليوم';total=(svc.dealHour||10)*4;body=noAd+`<div class="fld"><label>عدد الساعات</label><input id="svcHours" type="number" min="1" value="4"></div>`;}
   $('#svcTitle').textContent=title;$('#svcBody').innerHTML=body;$('#svcTotal').textContent=total;svcPending={type,total};
   const dur=$('#svcDur');if(dur)dur.onchange=()=>{const t=dur.value==='8'?(svc.float8||50):(svc.floatDay||100);svcPending.total=t;$('#svcTotal').textContent=t;};
   const hrs=$('#svcHours');if(hrs)hrs.oninput=()=>{const t=(svc.dealHour||10)*(+hrs.value||1);svcPending.total=t;$('#svcTotal').textContent=t;};
   $('#svcModal').classList.add('open');}
 on('#svcConfirm','click',async()=>{if(!svcPending)return;const t=svcPending.type;let total=svcPending.total;let adId='',adName='',txt='';
-if(t!=='ticker'){const ad=$('#svcAd');if(!ad||!ad.value){toast('مفيش إعلان شغال — أضف إعلان الأول');return;}adId=ad.value;adName=(ADS.find(x=>x.id===adId)||{}).name||'إعلان';}
-if(t==='ticker'){txt=($('#svcTxt')?$('#svcTxt').value:'').trim();if(!txt){toast('اكتب الجملة الأول');return;}}
-if(t==='float'){const d=$('#svcDur')?$('#svcDur').value:'8';total=d==='8'?(S.svc.float8||50):(S.svc.floatDay||100);}
-if(t==='deal'){const h=+($('#svcHours')?$('#svcHours').value:4)||4;total=(S.svc.dealHour||10)*h;}
-if(!confirm('⚠️ هيتخصم '+total+'ج من رصيدك الآن. متأكد؟'))return;
-if(!ME){toast('سجل دخول الأول');return;}
-if((ME.balance||0)<total){toast('⚠️ رصيدك مش كفاية');return;}
-const nb=(ME.balance||0)-total;await updateDoc(U(ME.id),{balance:nb});ME.balance=nb;
-await addTx(ME.id,'deduct',total,'خدمة: '+$('#svcTitle').textContent,nb);
-updateBalChip();
-let name='',extra={};
-if(t==='verify'){name='طلب شارة موثوق ✔ — '+adName;extra={adId};}
-if(t==='ticker'){name='اشتراك شريط الأخبار 📰';extra={txt};}
-if(t==='float'){name='إعلان عائم 🎁 — '+adName;extra={adId,dur:($('#svcDur')?$('#svcDur').value:'8')};}
-if(t==='deal'){name='عرض اليوم ⏰ — '+adName;extra={adId,hours:+($('#svcHours')?$('#svcHours').value:4)||4};}
-await addDoc(collection(db,'requests'),{ownerUid:ME.id,name,type:'خدمة',status:'pending',total,paidWallet:true,...extra,createdAt:serverTimestamp()});
-$('#svcModal').classList.remove('open');
-toast('✅ تم الخصم '+total+'ج والطلب اتبعت للمراجعة');
-if($('#meModal').classList.contains('open'))openMe();});
+  if(t!=='ticker'){const ad=$('#svcAd');if(!ad||!ad.value){toast('مفيش إعلان شغال — أضف إعلان الأول');return;}adId=ad.value;adName=(ADS.find(x=>x.id===adId)||{}).name||'إعلان';}
+  if(t==='ticker'){txt=($('#svcTxt')?$('#svcTxt').value:'').trim();if(!txt){toast('اكتب الجملة الأول');return;}}
+  if(t==='float'){const d=$('#svcDur')?$('#svcDur').value:'8';total=d==='8'?(S.svc.float8||50):(S.svc.floatDay||100);}
+  if(t==='deal'){const h=+($('#svcHours')?$('#svcHours').value:4)||4;total=(S.svc.dealHour||10)*h;}
+  if(!ME){toast('سجل دخول الأول');return;}
+  if(!confirm('⚠️ هيتخصم '+total+'ج من رصيدك الآن. متأكد؟'))return;
+  if((ME.balance||0)<total){toast('⚠️ رصيدك مش كفاية');return;}
+  const nb=(ME.balance||0)-total;await updateDoc(U(ME.id),{balance:nb});ME.balance=nb;
+  await addTx(ME.id,'deduct',total,'خدمة: '+$('#svcTitle').textContent,nb);updateBalChip();
+  let name='',extra={};
+  if(t==='verify'){name='طلب شارة موثوق ✔ — '+adName;extra={adId};}
+  if(t==='ticker'){name='اشتراك شريط الأخبار 📰';extra={txt};}
+  if(t==='float'){name='إعلان عائم 🎁 — '+adName;extra={adId,dur:($('#svcDur')?$('#svcDur').value:'8')};}
+  else if(t==='deal'){name='عرض اليوم ⏰ — '+adName;extra={adId,hours:+($('#svcHours')?$('#svcHours').value:4)||4};}
+  await addDoc(collection(db,'requests'),{ownerUid:ME.id,name,type:'
 async function openMe(){const mb=$('#meBody');if(!mb)return;
   let reqs=[];try{const r=await getDocs(collection(db,'requests'));reqs=r.docs.map(d=>({id:d.id,...d.data()})).filter(x=>x.ownerUid===ME.id);}catch(e){}
   const myAds=ADS.filter(a=>a.ownerUid===ME.id);const svc=S.svc||{};
