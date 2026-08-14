@@ -629,8 +629,9 @@ on('#svcConfirm','click',async()=>{if(!svcPending)return;const t=svcPending.type
   if(t==='ticker'){name='اشتراك شريط الأخبار 📰';extra={txt};}
   if(t==='float'){name='إعلان عائم 🎁 — '+adName;extra={adId,dur:($('#svcDur')?$('#svcDur').value:'8')};}
   else if(t==='deal'){name='عرض اليوم ⏰ — '+adName;extra={adId,hours:+($('#svcHours')?$('#svcHours').value:4)||4};}
-  await addDoc(collection(db,'requests'),{ownerUid:ME.id,name,type:'
-async function openMe(){const mb=$('#meBody');if(!mb)return;
+await addDoc(collection(db,'requests'),{ownerUid:ME.id,name,type:'خدمة',status:'pending',total,paidWallet:true,...extra,createdAt:serverTimestamp()});
+  svcPending=null;$('#svcModal').classList.remove('open');toast('✅ تم الخصم '+total+'ج والطلب اتبعت للمراجعة');
+  if($('#meModal').classList.contains('open'))openMe();});async function openMe(){const mb=$('#meBody');if(!mb)return;
   let reqs=[];try{const r=await getDocs(collection(db,'requests'));reqs=r.docs.map(d=>({id:d.id,...d.data()})).filter(x=>x.ownerUid===ME.id);}catch(e){}
   const myAds=ADS.filter(a=>a.ownerUid===ME.id);const svc=S.svc||{};
   let txs=[];try{const tt=await getDocs(collection(db,'transactions'));txs=tt.docs.map(d=>({id:d.id,...d.data()})).filter(x=>x.uid===ME.id).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));}catch(e){}
