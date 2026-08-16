@@ -249,8 +249,8 @@ footer a{color:#cfe3d7;text-decoration:none;display:block;padding:.22rem 0;font-
   <button class="hbtn" id="balChip" style="display:none" title="سجل الحركات">💰 0ج</button>
   <button class="hbtn" id="acctBtn" title="حسابي">👤</button>
   <button class="hbtn gold" id="addBtnTop" title="أضف إعلانك">🚀</button>
-  <button class="hbtn" id="menuBtn">☰</button>
-</div></nav>
+<button class="hbtn" id="svcBtn" title="خدمات">🛍️</button>
+<button class="hbtn" id="menuBtn">☰</button></div></nav>
   </div></header>
 </div>
 <div class="wrap"><button id="splashBtn">🎁 الإعلان المميز — اضغط للمشاهدة</button></div>
@@ -643,6 +643,7 @@ try{await addDoc(collection(db,'requests'),{ownerUid:ME.id,name,type:'خدمة',
   on('#meSave','click',async()=>{await updateDoc(U(ME.id),{name:$('#meName').value,phone:$('#mePhone').value});ME.name=$('#meName').value;ME.phone=$('#mePhone').value;const ab=$('#acctBtn');if(ab){ab.textContent='👤';ab.title=(ME.name||'حسابي');}toast('✅ اتحفظ');});
   on('#mePassSave','click',async()=>{const p=$('#mePass').value;if(!p||p.length<6){toast('6 أحرف على الأقل');return;}try{await updatePassword(auth.currentUser,p);toast('✅ اتغير الباسورد');}catch(e){toast('⚠️ '+e.message);}});
   on('#meHist','click',()=>openHist());
+  on('#svcBtn','click',()=>{const dr=$('#drawer');if(dr)dr.classList.remove('open');const el=document.querySelector('#charge');if(el){el.scrollIntoView({behavior:'smooth'});}});
   $$('#meBody [data-wa]').forEach(b=>b.onclick=()=>{const p=b.dataset.wa.split('|');window.open(waLink(S.wa,'السلام عليكم، حابب أستفسر عن طلب "'+p[0]+'" (حالته: '+(p[1]||'')+')'),'_blank');});
   $$('#meBody [data-renew]').forEach(b=>b.onclick=async()=>{const a=ADS.find(x=>x.id===b.dataset.renew);if(!a)return;const cost=((S.prices[a.plan]||{day:5}).day)*7;if(!(await spend(cost,'تجديد إعلان: '+a.name)))return;const base=Math.max(a.endsAt||Date.now(),Date.now());a.endsAt=base+7*864e5;a.status='شغال';a.daysLeft=7;await updateDoc(doc(db,'ads',a.id),{endsAt:a.endsAt,status:'شغال'});toast('✅ تم التجديد 7 أيام');openMe();});  on('#svcVerify','click',()=>openSvc('verify'));
   on('#svcTicker','click',()=>openSvc('ticker'));
