@@ -446,6 +446,7 @@ footer a{color:#cfe3d7;text-decoration:none;display:block;padding:.22rem 0;font-
 </div></div>
 <div class="toast" id="toast"></div>
 <div id="svcShow" style="position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;z-index:998"><div style="background:var(--pan,#151a18);color:#eef2ef;border:1px solid var(--line,#2a2f2c);border-radius:16px;width:min(92vw,560px);max-height:86vh;overflow:auto;padding:14px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><h3 style="font-family:'Lalezar';margin:0;color:#ffd75e">🛍️ خدمات تخلّي إعلانك يلمع ✨</h3><button class="hbtn" id="svcShowX">✕</button></div><div id="svcShowBody" style="display:grid;gap:10px"></div></div></div><script type="module">
+<style id="ghostFix">#toast{pointer-events:none!important}.modal:not(.open){pointer-events:none!important}[id$="Modal"]:not(.open){pointer-events:none!important}</style>
 import{initializeApp}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
 import{getFirestore,collection,getDocs,addDoc,updateDoc,doc,getDoc,serverTimestamp}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 import{getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,signInWithPopup,GoogleAuthProvider,sendPasswordResetEmail,signOut,onAuthStateChanged,updatePassword}from"https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
