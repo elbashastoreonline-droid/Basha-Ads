@@ -152,8 +152,7 @@ let tx=TRANS.filter(t=>t.uid===uid);try{const sn=await getDocs(collection(db,'tr
    <div class="fld"><label>ملاحظة</label><input id="uNote" placeholder="سبب التعديل"></div>
    <button class="save" id="uSave">💾 حفظ الرصيد</button></div>
    <h3 style="margin:12px 0 8px">📒 سجل الحركات</h3>`+
-   (tx.length?tx.map(t=>`<div class="tx"><span>${esc(t.note||t.type)}</span><span class="${(t.type==='add'||t.type==='gift'||t.type==='refund')?'add':'sub'}">${(t.type==='add'||t.type==='gift'||t.type==='refund')?'+':'−'}${t.amount} ج</span></div>`).join(''):'<p style="color:var(--mut);font-size:.75rem">لسه مفيش حركات.</p>');
-  $('#userModal').classList.add('open');
+  (tx.length?tx.map(t=>`<div class="tx"><span>🕐 ${fmtDT(t.at||t.createdAt)} • ${esc(t.note||t.type)}</span><span class="${(t.type==='add'||t.type==='gift'||t.type==='refund')?'add':'sub'}">${(t.type==='add'||t.type==='gift'||t.type==='refund')?'+':'−'}${t.amount} ج</span></div>`).join(''):'<p style="color:var(--mut);font-size:.75rem">لسه مفيش حركات.</p>');  $('#userModal').classList.add('open');
   $('#uClose').onclick=()=>$('#userModal').classList.remove('open');
   $('#uSave').onclick=async()=>{const add=+$('#uAdd').value||0,sub=+$('#uSub').value||0,set=$('#uSet').value,note=$('#uNote').value||'تعديل يدوي';
   if(!add&&!sub&&set===''){alert('اكتب مبلغ الأول');return;}
